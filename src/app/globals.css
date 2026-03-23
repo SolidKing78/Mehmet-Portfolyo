@@ -1,18 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-family-body), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-family-display), ui-serif, Georgia, serif;
+  --font-sans: var(--font-family-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-family-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-family-mono), ui-monospace, monospace;
 
-  --color-canvas: #0a0a0b;
-  --color-surface: #111113;
-  --color-surface-elevated: #16161a;
-  --color-border: #2a2a30;
-  --color-muted: #8b8b96;
-  --color-fg: #f4f4f5;
-  --color-accent: #22d3ee;
-  --color-accent-dim: rgba(34, 211, 238, 0.12);
+  --color-canvas: #080809;
+  --color-surface: #0e0e11;
+  --color-panel: #121218;
+  --color-elevated: #18181f;
+  --color-border: rgba(255, 255, 255, 0.06);
+  --color-border-strong: rgba(255, 255, 255, 0.1);
+  --color-muted: #71717b;
+  --color-fg: #fafafa;
+  --color-fg-soft: #d4d4d8;
+  --color-accent: #5eead4;
+  --color-accent-dim: rgba(94, 234, 212, 0.14);
+  --color-accent-line: rgba(94, 234, 212, 0.45);
 }
 
 @layer base {
@@ -21,8 +25,26 @@
   }
 
   body {
-    @apply bg-[var(--color-canvas)] text-[var(--color-fg)] antialiased;
+    @apply text-[var(--color-fg)] antialiased;
     font-family: var(--font-sans);
+    background-color: var(--color-canvas);
+    background-image: linear-gradient(
+        125deg,
+        rgba(94, 234, 212, 0.03) 0%,
+        transparent 42%
+      ),
+      linear-gradient(
+        165deg,
+        rgba(255, 255, 255, 0.02) 0%,
+        transparent 38%
+      ),
+      repeating-linear-gradient(
+        -12deg,
+        transparent,
+        transparent 100px,
+        rgba(255, 255, 255, 0.012) 100px,
+        rgba(255, 255, 255, 0.012) 101px
+      );
   }
 
   ::selection {

@@ -1,27 +1,31 @@
-import { About } from "@/components/sections/About";
-import { Capabilities } from "@/components/sections/Capabilities";
-import { CaseStudies } from "@/components/sections/CaseStudies";
-import { Contact } from "@/components/sections/Contact";
-import { Credentials } from "@/components/sections/Credentials";
-import { ExecutiveSummary } from "@/components/sections/ExecutiveSummary";
-import { Hero } from "@/components/sections/Hero";
-import { MediaWall } from "@/components/sections/MediaWall";
-import { ProofStrip } from "@/components/sections/ProofStrip";
-import { Timeline } from "@/components/sections/Timeline";
+import { IdentityAside } from "@/components/identity/IdentityAside";
+import { SideRail } from "@/components/layout/SideRail";
+import { CapabilitySignals } from "@/components/sections/CapabilitySignals";
+import { ContactClose } from "@/components/sections/ContactClose";
+import { EditorialIntro } from "@/components/sections/EditorialIntro";
+import { ExperienceSection } from "@/components/sections/ExperienceSection";
+import { FeaturedFlagships } from "@/components/sections/FeaturedFlagships";
 
 export default function HomePage() {
   return (
-    <>
-      <Hero />
-      <ExecutiveSummary />
-      <ProofStrip />
-      <CaseStudies />
-      <Timeline />
-      <Capabilities />
-      <MediaWall />
-      <About />
-      <Credentials />
-      <Contact />
-    </>
+    <div className="min-h-screen">
+      <SideRail />
+      <div className="lg:pl-[52px]">
+        <div className="mx-auto max-w-6xl px-5 pb-8 pt-8 sm:px-8 sm:pt-12 lg:max-w-[1200px] lg:px-12">
+          <div className="flex flex-col gap-14 lg:flex-row lg:gap-16 xl:gap-20">
+            <div className="lg:w-[min(100%,340px)] lg:shrink-0">
+              <IdentityAside />
+            </div>
+            <div className="min-w-0 flex-1 space-y-20 sm:space-y-24 lg:space-y-28 lg:pt-2">
+              <EditorialIntro />
+              <CapabilitySignals />
+              <FeaturedFlagships />
+              <ExperienceSection />
+              <ContactClose />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

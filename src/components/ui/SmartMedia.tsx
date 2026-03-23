@@ -20,27 +20,18 @@ export function SmartImage({
   priority,
 }: SmartImageProps) {
   const [failed, setFailed] = useState(false);
-
   const onError = useCallback(() => setFailed(true), []);
 
   if (failed) {
     return (
       <div
         className={cn(
-          "flex min-h-[12rem] items-center justify-center border border-[var(--color-border)] bg-[var(--color-surface)] text-center text-xs tracking-wide text-[var(--color-muted)] uppercase",
+          "min-h-[12rem] bg-[var(--color-panel)]",
           className,
         )}
         role="img"
         aria-label={alt}
-      >
-        Görsel yüklenemedi
-        <span className="sr-only">: {alt}</span>
-        <span className="mt-2 block max-w-[14rem] font-mono text-[10px] normal-case">
-          Dosyayı{" "}
-          <code className="text-[var(--color-accent)]">{src}</code> konumuna
-          ekleyin
-        </span>
-      </div>
+      />
     );
   }
 
@@ -80,10 +71,9 @@ export function SmartVideo({ src, poster, className, caption }: SmartVideoProps)
         poster={poster}
       >
         <source src={src} />
-        Tarayıcınız video etiketini desteklemiyor.
       </video>
       {caption ? (
-        <figcaption className="shrink-0 border-t border-[var(--color-border)] px-2 py-1.5 text-[11px] text-[var(--color-muted)]">
+        <figcaption className="shrink-0 border-t border-[var(--color-border)] bg-[var(--color-panel)] px-3 py-2 font-mono text-[10px] tracking-wider text-[var(--color-muted)] uppercase">
           {caption}
         </figcaption>
       ) : null}

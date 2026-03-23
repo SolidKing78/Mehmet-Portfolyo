@@ -14,7 +14,7 @@ export function Reveal({
   children,
   className,
   delay = 0,
-  y = 14,
+  y = 10,
 }: RevealProps) {
   const reduce = useReducedMotion();
 

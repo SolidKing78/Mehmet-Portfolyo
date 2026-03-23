@@ -1,19 +1,11 @@
 import type { Metadata } from "next";
-import { Fraunces, IBM_Plex_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { IBM_Plex_Mono, Outfit } from "next/font/google";
 import "./globals.css";
-import { SiteFooter } from "@/components/layout/SiteFooter";
-import { SiteHeader } from "@/components/layout/SiteHeader";
 import { person } from "@/content/site";
 
-const jakarta = Plus_Jakarta_Sans({
+const outfit = Outfit({
   subsets: ["latin", "latin-ext"],
-  variable: "--font-family-body",
-  display: "swap",
-});
-
-const fraunces = Fraunces({
-  subsets: ["latin", "latin-ext"],
-  variable: "--font-family-display",
+  variable: "--font-family-sans",
   display: "swap",
 });
 
@@ -27,38 +19,34 @@ const plexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(`https://${person.domain}`),
   title: {
-    default: `${person.name} — AI-native mühendislik yazılımı · CAD otomasyonu`,
+    default: `${person.name} — Mühendislik yazılımı · CAD otomasyonu`,
     template: `%s · ${person.name}`,
   },
   description:
-    "Mehmet Seyrimez: SolidWorks API, C# / .NET ve üretim süreçlerinde CAD–CAM, prefabrik / hafif çelik yazılımı ve AI destekli ürün geliştirme. Ölçeklenebilir iç araçlar ve otomasyon.",
+    "Mehmet Seyrimez: SolidWorks API, C# / .NET, prefabrik ve hafif çelik için CAD/CAM yazılımı, üretim otomasyonu ve AI destekli mühendislik ürün geliştirme.",
   keywords: [
     "Mehmet Seyrimez",
     "CAD otomasyonu",
     "SolidWorks API",
-    "Manufacturing software",
     "Prefabrik CAD CAM",
-    "Hafif çelik yazılımı",
-    "C#",
-    ".NET",
     "Mühendislik yazılımı",
-    "AI destekli geliştirme",
-    "Parametrik tasarım otomasyonu",
+    "Gencer Otomotiv",
+    "ZMT Prefabrik",
   ],
   openGraph: {
     type: "website",
     locale: "tr_TR",
     url: `https://${person.domain}`,
     siteName: person.name,
-    title: `${person.name} — AI-native mühendislik yazılımı`,
+    title: `${person.name} — Mühendislik yazılımı & CAD otomasyonu`,
     description:
-      "CAD otomasyonu, üretim yazılımı ve SolidWorks ekosisteminde ölçeklenebilir sistemler.",
+      "Üretim hatlarına yakın mühendislik yazılımı: SolidWorks API, CAD/CAM ve AI destekli ürün geliştirme.",
   },
   twitter: {
     card: "summary_large_image",
-    title: `${person.name} — CAD otomasyonu & mühendislik yazılımı`,
+    title: `${person.name} — CAD otomasyonu`,
     description:
-      "Üretim gerçeklerinden ölçeklenebilir yazılım ürünleri. SolidWorks API, C# / .NET.",
+      "SolidWorks API, C# / .NET ve prefabrik üretim yazılımı.",
   },
   robots: { index: true, follow: true },
 };
@@ -71,13 +59,14 @@ const jsonLd = {
   email: person.email,
   telephone: person.phoneTel,
   sameAs: [person.linkedin],
-  jobTitle: "CAD Automation Engineer",
+  jobTitle: "Engineering Software Developer",
   knowsAbout: [
     "CAD automation",
     "SolidWorks API",
     "Manufacturing software",
     "C#",
     ".NET",
+    "C++",
   ],
 };
 
@@ -87,18 +76,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="tr"
-      className={`${jakarta.variable} ${fraunces.variable} ${plexMono.variable}`}
-    >
+    <html lang="tr" className={`${outfit.variable} ${plexMono.variable}`}>
       <body className="min-h-screen font-sans">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <SiteHeader />
-        <main>{children}</main>
-        <SiteFooter />
+        {children}
       </body>
     </html>
   );

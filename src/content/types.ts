@@ -1,5 +1,3 @@
-export type Locale = "tr" | "en";
-
 export type MediaItem = {
   src: string;
   alt: string;
@@ -8,17 +6,23 @@ export type MediaItem = {
   caption?: string;
 };
 
-export type CaseStudy = {
+/** 1–3: çizgi uzunluğu / vurgu (yüzde değil). */
+export type SignalStrength = 1 | 2 | 3;
+
+export type CapabilitySignal = {
+  id: string;
+  label: string;
+  strength: SignalStrength;
+  note: string;
+};
+
+export type FlagshipProject = {
   slug: string;
   title: string;
-  tagline: string;
-  problem: string;
   context: string;
   role: string;
   technologies: string[];
-  process: string[];
-  impact: string[];
-  strategic: string;
+  outcome: string;
   media: MediaItem[];
 };
 
@@ -28,34 +32,20 @@ export type TimelineEntry = {
   title: string;
   org: string;
   summary: string;
-  focus: string[];
 };
 
-export type CapabilityGroup = {
-  id: string;
-  title: string;
-  items: string[];
-};
-
-export type Credential = {
-  label: string;
+export type EducationEntry = {
+  institution: string;
   detail: string;
-  href?: string;
-  hrefLabel?: string;
+  period: string;
 };
 
-export type SummaryPillar = {
-  title: string;
-  body: string;
+export type Certification = {
+  name: string;
+};
+
+export type RailNavItem = {
+  id: string;
   href: string;
-};
-
-export type PageMapItem = {
-  label: string;
-  description: string;
-  href: string;
-};
-
-export type ProofChip = {
   label: string;
 };
