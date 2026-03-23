@@ -4,21 +4,6 @@
   --font-sans: var(--font-family-sans), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-family-display), ui-serif, Georgia, serif;
   --font-mono: var(--font-family-mono), ui-monospace, monospace;
-
-  --color-canvas: #09090b;
-  --color-surface: #0c0c10;
-  --color-panel: #101014;
-  --color-elevated: #151519;
-  --color-border: rgba(255, 255, 255, 0.055);
-  --color-border-strong: rgba(255, 255, 255, 0.09);
-  --color-muted: #6b6b76;
-  --color-dim: #52525c;
-  --color-fg: #f4f4f5;
-  --color-fg-soft: #a1a1aa;
-  --color-accent: #06b6d4;
-  --color-accent-dim: rgba(6, 182, 212, 0.1);
-  --color-accent-line: rgba(6, 182, 212, 0.5);
-  --color-accent-glow: rgba(6, 182, 212, 0.06);
 }
 
 @layer base {
@@ -29,24 +14,18 @@
   }
 
   body {
-    color: var(--color-fg);
     font-family: var(--font-sans);
-    background-color: #07090d;
-    background-image: radial-gradient(circle at 20% 10%, #0f1725 0%, transparent 32%),
-      radial-gradient(circle at 80% 10%, #061323 0%, transparent 28%),
-      repeating-linear-gradient(
-        -40deg,
-        transparent 0,
-        transparent 115px,
-        rgba(42, 88, 142, 0.12) 116px,
-        rgba(42, 88, 142, 0.12) 117px
-      );
+    color: #f4f6ff;
+    background-color: #050718;
+    background-image: radial-gradient(circle at 12% 8%, rgba(0, 255, 213, 0.14), transparent 35%),
+      radial-gradient(circle at 80% 4%, rgba(47, 79, 255, 0.15), transparent 34%),
+      linear-gradient(180deg, #050718 0%, #040413 100%);
     background-attachment: fixed;
   }
 
   ::selection {
-    background: var(--color-accent-dim);
-    color: var(--color-fg);
+    background: rgba(0, 255, 217, 0.24);
+    color: #ecfeff;
   }
 }
 
@@ -55,13 +34,13 @@
 }
 
 @layer components {
-  .site-root {
-    @apply relative min-h-screen overflow-x-clip;
+  .portfolio-root {
+    @apply mx-auto max-w-[1230px] px-4 pb-20 text-zinc-100 sm:px-6 lg:px-8;
   }
 
   .intro-overlay {
     @apply pointer-events-none fixed inset-0 z-50 flex items-center justify-center bg-black;
-    animation: intro-fade 2s ease forwards;
+    animation: intro-fade 2.1s ease forwards;
   }
 
   .intro-overlay-hidden {
@@ -69,8 +48,8 @@
   }
 
   .intro-name {
-    @apply relative z-20 text-center text-3xl font-semibold tracking-[0.18em] text-cyan-300 uppercase sm:text-6xl;
-    animation: intro-scale 1.3s ease;
+    @apply relative z-20 text-center text-3xl font-semibold tracking-[0.24em] text-cyan-300 uppercase sm:text-6xl;
+    animation: intro-scale 1.5s ease;
   }
 
   .intro-shutter {
@@ -79,198 +58,369 @@
 
   .intro-shutter-top {
     top: 0;
-    animation: shutter-up 1.6s ease 1.2s forwards;
+    animation: shutter-up 1.6s ease 1.1s forwards;
   }
 
   .intro-shutter-bottom {
     bottom: 0;
-    animation: shutter-down 1.6s ease 1.2s forwards;
+    animation: shutter-down 1.6s ease 1.1s forwards;
   }
 
-  .desktop-canvas {
-    @apply mx-auto flex min-h-screen max-w-[1260px] items-center gap-7 px-5 py-8 lg:px-8;
+  .site-header {
+    @apply sticky top-2 z-40 mt-3 flex items-center gap-3 rounded-md border border-cyan-400/20 bg-black/60 px-3 py-2 backdrop-blur-md;
   }
 
-  .left-rail {
-    @apply hidden h-[84vh] w-[56px] shrink-0 rounded-md border border-white/10 bg-black/45 py-6 backdrop-blur-md lg:flex lg:flex-col lg:items-center;
+  .brand-pill {
+    @apply rounded bg-cyan-400/20 px-2 py-1 text-[11px] font-semibold tracking-wider text-cyan-300;
   }
 
-  .left-rail-logo {
-    @apply text-2xl font-semibold tracking-wider text-cyan-400;
+  .mobile-menu-btn {
+    @apply ml-auto grid h-8 w-8 place-items-center rounded border border-white/20 text-zinc-200 lg:hidden;
   }
 
-  .left-rail-icons {
-    @apply mt-auto mb-auto flex flex-col items-center gap-6 text-zinc-400;
+  .top-nav {
+    @apply mx-auto flex flex-wrap items-center gap-3 text-xs font-medium text-zinc-300 sm:gap-4;
   }
 
-  .left-rail-icons a {
-    @apply transition-colors duration-300 hover:text-cyan-400;
+  .top-nav a {
+    @apply border-b border-transparent px-1 py-1 transition-colors duration-300 hover:border-cyan-400 hover:text-cyan-300;
   }
 
-  .resume-shell {
-    @apply grid w-full gap-0 overflow-hidden rounded-md border border-white/10 bg-black/40 shadow-[0_22px_70px_rgba(0,0,0,0.55)] backdrop-blur-sm lg:grid-cols-[40%_60%];
+  .top-nav-hidden {
+    @apply hidden;
   }
 
-  .identity-column {
-    @apply flex min-h-[760px] flex-col border-r border-white/10 bg-black/60;
+  .lang-switch {
+    @apply ml-auto hidden rounded border border-white/15 bg-black/40 p-1 sm:flex;
   }
 
-  .identity-photo {
-    @apply relative min-h-[580px] flex-1;
+  .lang-switch button {
+    @apply rounded px-2 py-1 text-xs font-semibold text-zinc-300 transition-colors;
   }
 
-  .identity-meta {
-    @apply space-y-2 px-8 py-8 text-center;
+  .lang-switch button.active {
+    @apply bg-cyan-400 text-black;
   }
 
-  .identity-meta h1 {
-    @apply text-5xl font-semibold text-white;
+  .hero-section {
+    @apply relative mt-5 grid min-h-[560px] overflow-hidden rounded-md border border-cyan-400/20 lg:grid-cols-2;
   }
 
-  .identity-role {
-    @apply text-base tracking-wide text-cyan-400;
+  .hero-bg {
+    @apply absolute inset-0;
   }
 
-  .identity-links {
-    @apply mt-4 flex items-center justify-center gap-5 text-zinc-200;
+  .hero-overlay {
+    @apply absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.82),rgba(0,0,0,0.62))];
   }
 
-  .identity-links a {
-    @apply transition-colors duration-300 hover:text-cyan-400;
+  .hero-left,
+  .hero-right {
+    @apply relative z-10 p-8 sm:p-10;
   }
 
-  .content-column {
-    @apply space-y-7 bg-black/45 p-8;
+  .hello-pill {
+    @apply mb-4 inline-block rounded bg-cyan-400/20 px-3 py-1 text-xs font-semibold text-cyan-300;
   }
 
-  .resume-panel {
-    @apply rounded-md border border-white/10 bg-black/35 p-6;
+  .hero-left h1 {
+    @apply text-4xl font-bold text-white sm:text-5xl;
   }
 
-  .resume-title {
-    @apply text-6xl leading-none font-semibold text-white lowercase;
+  .role-line {
+    @apply mt-2 text-xl text-zinc-200;
   }
 
-  .resume-kpis {
-    @apply mt-4 flex flex-wrap gap-x-5 gap-y-1 text-sm font-medium text-cyan-400;
+  .hero-left ul {
+    @apply mt-5 space-y-2 text-sm text-zinc-300;
   }
 
-  .resume-kpis span::after {
-    content: "/";
-    @apply ml-3 text-cyan-700;
+  .hero-left li {
+    @apply flex items-center gap-2;
   }
 
-  .resume-kpis span:last-child::after {
-    content: "";
-    @apply ml-0;
+  .hero-social {
+    @apply mt-6 flex gap-3;
   }
 
-  .resume-body {
-    @apply mt-5 max-w-2xl text-sm leading-relaxed text-zinc-300;
+  .hero-social a {
+    @apply grid h-8 w-8 place-items-center rounded border border-white/20 text-zinc-300 transition-colors hover:border-cyan-400 hover:text-cyan-300;
   }
 
-  .resume-panel-head {
-    @apply mb-5 flex items-center gap-2 text-cyan-400;
+  .hero-right {
+    @apply flex items-center justify-center;
   }
 
-  .resume-panel-head h2 {
-    @apply text-4xl font-semibold lowercase text-zinc-100;
+  .profile-ring {
+    @apply relative h-[240px] w-[240px] overflow-hidden rounded-full border-[8px] border-cyan-300/30 shadow-[0_0_0_8px_rgba(0,0,0,0.36)] sm:h-[300px] sm:w-[300px];
   }
 
-  .resume-skill-row {
-    @apply flex items-center justify-between text-sm font-medium uppercase;
+  .about-section {
+    @apply mt-10 grid items-center gap-8 rounded-md border border-white/10 bg-[#060919]/80 p-6 sm:p-8 lg:grid-cols-2;
   }
 
-  .resume-skill-row span {
-    @apply tracking-wide text-zinc-100;
+  .about-image {
+    @apply relative min-h-[260px] overflow-hidden rounded-md border border-white/10;
   }
 
-  .resume-skill-row strong {
-    @apply text-cyan-400;
+  .about-content h2,
+  .services-section h2,
+  .featured-section h2,
+  .skills-section h2,
+  .experience-section h2,
+  .portfolio-section h2,
+  .contact-section h2 {
+    @apply text-3xl font-semibold text-white;
   }
 
-  .resume-skill-track {
-    @apply h-[3px] overflow-hidden rounded bg-zinc-700/50;
+  .about-content p {
+    @apply mt-3 max-w-[62ch] text-sm leading-relaxed text-zinc-300;
   }
 
-  .resume-skill-fill {
-    @apply block h-full w-0 bg-cyan-400 transition-[width] duration-700 ease-out;
+  .tag-row {
+    @apply mt-4 flex flex-wrap gap-2;
   }
 
-  .resume-skill-fill.is-active {
-    width: var(--target);
+  .tag-row span {
+    @apply rounded border border-cyan-400/30 bg-cyan-400/10 px-2 py-1 text-xs text-cyan-200;
   }
 
-  .project-grid {
-    @apply grid gap-5;
+  .cv-btn {
+    @apply mt-5 inline-flex items-center gap-2 rounded-full bg-cyan-400/80 px-5 py-2 text-sm font-semibold text-black transition-colors hover:bg-cyan-300;
   }
 
-  .project-card {
-    @apply rounded-md border border-white/10 bg-black/30 p-4;
+  .services-section,
+  .featured-section,
+  .skills-section,
+  .experience-section,
+  .portfolio-section,
+  .cta-strip,
+  .contact-section {
+    @apply mt-10 rounded-md border border-white/10 bg-[#060919]/72 p-6 sm:p-8;
   }
 
-  .project-tag {
-    @apply text-xs tracking-[0.2em] text-cyan-400;
+  .service-grid {
+    @apply mt-6 grid gap-4 md:grid-cols-3;
   }
 
-  .project-card h3 {
-    @apply mt-2 text-lg font-semibold text-zinc-100;
+  .service-card {
+    @apply rounded border border-white/10 bg-black/35 p-4 shadow-[0_14px_38px_rgba(0,0,0,0.35)];
   }
 
-  .project-card p {
-    @apply mt-2 text-sm leading-relaxed text-zinc-300;
+  .service-card h3 {
+    @apply text-xl font-semibold text-white;
   }
 
-  .project-media {
-    @apply relative mt-4 min-h-[220px] overflow-hidden rounded-md border border-white/10;
+  .service-card p {
+    @apply mt-2 text-sm text-zinc-300;
   }
 
-  .cta-panel h2 {
-    @apply text-2xl font-semibold text-white;
+  .featured-grid {
+    @apply mt-5 grid items-center gap-5 lg:grid-cols-[58%_42%];
   }
 
-  .cta-panel p {
-    @apply mt-2 text-sm leading-relaxed text-zinc-300;
+  .featured-media {
+    @apply relative min-h-[260px] overflow-hidden rounded-md border border-white/10;
   }
 
-  .cta-row {
-    @apply mt-5 flex flex-wrap gap-3;
+  .featured-copy span {
+    @apply text-xs tracking-[0.2em] text-cyan-300 uppercase;
   }
 
-  .cta-button {
-    @apply inline-flex items-center gap-2 rounded-sm border border-cyan-400/70 bg-cyan-400/15 px-4 py-2 text-sm font-semibold text-cyan-300 transition-all duration-300 hover:-translate-y-[1px] hover:bg-cyan-400/25;
+  .featured-copy h3 {
+    @apply mt-2 text-2xl font-semibold text-white;
   }
 
-  .cta-button-secondary {
-    @apply border-white/20 bg-white/5 text-zinc-200 hover:bg-white/10;
+  .featured-copy p {
+    @apply mt-3 text-sm leading-relaxed text-zinc-300;
   }
 
-  .mobile-shell {
-    @apply mx-auto flex w-full max-w-[640px] flex-col gap-4 px-4 py-6;
+  .skills-section {
+    @apply grid gap-8 lg:grid-cols-2;
   }
 
-  .mobile-hero {
-    @apply rounded-md border border-white/10 bg-black/45 p-4 text-center;
+  .bars {
+    @apply mt-5 space-y-3;
   }
 
-  .mobile-photo {
-    @apply relative mx-auto mb-4 min-h-[340px] w-full overflow-hidden rounded-md;
+  .bar-top {
+    @apply mb-1 flex items-center justify-between text-xs;
   }
 
-  .mobile-hero h1 {
-    @apply text-4xl font-semibold text-white;
+  .bar-track {
+    @apply h-[4px] bg-zinc-700;
   }
 
-  .mobile-hero p {
-    @apply mt-2 text-sm text-cyan-300;
+  .bar-fill {
+    @apply block h-full bg-cyan-400 transition-all duration-700 ease-out;
   }
 
-  .mobile-card {
-    @apply rounded-md border border-white/10 bg-black/40 p-4;
+  .circle-grid {
+    @apply mt-5 grid grid-cols-2 gap-4;
   }
 
-  .mobile-card h2 {
-    @apply mb-3 text-xl font-semibold text-white;
+  .circle-item {
+    @apply relative rounded border border-white/10 bg-black/35 p-3 text-center;
+  }
+
+  .circle-item svg {
+    @apply mx-auto h-[112px] w-[112px] -rotate-90;
+  }
+
+  .circle-track {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.2);
+    stroke-width: 8;
+  }
+
+  .circle-progress {
+    fill: none;
+    stroke: #2dd4bf;
+    stroke-width: 8;
+    transition: stroke-dashoffset 0.9s ease;
+    stroke-linecap: round;
+  }
+
+  .circle-item strong {
+    @apply mt-1 block text-lg text-cyan-300;
+  }
+
+  .circle-item span {
+    @apply text-xs text-zinc-300;
+  }
+
+  .experience-section {
+    @apply grid gap-7 lg:grid-cols-2;
+  }
+
+  .exp-stack {
+    @apply mt-5 space-y-3;
+  }
+
+  .exp-card {
+    @apply rounded border border-white/10 bg-black/35 p-4;
+  }
+
+  .exp-card h3 {
+    @apply text-lg font-semibold text-white;
+  }
+
+  .exp-card h4 {
+    @apply text-sm text-cyan-300;
+  }
+
+  .exp-card small {
+    @apply text-[11px] text-zinc-400;
+  }
+
+  .exp-card p,
+  .exp-card ul {
+    @apply mt-2 text-sm text-zinc-300;
+  }
+
+  .exp-card li {
+    @apply list-disc;
+    margin-left: 1rem;
+  }
+
+  .masonry-grid {
+    @apply mt-6 columns-2 gap-4 space-y-4 md:columns-3;
+  }
+
+  .masonry-item {
+    @apply relative mb-4 min-h-[140px] break-inside-avoid overflow-hidden rounded border border-white/10;
+  }
+
+  .masonry-item:nth-child(3n) {
+    min-height: 280px;
+  }
+
+  .masonry-item:nth-child(4n) {
+    min-height: 210px;
+  }
+
+  .cta-strip h2 {
+    @apply text-3xl font-semibold text-white;
+  }
+
+  .cta-strip p {
+    @apply mt-2 max-w-[70ch] text-sm text-zinc-300;
+  }
+
+  .contact-grid {
+    @apply mt-6 grid gap-5 lg:grid-cols-[40%_60%];
+  }
+
+  .contact-cards {
+    @apply space-y-3;
+  }
+
+  .contact-cards article {
+    @apply rounded border border-white/10 bg-black/35 p-4;
+  }
+
+  .contact-cards h3 {
+    @apply text-lg font-semibold text-cyan-300;
+  }
+
+  .contact-cards p {
+    @apply text-sm text-zinc-300;
+  }
+
+  .contact-form {
+    @apply rounded border border-white/10 bg-black/35 p-4;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    @apply mb-3 w-full rounded border border-white/20 bg-black/20 px-3 py-2 text-sm text-zinc-100 outline-none transition-colors focus:border-cyan-400;
+  }
+
+  .contact-form button {
+    @apply mt-1 w-full rounded-full bg-cyan-400/85 px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-cyan-300;
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .mobile-mode .top-nav {
+    @apply absolute top-[48px] right-2 left-2 rounded border border-white/10 bg-[#060919]/95 p-3;
+  }
+
+  .mobile-mode .lang-switch {
+    @apply flex;
+  }
+
+  .mobile-mode .site-header {
+    @apply gap-2;
+  }
+
+  .mobile-mode .hero-section {
+    @apply grid-cols-1;
+  }
+
+  .mobile-mode .hero-right {
+    @apply pt-0;
+  }
+
+  .mobile-mode .profile-ring {
+    @apply h-[220px] w-[220px];
+  }
+
+  .mobile-mode .about-section,
+  .mobile-mode .featured-grid,
+  .mobile-mode .skills-section,
+  .mobile-mode .experience-section,
+  .mobile-mode .contact-grid {
+    @apply grid-cols-1;
   }
 }
 
@@ -289,13 +439,13 @@
 @keyframes intro-scale {
   0% {
     opacity: 0;
-    transform: scale(0.82);
-    letter-spacing: 0.4em;
+    transform: scale(0.84);
+    letter-spacing: 0.45em;
   }
   100% {
     opacity: 1;
     transform: scale(1);
-    letter-spacing: 0.18em;
+    letter-spacing: 0.24em;
   }
 }
 
