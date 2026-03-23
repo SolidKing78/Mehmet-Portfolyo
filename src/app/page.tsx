@@ -1,7 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type FormEvent,
+} from "react";
 import {
   Bot,
   Braces,
@@ -15,13 +22,13 @@ import {
   Mail,
   MapPin,
   Menu,
-  MessageCircle,
   PencilRuler,
   Phone,
   Send,
   Sparkles,
   Wrench,
 } from "lucide-react";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { person } from "@/content/site";
 import { projeler } from "@/lib/paths";
 import { SmartImage } from "@/components/ui/SmartMedia";
@@ -222,7 +229,10 @@ const workCards = [
   },
 ];
 
-const introVariants = [
+/** Oturumda yalnızca ilk ana sayfa girişinde intro; alt sayfadan dönüşte tekrarlanmaz. */
+const INTRO_SESSION_KEY = "mehmetsey-portfolio-intro-session";
+
+const INTRO_VARIANTS = [
   "intro-v1",
   "intro-v2",
   "intro-v3",
@@ -235,18 +245,27 @@ const introVariants = [
   "intro-v10",
   "intro-v11",
   "intro-v12",
-];
+  "intro-v13",
+  "intro-v14",
+  "intro-v15",
+  "intro-v16",
+  "intro-v17",
+  "intro-v18",
+  "intro-v19",
+  "intro-v20",
+] as const;
 
-function IntroOverlay({ hidden }: { hidden: boolean }) {
-  const [variant, setVariant] = useState("intro-v1");
+const INTRO_FULL_NAME = "Mehmet Seyrimez";
+const INTRO_DURATION_MS = 3400;
 
-  useEffect(() => {
-    const timer = window.setTimeout(() => {
-      const index = Math.floor(Math.random() * introVariants.length);
-      setVariant(introVariants[index] ?? "intro-v1");
-    }, 0);
-    return () => window.clearTimeout(timer);
-  }, []);
+function IntroOverlay({
+  hidden,
+  variant,
+}: {
+  hidden: boolean;
+  variant: (typeof INTRO_VARIANTS)[number];
+}) {
+  const letterReveal = variant === "intro-v18";
 
   return (
     <div className={`intro-overlay ${variant}${hidden ? " intro-overlay-hidden" : ""}`}>
@@ -254,7 +273,25 @@ function IntroOverlay({ hidden }: { hidden: boolean }) {
       <div className="intro-wave intro-wave-a" />
       <div className="intro-wave intro-wave-b" />
       <div className="intro-noise" />
-      <p className="intro-name">Mehmet Seyrimez</p>
+      {variant === "intro-v17" ? <div className="intro-light-beam" aria-hidden /> : null}
+      {variant === "intro-v19" ? <div className="intro-scanlines" aria-hidden /> : null}
+      {letterReveal ? (
+        <p className="intro-name intro-name-letters" aria-label={INTRO_FULL_NAME}>
+          {INTRO_FULL_NAME.split("").map((ch, i) => (
+            <span
+              key={i}
+              className="intro-letter"
+              style={{ animationDelay: `${i * 0.045}s` }}
+            >
+              {ch === " " ? "\u00A0" : ch}
+            </span>
+          ))}
+        </p>
+      ) : (
+        <p className="intro-name">
+          <span className="intro-name-core">{INTRO_FULL_NAME}</span>
+        </p>
+      )}
       <div className="intro-shutter intro-shutter-top" />
       <div className="intro-shutter intro-shutter-bottom" />
     </div>
@@ -263,7 +300,8 @@ function IntroOverlay({ hidden }: { hidden: boolean }) {
 
 export default function HomePage() {
   const [lang, setLang] = useState<Lang>("tr");
-  const [showIntro, setShowIntro] = useState(true);
+  const [showIntro, setShowIntro] = useState(false);
+  const [introVariant, setIntroVariant] = useState<(typeof INTRO_VARIANTS)[number]>("intro-v1");
   const [isMobile, setIsMobile] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
   const [activeFeatured, setActiveFeatured] = useState(0);
@@ -279,6 +317,33 @@ export default function HomePage() {
   const sliderLockRef = useRef(false);
   const SLIDE_MS = 8200;
 
+  useLayoutEffect(() => {
+    queueMicrotask(() => {
+      try {
+        if (sessionStorage.getItem(INTRO_SESSION_KEY) === "1") return;
+        const pick =
+          INTRO_VARIANTS[Math.floor(Math.random() * INTRO_VARIANTS.length)] ?? "intro-v1";
+        setIntroVariant(pick);
+        setShowIntro(true);
+      } catch {
+        /* private mode / SSR */
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!showIntro) return;
+    const done = window.setTimeout(() => {
+      try {
+        sessionStorage.setItem(INTRO_SESSION_KEY, "1");
+      } catch {
+        /* ignore */
+      }
+      setShowIntro(false);
+    }, INTRO_DURATION_MS);
+    return () => window.clearTimeout(done);
+  }, [showIntro]);
+
   useEffect(() => {
     const media = window.matchMedia("(max-width: 980px)");
     const onUpdate = () =>
@@ -290,8 +355,6 @@ export default function HomePage() {
       );
     onUpdate();
     media.addEventListener("change", onUpdate);
-
-    const introTimer = window.setTimeout(() => setShowIntro(false), 2100);
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -307,7 +370,6 @@ export default function HomePage() {
     return () => {
       media.removeEventListener("change", onUpdate);
       observer.disconnect();
-      window.clearTimeout(introTimer);
     };
   }, []);
 
@@ -370,7 +432,7 @@ export default function HomePage() {
 
   return (
     <div className={`portfolio-root${isMobile ? " mobile-mode" : ""}`}>
-      <IntroOverlay hidden={!showIntro} />
+      {showIntro ? <IntroOverlay hidden={false} variant={introVariant} /> : null}
 
       <header className="site-header">
         <div className="brand-pill">{t.heroBadge}</div>
@@ -433,7 +495,7 @@ export default function HomePage() {
               <Phone size={20} />
             </a>
             <a href="https://wa.me/905383940137" target="_blank" rel="noreferrer" aria-label="WhatsApp">
-              <MessageCircle size={20} />
+              <WhatsAppIcon size={22} className="text-[#25D366]" />
             </a>
             <a href={person.linkedin} target="_blank" rel="noreferrer" aria-label="Linkedin">
               <Linkedin size={20} />
@@ -618,7 +680,7 @@ export default function HomePage() {
             LinkedIn
           </a>
           <a href="https://wa.me/905383940137" target="_blank" rel="noreferrer">
-            <MessageCircle size={16} />
+            <WhatsAppIcon size={18} className="text-[#25D366]" />
             WhatsApp
           </a>
         </div>
@@ -644,7 +706,7 @@ export default function HomePage() {
               <p>{person.linkedin}</p>
             </article>
             <article>
-              <MessageCircle size={18} />
+              <WhatsAppIcon size={20} className="text-[#25D366]" />
               <h3>WhatsApp</h3>
               <p>+90 538 394 01 37</p>
             </article>
@@ -687,7 +749,7 @@ export default function HomePage() {
                 <Linkedin size={18} />
               </a>
               <a href="https://wa.me/905383940137" target="_blank" rel="noreferrer" aria-label="WhatsApp">
-                <MessageCircle size={18} />
+                <WhatsAppIcon size={20} className="text-[#25D366]" />
               </a>
             </div>
           </form>

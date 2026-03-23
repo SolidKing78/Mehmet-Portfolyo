@@ -40,7 +40,7 @@
 
   .intro-overlay {
     @apply pointer-events-none fixed inset-0 z-50 flex items-center justify-center bg-black;
-    animation: intro-fade 2.1s ease forwards;
+    animation: intro-fade 3.4s ease forwards;
   }
 
   .intro-overlay-hidden {
@@ -51,18 +51,56 @@
     @apply relative z-20 text-center text-3xl font-semibold tracking-[0.24em] text-cyan-300 uppercase sm:text-6xl;
   }
 
+  .intro-name-core {
+    @apply inline-block;
+  }
+
+  .intro-name-letters {
+    @apply flex flex-wrap items-center justify-center gap-0 tracking-[0.18em];
+  }
+
+  .intro-letter {
+    @apply inline-block opacity-0;
+    animation: intro-letter-fill 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
   .intro-shutter {
     @apply absolute left-0 right-0 z-10 h-1/2 bg-black;
   }
 
   .intro-shutter-top {
     top: 0;
-    animation: shutter-up 1.6s ease 1.1s forwards;
+    animation: shutter-up 1.45s cubic-bezier(0.77, 0, 0.18, 1) 1.35s forwards;
   }
 
   .intro-shutter-bottom {
     bottom: 0;
-    animation: shutter-down 1.6s ease 1.1s forwards;
+    animation: shutter-down 1.45s cubic-bezier(0.77, 0, 0.18, 1) 1.35s forwards;
+  }
+
+  .intro-light-beam {
+    @apply pointer-events-none absolute top-0 left-1/2 z-[5] h-[120%] w-[min(22vw,180px)] -translate-x-1/2;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 255, 251, 0) 0%,
+      rgba(0, 255, 251, 0.35) 45%,
+      rgba(120, 200, 255, 0.12) 100%
+    );
+    filter: blur(8px);
+    animation: intro-beam-pour 2.2s ease-out forwards;
+    opacity: 0;
+  }
+
+  .intro-scanlines {
+    @apply pointer-events-none absolute inset-0 z-[6] opacity-[0.14];
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 255, 240, 0.09) 2px,
+      rgba(0, 255, 240, 0.09) 3px
+    );
+    animation: intro-scan-drift 3s linear infinite;
   }
 
   .intro-gradient {
@@ -99,52 +137,107 @@
     animation: intro-noise-drift 6s linear infinite;
   }
 
-  .intro-v1 .intro-name {
-    animation: intro-scale 1.3s ease;
+  .intro-v1 .intro-name:not(.intro-name-letters) {
+    animation: intro-scale 1.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   }
 
-  .intro-v2 .intro-name {
-    animation: intro-slide-up 1.3s ease;
+  .intro-v2 .intro-name:not(.intro-name-letters) {
+    animation: intro-slide-up 1.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
 
-  .intro-v3 .intro-name {
-    animation: intro-slide-right 1.25s ease;
+  .intro-v3 .intro-name:not(.intro-name-letters) {
+    animation: intro-slide-right 1.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
 
-  .intro-v4 .intro-name {
-    animation: intro-slide-left 1.25s ease;
+  .intro-v4 .intro-name:not(.intro-name-letters) {
+    animation: intro-slide-left 1.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
 
-  .intro-v5 .intro-name {
-    animation: intro-glow 1.4s ease;
+  .intro-v5 .intro-name:not(.intro-name-letters) {
+    animation: intro-glow 1.5s ease forwards;
   }
 
-  .intro-v6 .intro-name {
-    animation: intro-flip 1.5s ease;
+  .intro-v6 .intro-name:not(.intro-name-letters) {
+    animation: intro-flip 1.55s ease forwards;
+    transform-style: preserve-3d;
+    perspective: 800px;
   }
 
-  .intro-v7 .intro-name {
-    animation: intro-zoom-out 1.4s ease;
+  .intro-v7 .intro-name:not(.intro-name-letters) {
+    animation: intro-zoom-out 1.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
-  .intro-v8 .intro-name {
-    animation: intro-letter 1.5s ease;
+  .intro-v8 .intro-name:not(.intro-name-letters) {
+    animation: intro-letter 1.55s ease forwards;
   }
 
-  .intro-v9 .intro-name {
-    animation: intro-bounce 1.4s ease;
+  .intro-v9 .intro-name:not(.intro-name-letters) {
+    animation: intro-bounce 1.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   }
 
-  .intro-v10 .intro-name {
-    animation: intro-swivel 1.45s ease;
+  .intro-v10 .intro-name:not(.intro-name-letters) {
+    animation: intro-swivel 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
 
-  .intro-v11 .intro-name {
-    animation: intro-diagonal 1.35s ease;
+  .intro-v11 .intro-name:not(.intro-name-letters) {
+    animation: intro-diagonal 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
 
-  .intro-v12 .intro-name {
-    animation: intro-blur 1.3s ease;
+  .intro-v12 .intro-name:not(.intro-name-letters) {
+    animation: intro-blur 1.4s ease forwards;
+  }
+
+  .intro-v13 .intro-name:not(.intro-name-letters) .intro-name-core {
+    animation: intro-chromatic 2.4s ease-in-out infinite alternate;
+    background: linear-gradient(120deg, #5eead4, #38bdf8, #a78bfa, #5eead4);
+    background-size: 220% 220%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .intro-v14 .intro-name:not(.intro-name-letters) .intro-name-core {
+    background: linear-gradient(
+      110deg,
+      #94a3b8 0%,
+      #ecfeff 35%,
+      #22d3ee 50%,
+      #ecfeff 65%,
+      #64748b 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: intro-shimmer-sweep 2s linear infinite;
+  }
+
+  .intro-v15 .intro-name:not(.intro-name-letters) .intro-name-core {
+    animation: intro-liquid 2.6s ease-in-out infinite;
+    text-shadow:
+      0 0 40px rgba(34, 211, 238, 0.45),
+      0 0 80px rgba(99, 102, 241, 0.25);
+  }
+
+  .intro-v16 .intro-name:not(.intro-name-letters) {
+    animation: intro-vortex 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  .intro-v17 .intro-name:not(.intro-name-letters) .intro-name-core {
+    animation: intro-pulse-core 1.6s ease-in-out infinite alternate;
+    text-shadow: 0 0 28px rgba(0, 255, 251, 0.55);
+  }
+
+  .intro-v19 .intro-name:not(.intro-name-letters) .intro-name-core {
+    animation: intro-neon 1.2s ease-in-out infinite alternate;
+  }
+
+  .intro-v20 .intro-name:not(.intro-name-letters) .intro-name-core {
+    animation: intro-depth 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    text-shadow:
+      0 1px 0 rgba(0, 0, 0, 0.8),
+      0 0 24px rgba(45, 212, 191, 0.5),
+      0 0 60px rgba(56, 189, 248, 0.35);
   }
 
   .site-header {
@@ -542,7 +635,7 @@
   0% {
     opacity: 1;
   }
-  78% {
+  82% {
     opacity: 1;
   }
   100% {
@@ -742,5 +835,133 @@
   }
   100% {
     transform: translateY(110%);
+  }
+}
+
+@keyframes intro-letter-fill {
+  0% {
+    opacity: 0;
+    transform: translateY(-120%) scaleY(1.2);
+    filter: blur(8px);
+    color: rgba(165, 243, 252, 0.3);
+  }
+  55% {
+    opacity: 1;
+    color: #ecfeff;
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+    color: #5eead4;
+  }
+}
+
+@keyframes intro-chromatic {
+  0% {
+    background-position: 0% 50%;
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    background-position: 100% 50%;
+    filter: hue-rotate(25deg);
+  }
+}
+
+@keyframes intro-shimmer-sweep {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+@keyframes intro-liquid {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    letter-spacing: 0.24em;
+  }
+  33% {
+    transform: translateY(-4px) scale(1.02);
+    letter-spacing: 0.28em;
+  }
+  66% {
+    transform: translateY(2px) scale(0.99);
+    letter-spacing: 0.2em;
+  }
+}
+
+@keyframes intro-vortex {
+  0% {
+    opacity: 0;
+    transform: rotate(-8deg) scale(0.6);
+    filter: blur(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes intro-pulse-core {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  100% {
+    transform: scale(1.03);
+    filter: brightness(1.15);
+  }
+}
+
+@keyframes intro-neon {
+  0% {
+    color: #67e8f9;
+    text-shadow:
+      0 0 10px rgba(34, 211, 238, 0.8),
+      0 0 28px rgba(34, 211, 238, 0.45);
+  }
+  100% {
+    color: #a5f3fc;
+    text-shadow:
+      0 0 18px rgba(167, 243, 208, 0.9),
+      0 0 48px rgba(56, 189, 248, 0.5);
+  }
+}
+
+@keyframes intro-depth {
+  0% {
+    opacity: 0;
+    transform: translateZ(-80px) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: translateZ(0) scale(1);
+  }
+}
+
+@keyframes intro-beam-pour {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -100%) scaleY(0.2);
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.85;
+    transform: translate(-50%, 0) scaleY(1);
+  }
+}
+
+@keyframes intro-scan-drift {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(12px);
   }
 }
