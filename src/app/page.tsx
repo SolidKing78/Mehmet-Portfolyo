@@ -10,13 +10,15 @@ export default function HomePage() {
   return (
     <div className="min-h-screen">
       <SideRail />
-      <div className="lg:pl-[52px]">
-        <div className="mx-auto max-w-6xl px-5 pb-8 pt-8 sm:px-8 sm:pt-12 lg:max-w-[1200px] lg:px-12">
-          <div className="flex flex-col gap-14 lg:flex-row lg:gap-16 xl:gap-20">
-            <div className="lg:w-[min(100%,340px)] lg:shrink-0">
+      <div className="lg:pl-[46px]">
+        <div className="mx-auto max-w-[1180px] px-5 pb-8 pt-6 sm:px-8 sm:pt-10 lg:px-10">
+          <div className="flex flex-col gap-10 lg:flex-row lg:gap-12 xl:gap-14">
+            {/* left: identity */}
+            <div className="lg:w-[min(100%,360px)] lg:shrink-0 xl:w-[380px]">
               <IdentityAside />
             </div>
-            <div className="min-w-0 flex-1 space-y-20 sm:space-y-24 lg:space-y-28 lg:pt-2">
+            {/* right: content */}
+            <div className="min-w-0 flex-1 space-y-24 sm:space-y-28 lg:space-y-32 lg:pt-0">
               <EditorialIntro />
               <CapabilitySignals />
               <FeaturedFlagships />

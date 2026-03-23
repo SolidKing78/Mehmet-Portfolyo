@@ -3,49 +3,65 @@
 import { capabilitySignals } from "@/content/site";
 import type { SignalStrength } from "@/content/types";
 import { Reveal } from "@/components/motion/Reveal";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-const widthClass: Record<SignalStrength, string> = {
-  1: "w-[32%]",
-  2: "w-[58%]",
-  3: "w-[92%]",
+const widthPercent: Record<SignalStrength, string> = {
+  1: "32%",
+  2: "60%",
+  3: "91%",
 };
+
+function AnimatedBar({
+  strength,
+  delay,
+}: {
+  strength: SignalStrength;
+  delay: number;
+}) {
+  const reduce = useReducedMotion();
+  return (
+    <div className="mt-3 h-[2px] w-full rounded-full bg-[var(--color-border)]">
+      <motion.div
+        className="h-[2px] rounded-full bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-accent)]/20"
+        initial={reduce ? { width: widthPercent[strength] } : { width: 0 }}
+        whileInView={{ width: widthPercent[strength] }}
+        viewport={{ once: true, margin: "-10% 0px" }}
+        transition={{
+          duration: 0.8,
+          ease: [0.22, 1, 0.36, 1],
+          delay: delay + 0.2,
+        }}
+      />
+    </div>
+  );
+}
 
 export function CapabilitySignals() {
   return (
-    <section id="uzmanlik" className="scroll-mt-8 lg:scroll-mt-12">
+    <section id="uzmanlik" className="scroll-mt-6 lg:scroll-mt-10">
       <Reveal>
-        <p className="font-mono text-[11px] font-medium lowercase tracking-[0.28em] text-[var(--color-accent)]">
-          uzmanlık
-        </p>
-        <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[var(--color-fg)] sm:text-4xl">
+        <span className="font-mono text-[9px] font-medium tracking-[0.35em] text-[var(--color-accent)] uppercase">
+          skills
+        </span>
+        <h2 className="mt-5 font-display text-[2.25rem] leading-[1.08] tracking-[-0.02em] text-[var(--color-fg)] italic sm:text-[2.8rem]">
           Yetkinlik alanları
         </h2>
-        <p className="mt-3 max-w-xl font-mono text-[11px] leading-relaxed text-[var(--color-muted)]">
-          Çizgi uzunluğu göreli derinlik gösterir; yüzde veya sıralama iddiası değildir.
-        </p>
       </Reveal>
 
-      <div className="mt-10 space-y-8 rounded-lg border border-[var(--color-border)] bg-[var(--color-panel)]/80 p-6 sm:p-8">
+      <div className="mt-10 rounded-xl border border-[var(--color-border)] bg-[var(--color-panel)] p-6 shadow-[inset_0_1px_0_var(--color-border),0_0_40px_var(--color-accent-glow)] sm:p-8">
         {capabilitySignals.map((c, i) => (
-          <Reveal key={c.id} delay={0.05 * i}>
-            <div>
-              <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <span className="text-sm font-medium text-[var(--color-fg)]">
+          <Reveal key={c.id} delay={0.04 * i}>
+            <div className={cn(i > 0 && "mt-7")}>
+              <div className="flex items-baseline justify-between gap-4">
+                <span className="text-[14px] font-medium text-[var(--color-fg)]">
                   {c.label}
                 </span>
-                <span className="max-w-[14rem] text-right font-mono text-[10px] text-[var(--color-muted)] sm:max-w-xs">
+                <span className="shrink-0 text-right font-mono text-[9px] tracking-wide text-[var(--color-dim)]">
                   {c.note}
                 </span>
               </div>
-              <div className="mt-3 h-px w-full bg-[var(--color-border-strong)]">
-                <div
-                  className={cn(
-                    "h-px bg-gradient-to-r from-[var(--color-accent-line)] to-transparent",
-                    widthClass[c.strength],
-                  )}
-                />
-              </div>
+              <AnimatedBar strength={c.strength} delay={0.04 * i} />
             </div>
           </Reveal>
         ))}

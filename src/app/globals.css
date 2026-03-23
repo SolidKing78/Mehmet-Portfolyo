@@ -2,49 +2,45 @@
 
 @theme {
   --font-sans: var(--font-family-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-family-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-family-display), ui-serif, Georgia, serif;
   --font-mono: var(--font-family-mono), ui-monospace, monospace;
 
-  --color-canvas: #080809;
-  --color-surface: #0e0e11;
-  --color-panel: #121218;
-  --color-elevated: #18181f;
-  --color-border: rgba(255, 255, 255, 0.06);
-  --color-border-strong: rgba(255, 255, 255, 0.1);
-  --color-muted: #71717b;
-  --color-fg: #fafafa;
-  --color-fg-soft: #d4d4d8;
-  --color-accent: #5eead4;
-  --color-accent-dim: rgba(94, 234, 212, 0.14);
-  --color-accent-line: rgba(94, 234, 212, 0.45);
+  --color-canvas: #09090b;
+  --color-surface: #0c0c10;
+  --color-panel: #101014;
+  --color-elevated: #151519;
+  --color-border: rgba(255, 255, 255, 0.055);
+  --color-border-strong: rgba(255, 255, 255, 0.09);
+  --color-muted: #6b6b76;
+  --color-dim: #52525c;
+  --color-fg: #f4f4f5;
+  --color-fg-soft: #a1a1aa;
+  --color-accent: #06b6d4;
+  --color-accent-dim: rgba(6, 182, 212, 0.1);
+  --color-accent-line: rgba(6, 182, 212, 0.5);
+  --color-accent-glow: rgba(6, 182, 212, 0.06);
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   body {
-    @apply text-[var(--color-fg)] antialiased;
+    color: var(--color-fg);
     font-family: var(--font-sans);
     background-color: var(--color-canvas);
-    background-image: linear-gradient(
-        125deg,
-        rgba(94, 234, 212, 0.03) 0%,
-        transparent 42%
-      ),
-      linear-gradient(
-        165deg,
-        rgba(255, 255, 255, 0.02) 0%,
-        transparent 38%
-      ),
+    background-image:
       repeating-linear-gradient(
-        -12deg,
+        -45deg,
         transparent,
-        transparent 100px,
-        rgba(255, 255, 255, 0.012) 100px,
-        rgba(255, 255, 255, 0.012) 101px
+        transparent 120px,
+        rgba(255, 255, 255, 0.015) 120px,
+        rgba(255, 255, 255, 0.015) 121px
       );
+    background-attachment: fixed;
   }
 
   ::selection {
