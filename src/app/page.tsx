@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import {
   Bot,
   Braces,
@@ -129,13 +129,13 @@ const dictionary = {
 const sectionAnchors = ["#home", "#about", "#skills", "#experience", "#contact"];
 
 const technicalSkills = [
-  { name: "AI & Automation", icon: Sparkles, value: 96 },
-  { name: "AI-Assisted Development", icon: Bot, value: 95 },
-  { name: "No-Code / Low-Code", icon: PencilRuler, value: 84 },
-  { name: "Prompt Engineering", icon: Braces, value: 90 },
-  { name: "LLM Workflows", icon: Code2, value: 92 },
-  { name: "SolidWorks", icon: Wrench, value: 95 },
-  { name: "SolidWorks API (VBA, .NET, C#)", icon: DraftingCompass, value: 96 },
+  { name: "AI & Automation", icon: Sparkles },
+  { name: "AI-Assisted Development", icon: Bot },
+  { name: "No-Code / Low-Code", icon: PencilRuler },
+  { name: "Prompt Engineering", icon: Braces },
+  { name: "LLM Workflows", icon: Code2 },
+  { name: "SolidWorks", icon: Wrench },
+  { name: "SolidWorks API (VBA, .NET, C#)", icon: DraftingCompass },
 ];
 
 const educationCards = [
@@ -250,6 +250,10 @@ function IntroOverlay({ hidden }: { hidden: boolean }) {
 
   return (
     <div className={`intro-overlay ${variant}${hidden ? " intro-overlay-hidden" : ""}`}>
+      <div className="intro-gradient" />
+      <div className="intro-wave intro-wave-a" />
+      <div className="intro-wave intro-wave-b" />
+      <div className="intro-noise" />
       <p className="intro-name">Mehmet Seyrimez</p>
       <div className="intro-shutter intro-shutter-top" />
       <div className="intro-shutter intro-shutter-bottom" />
@@ -260,10 +264,10 @@ function IntroOverlay({ hidden }: { hidden: boolean }) {
 export default function HomePage() {
   const [lang, setLang] = useState<Lang>("tr");
   const [showIntro, setShowIntro] = useState(true);
-  const [barsActive, setBarsActive] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
   const [activeFeatured, setActiveFeatured] = useState(0);
+  const [sliderCycle, setSliderCycle] = useState(0);
   const [formError, setFormError] = useState("");
   const [form, setForm] = useState({
     firstName: "",
@@ -272,6 +276,8 @@ export default function HomePage() {
     message: "",
   });
   const t = useMemo(() => dictionary[lang], [lang]);
+  const sliderLockRef = useRef(false);
+  const SLIDE_MS = 8200;
 
   useEffect(() => {
     const media = window.matchMedia("(max-width: 980px)");
@@ -286,16 +292,10 @@ export default function HomePage() {
     media.addEventListener("change", onUpdate);
 
     const introTimer = window.setTimeout(() => setShowIntro(false), 2100);
-    const sliderInterval = window.setInterval(() => {
-      setActiveFeatured((prev) => (prev + 1) % projectDetails.length);
-    }, 5200);
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.target.classList.contains("skills-section") && entry.isIntersecting) {
-            setBarsActive(true);
-          }
           if (entry.isIntersecting) entry.target.classList.add("is-visible");
         });
       },
@@ -308,15 +308,36 @@ export default function HomePage() {
       media.removeEventListener("change", onUpdate);
       observer.disconnect();
       window.clearTimeout(introTimer);
-      window.clearInterval(sliderInterval);
     };
   }, []);
 
   const toggleFeatured = (direction: "next" | "prev") => {
+    if (sliderLockRef.current) return;
+    sliderLockRef.current = true;
+    window.setTimeout(() => {
+      sliderLockRef.current = false;
+    }, 300);
     setActiveFeatured((prev) => {
       if (direction === "next") return (prev + 1) % projectDetails.length;
       return (prev - 1 + projectDetails.length) % projectDetails.length;
     });
+    setSliderCycle((prev) => prev + 1);
+  };
+
+  const jumpFeatured = (index: number) => {
+    if (sliderLockRef.current || index === activeFeatured) return;
+    sliderLockRef.current = true;
+    window.setTimeout(() => {
+      sliderLockRef.current = false;
+    }, 300);
+    setActiveFeatured(index);
+    setSliderCycle((prev) => prev + 1);
+  };
+
+  const onSliderComplete = () => {
+    if (sliderLockRef.current) return;
+    setActiveFeatured((prev) => (prev + 1) % projectDetails.length);
+    setSliderCycle((prev) => prev + 1);
   };
 
   const activeProject = projectDetails[activeFeatured];
@@ -468,12 +489,28 @@ export default function HomePage() {
               src={activeProject.heroMedia.poster ?? activeProject.heroMedia.src}
               alt={activeProject.titleTr}
             />
-            <button className="slider-btn slider-btn-left" onClick={() => toggleFeatured("prev")}>
+            <button
+              type="button"
+              className="slider-btn slider-btn-left"
+              onClick={() => toggleFeatured("prev")}
+            >
               ‹
             </button>
-            <button className="slider-btn slider-btn-right" onClick={() => toggleFeatured("next")}>
+            <button
+              type="button"
+              className="slider-btn slider-btn-right"
+              onClick={() => toggleFeatured("next")}
+            >
               ›
             </button>
+            <div className="slider-progress">
+              <span
+                key={`${activeFeatured}-${sliderCycle}`}
+                className="slider-progress-runner"
+                style={{ animationDuration: `${SLIDE_MS}ms` }}
+                onAnimationEnd={onSliderComplete}
+              />
+            </div>
           </div>
           <div className="featured-copy">
             <span>{activeProject.label}</span>
@@ -485,9 +522,10 @@ export default function HomePage() {
             <div className="slider-dots">
               {projectDetails.map((item, idx) => (
                 <button
+                  type="button"
                   key={item.slug}
                   className={idx === activeFeatured ? "active" : ""}
-                  onClick={() => setActiveFeatured(idx)}
+                  onClick={() => jumpFeatured(idx)}
                   aria-label={item.slug}
                 />
               ))}
@@ -499,7 +537,7 @@ export default function HomePage() {
       <section id="skills" className="skills-section reveal">
         <h2>{t.skillTitleA}</h2>
         <div className="skill-icon-grid">
-          {technicalSkills.map((skill, idx) => {
+          {technicalSkills.map((skill) => {
             const Icon = skill.icon;
             return (
               <article key={skill.name} className="skill-icon-card">
@@ -508,15 +546,6 @@ export default function HomePage() {
                     <Icon size={18} />
                   </span>
                   <strong>{skill.name}</strong>
-                </div>
-                <div className="bar-track">
-                  <span
-                    className={`bar-fill${barsActive ? " active" : ""}`}
-                    style={{
-                      width: barsActive ? `${skill.value}%` : "0%",
-                      transitionDelay: `${idx * 120}ms`,
-                    }}
-                  />
                 </div>
               </article>
             );
@@ -530,13 +559,18 @@ export default function HomePage() {
             <GraduationCap size={20} />
             {t.education}
           </h2>
-          <div className="exp-stack">
+          <div className="exp-timeline">
             {educationCards.map((card) => (
-              <article key={card.title} className="exp-card">
-                <h3>{card.title}</h3>
-                <h4>{card.sub}</h4>
-                <small>{card.period}</small>
-                <p>{lang === "tr" ? card.bodyTr : card.bodyEn}</p>
+              <article key={card.title} className="exp-item">
+                <span className="exp-dot">
+                  <GraduationCap size={14} />
+                </span>
+                <div className="exp-card">
+                  <h3>{card.title}</h3>
+                  <h4>{card.sub}</h4>
+                  <small>{card.period}</small>
+                  <p>{lang === "tr" ? card.bodyTr : card.bodyEn}</p>
+                </div>
               </article>
             ))}
           </div>
@@ -546,20 +580,25 @@ export default function HomePage() {
             <Building2 size={20} />
             {t.work}
           </h2>
-          <div className="exp-stack">
+          <div className="exp-timeline">
             {workCards.map((card) => (
-              <article key={card.title} className="exp-card">
-                <h3>{card.title}</h3>
-                <h4>{card.org}</h4>
-                <small>{card.period}</small>
-                <ul>
-                  {(lang === "tr" ? card.pointsTr : card.pointsEn).map((point) => (
-                    <li key={point}>
-                      <CheckCircle2 size={14} />
-                      <span>{point}</span>
-                    </li>
-                  ))}
-                </ul>
+              <article key={card.title} className="exp-item">
+                <span className="exp-dot">
+                  <Building2 size={14} />
+                </span>
+                <div className="exp-card">
+                  <h3>{card.title}</h3>
+                  <h4>{card.org}</h4>
+                  <small>{card.period}</small>
+                  <ul>
+                    {(lang === "tr" ? card.pointsTr : card.pointsEn).map((point) => (
+                      <li key={point}>
+                        <CheckCircle2 size={14} />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </article>
             ))}
           </div>
