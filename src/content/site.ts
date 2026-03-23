@@ -1,24 +1,91 @@
+import { projeler } from "@/lib/paths";
 import type {
   CapabilityGroup,
   CaseStudy,
   Credential,
+  PageMapItem,
   ProofChip,
+  SummaryPillar,
   TimelineEntry,
 } from "./types";
 
-/** CV ile tarih, kurum adı ve sayısal iddiaları mutlaka doğrulayın. */
 export const person = {
   name: "Mehmet Seyrimez",
   domain: "mehmetseyrimez.com",
-  headline: "AI-native mühendislik yazılımı geliştiricisi",
+  /** Ana meslek kimliği — tek satırda netlik */
+  roleTitle: "CAD otomasyonu ve mühendislik yazılımı geliştiricisi",
+  headline: "Üretim gerçeklerini ölçeklenebilir yazılıma dönüştürüyorum",
   subhead:
-    "CAD otomasyonu, üretim süreçleri ve SolidWorks ekosisteminde ölçeklenebilir iç araçlar inşa ediyorum. Endüstriyel gerçekliği yazılıma taşıyan, ölçülebilir sonuç üreten sistemler.",
-  email: "iletisim@mehmetseyrimez.com",
-  linkedin: "https://www.linkedin.com/in/",
+    "SolidWorks API, C# / .NET ve CAD–CAM hattında iç araçlar, makro–eklenti mimarisi ve parametrik otomasyon. Prefabrik / hafif çelik üretim düşüncesiyle sahada işleyen sistemler; AI’yi kontrollü kaldıraç olarak kullanan geliştirme disiplini.",
+  email: "mehmetseyrimez@gmail.com",
+  phoneDisplay: "+90 538 394 01 37",
+  phoneTel: "+905383940137",
+  linkedin: "https://www.linkedin.com/in/mehmet-seyrimez/",
 } as const;
 
+/** Ana sayfa üst bölümü: tek bakışta kimlik + sayfa haritası */
+export const executiveLead =
+  "Mekanik tasarım ve üretim süreçlerinden beslenen bir çizgide; SolidWorks ekosisteminde API tabanlı otomasyon, 2B–3B parametrik dönüşümler ve üretilebilir çıktılar üreten yazılım hatları kuruyorum. Aşağıda önce üst düzey özet, ardından projeler, deneyim çerçevesi ve yetkinlik detayları yer alıyor.";
+
+export const summaryPillars: SummaryPillar[] = [
+  {
+    title: "Odak",
+    body: "CAD otomasyonu, SolidWorks API / C#, .NET, CAD–CAM ve prefabrik–hafif çelik üretim mantığına uygun iç yazılım ürünleri.",
+    href: "#yetenekler",
+  },
+  {
+    title: "Kanıt",
+    body: "ParametriX ve makro demoları, İHA / AmphiDrone görselleri, otonom sualtı kaynak–muayene çalışmaları ve sahne fotoğrafları — aşağıdaki vaka ve medya bölümlerinde.",
+    href: "#projeler",
+  },
+  {
+    title: "Çalışma biçimi",
+    body: "Gereksinimi netleştirme, sınır koşullarını kodda tanımlama, pilot kullanım ve ölçülebilir geri bildirim; boş vaat yerine çalışan araçlar.",
+    href: "#hakkimda",
+  },
+  {
+    title: "İş birliği",
+    body: "Tam zamanlı, proje bazlı veya otomasyon / ürün sprint’leri; doğrudan e-posta, telefon veya LinkedIn üzerinden hızlı temas.",
+    href: "#iletisim",
+  },
+];
+
+export const pageMap: PageMapItem[] = [
+  {
+    label: "Projeler",
+    description: "Problem, bağlam, rol, teknoloji ve görsellerle vaka formatı.",
+    href: "#projeler",
+  },
+  {
+    label: "Deneyim",
+    description: "Üretim temeli → CAD derinliği → mühendislik yazılımı evrimi.",
+    href: "#deneyim",
+  },
+  {
+    label: "Yetenekler",
+    description: "CAD, otomasyon, AI destekli geliştirme ve üretim alanı bilgisi.",
+    href: "#yetenekler",
+  },
+  {
+    label: "Medya",
+    description: "Seçilmiş fotoğraflar ve yazılım videolarından kanıt duvarı.",
+    href: "#medya",
+  },
+  {
+    label: "Hakkımda",
+    description: "Sistem düşüncesi ve ürün disiplinine dair kısa çerçeve.",
+    href: "#hakkimda",
+  },
+  {
+    label: "Özgeçmiş",
+    description: "Güncel CV (PDF) indirme.",
+    href: "#kimlik",
+  },
+];
+
 export const nav = [
-  { href: "#hero", label: "Ana Sayfa" },
+  { href: "#hero", label: "Giriş" },
+  { href: "#ozet", label: "Özet" },
   { href: "#projeler", label: "Projeler" },
   { href: "#deneyim", label: "Deneyim" },
   { href: "#yetenekler", label: "Yetenekler" },
@@ -29,22 +96,76 @@ export const nav = [
 
 export const proofChips: ProofChip[] = [
   { label: "SolidWorks API · C# · .NET" },
-  { label: "CAD–CAM ve roll-form uyumlu üretim çıktıları" },
-  { label: "Prefabrik / hafif çelik mühendislik yazılımı" },
-  { label: "Üretim hattına yakın otomasyon ve iç araçlar" },
-  { label: "AI destekli geliştirme — hız ve kalite dengesi" },
+  { label: "Makro · eklenti · ParametriX 2B→3B" },
+  { label: "CAD–CAM ve üretilebilir çıktılar" },
+  { label: "Prefabrik / hafif çelik süreç bilgisi" },
+  { label: "AI destekli geliştirme (disiplinli)" },
 ];
+
+const SW = "Solidworks Makro API - Eklenti - ParametriX";
+const UAV = "İnsansız Hava Aracı";
+const SUB = "OTONOM SUALTI KAYNAĞI VE SUALTI";
 
 export const caseStudies: CaseStudy[] = [
   {
-    slug: "prefab-light-steel-cad-cam",
-    title: "Prefabrik / hafif çelik CAD–CAM yazılımı",
-    tagline: "Tasarımdan üretilebilir veriye tek hat",
+    slug: "solidworks-parametrix",
+    title: "SolidWorks API, makrolar ve ParametriX",
+    tagline: "2B–3B dönüşüm ve makro otomasyonu — demolar",
     problem:
-      "Prefabrik ve hafif çelik hatlarında tekrarlayan modelleme, manuel hata riski ve CAD ile üretim arasında kopukluk operasyonu yavaşlatıyordu.",
+      "Tekrarlayan modelleme, parametre tutarsızlığı ve 2B girdiden 3B modele geçişte manuel müdahale ihtiyacı mühendislik hızını düşürüyordu.",
     context:
-      "Roll-form ve üretim kısıtlarını dikkate alan, parametrik girdilerden doğrudan üretim çıktıları üreten bir mühendislik ürünü tasarlandı.",
-    role: "Mimari kararlar, çekirdek otomasyon akışları, SolidWorks / .NET entegrasyonu ve sahada kullanılabilirliğin doğrulanması.",
+      "SolidWorks üzerinde API ve makro disipliniyle otomasyon; ParametriX ile parametrik 2B–3B akışının ürünleştirilmesi.",
+    role: "Mimari ve uygulama: API / makro tasarımı, kullanıcı akışı, test ve demo üretimi.",
+    technologies: [
+      "SolidWorks API",
+      "C#",
+      ".NET",
+      "Makro / eklenti",
+      "Parametrik geometri",
+    ],
+    process: [
+      "Tekrarlayan işlerin ayrıştırılması ve API sınırlarında güvenli otomasyon",
+      "Girdi doğrulama ve hata geri bildirimi",
+      "Video ve canlı demo ile paydaş hizalaması",
+    ],
+    impact: [
+      "Tekrarın azaltılması ve tutarlı model üretimi",
+      "2B–3B hattında izlenebilir, tekrarlanabilir akış",
+      "Ekip içi iletişim için somut demo varlığı",
+    ],
+    strategic:
+      "Sunum slaytı değil, çalışır yazılım ve görülebilir otomasyon — teknik derinliğin kanıtı.",
+    media: [
+      {
+        kind: "video",
+        src: projeler(SW, "ParametriX_2D-3D_Converter.mp4"),
+        poster: projeler("image.png"),
+        alt: "ParametriX 2B–3B dönüştürücü demo videosu",
+        caption: "ParametriX 2D–3D Converter",
+      },
+      {
+        kind: "video",
+        src: projeler(SW, "Makro_Video.mp4"),
+        poster: projeler("image.png"),
+        alt: "SolidWorks makro otomasyon videosu",
+        caption: "Makro otomasyon",
+      },
+      {
+        kind: "image",
+        src: projeler("image.png"),
+        alt: "Mühendislik yazılımı / CAD görseli",
+      },
+    ],
+  },
+  {
+    slug: "prefab-engineering-software",
+    title: "Prefabrik / hafif çelik mühendislik yazılımı",
+    tagline: "Üretim kısıtlarıyla hizalı CAD–CAM düşüncesi",
+    problem:
+      "Prefabrik ve hafif çelik hatlarında tasarım ile roll-form / üretim çıktıları arasında kopukluk ve manuel hata riski.",
+    context:
+      "Üretim gerçeklerini parametre ve kural setlerine dökerek; tekrarlanabilir çıktı üreten iç yazılım ve otomasyon perspektifi.",
+    role: "Domain gereksinimlerinin yazılım sınırına taşınması, SolidWorks / .NET entegrasyonu ve pilot doğrulama.",
     technologies: [
       "SolidWorks API",
       "C#",
@@ -53,185 +174,191 @@ export const caseStudies: CaseStudy[] = [
       "Parametrik modelleme",
     ],
     process: [
-      "Üretim ve montaj gerçeklerini haritalama",
-      "Parametre sözleşmesi ve hata sınırlarının tanımı",
-      "API üzerinden otomatik model / teknik çıktı üretimi",
-      "Pilot hat ile doğrulama ve iterasyon",
+      "Hat ve montaj kısıtlarının haritalanması",
+      "Parametre sözleşmesi ve üretim çıktısı tanımı",
+      "Pilot hat ile ölçüm ve iterasyon",
     ],
     impact: [
-      "Tekrarlayan modelleme yükünün sistematik azaltılması",
-      "Üretim çıktılarında tutarlılık ve izlenebilirlik",
-      "Mühendislik–üretim hizasında hızlanmış geri bildirim döngüsü",
+      "Mühendislik–üretim hizasında hızlı geri bildirim",
+      "Çıktılarda tutarlılık ve izlenebilirlik hedefi",
     ],
     strategic:
-      "Domain bilgisinin ürünleşmiş bir yazılım hattına dönüştürülmesi; sadece otomasyon değil, operasyonel güven oluşturan bir sistem.",
+      "Endüstriyel domain bilgisinin ürünleşmiş yazılım hattına dönüşümü.",
     media: [
       {
         kind: "image",
-        src: "/media/projeler/prefab-cad-cam/hero.jpg",
-        alt: "Prefabrik CAD–CAM arayüzü veya çıktı görseli",
-      },
-      {
-        kind: "video",
-        src: "/media/projeler/prefab-cad-cam/demo.mp4",
-        poster: "/media/projeler/prefab-cad-cam/demo-poster.jpg",
-        alt: "Yazılım demosu",
+        src: projeler("image.png"),
+        alt: "CAD / mühendislik yazılımı görseli",
       },
     ],
   },
   {
-    slug: "solidworks-automation",
-    title: "SolidWorks CAD otomasyon sistemi",
-    tagline: "Tekrarı kaldıran, kuralları kodlayan mühendislik hattı",
+    slug: "uav-amphidrone",
+    title: "İHA ve AmphiDrone",
+    tagline: "Hava–su geçişli platform tasarımı ve görselleştirme",
     problem:
-      "Manuel modelleme ve tekrar kullanılmayan adımlar mühendislik ekibinin kapasitesini tüketiyor; hata maliyeti yüksekti.",
+      "Çok ortamlı görevlerde platform kısıtları, aerodinamik–hidrodinamik uzlaşı ve prototip iletişimi.",
     context:
-      "Kurumsal SolidWorks ortamında API tabanlı otomasyonla standartların kodlanması ve süreçlerin ölçeklenmesi hedeflendi.",
-    role: "API tasarımı, modül yapısı, C# / VBA geçiş stratejileri ve kullanıcı geri bildirimine göre evrim.",
-    technologies: ["SolidWorks API", "C#", "VBA", ".NET", "Versiyonlama"],
+      "İnsansız hava aracı projeleri kapsamında tasarım görselleri, fotoğraf ve AmphiDrone konsept görselleri.",
+    role: "Mekanik / sistem tasarımı katkıları, görselleştirme ve teknik sunum desteği.",
+    technologies: ["CAD", "Prototip", "Görselleştirme", "Sistem düşüncesi"],
     process: [
-      "Tekrar eden iş paketlerinin ayrıştırılması",
-      "API sınırlarında güvenli otomasyon katmanı",
-      "Şablon ve konfigürasyon yönetimi",
-      "Dokümantasyon ve devreye alma",
+      "Gereksinim ve risklerin netleştirilmesi",
+      "CAD ve saha görselleriyle paydaş hizalaması",
     ],
     impact: [
-      "Rutin işlerin otomasyona alınması",
-      "Tutarlı geometri ve malzeme tanımları",
-      "Mühendislik eforunun yüksek değerli problemlere kayması",
+      "Kavramın teknik olarak anlaşılır kılınması",
+      "Proje anlatımında görsel kanıt gücü",
     ],
     strategic:
-      "Mühendislik disiplinini yazılım sınırları içinde koruyarak ölçekleme — ‘hızlı prototip’ değil, üretimde yaşayan araçlar.",
+      "Yazılım odaklı profilin yanında mekatronik ve sahayı anlayan mühendislik derinliği.",
     media: [
       {
         kind: "image",
-        src: "/media/projeler/solidworks-automation/hero.jpg",
-        alt: "SolidWorks otomasyon ekran görüntüsü",
+        src: projeler(UAV, "AmphiDrone 1.png"),
+        alt: "AmphiDrone konsept görseli 1",
+      },
+      {
+        kind: "image",
+        src: projeler(UAV, "AmphiDrone 2.png"),
+        alt: "AmphiDrone konsept görseli 2",
+      },
+      {
+        kind: "image",
+        src: projeler(UAV, "1647591941376.jpg"),
+        alt: "İHA projesi görseli",
       },
     ],
   },
   {
-    slug: "parametrix-2d-3d",
-    title: "ParametriX — 2B → 3B dönüşüm",
-    tagline: "Girdi parametrelerinden güvenilir 3B üretimi",
+    slug: "underwater-welding",
+    title: "Otonom sualtı kaynak ve muayene",
+    tagline: "Zorlu ortamda robotik kaynak / muayene çizgisi",
     problem:
-      "2B verinin 3B modele güvenilir şekilde aktarılması; edge-case’lerde kırılganlık ve manuel müdahale ihtiyacı.",
+      "Sualtında operasyon güvenliği, erişim ve kaynak / muayene süreçlerinin otonom sistemlerle desteklenmesi.",
     context:
-      "Parametrik kurallar ve doğrulama katmanları ile dönüşümün tekrarlanabilir hale getirilmesi.",
-    role: "Algoritma ve yazılım iskeleti, kullanıcı akışı, test senaryoları.",
-    technologies: ["C#", ".NET", "Geometri işleme", "SolidWorks API"],
+      "Otonom sualtı kaynak ve muayene çalışmalarına ilişkin mühendislik görselleri ve konsept sunumu.",
+    role: "Tasarım ve teknik iletişim katkıları; çok disiplinli problem çerçevesi.",
+    technologies: ["Robotik", "CAD", "Sualtı sistemleri", "Kaynak / muayene"],
     process: [
-      "Girdi sözleşmesi ve validasyon",
-      "Dönüşüm grafiği ve hata geri bildirimi",
-      "Regresyon testleri",
+      "Operasyonel risk ve sistem sınırlarının tanımı",
+      "Görsel ve teknik anlatımla paydaş hizalaması",
     ],
     impact: [
-      "Tekrarlanabilir 2B–3B hattı",
-      "Manuel düzeltme ihtiyacının azaltılması",
+      "Karmaşık mühendislik konusunun görünür kılınması",
     ],
     strategic:
-      "‘Sihirli dönüştürücü’ yerine, mühendislik kurallarının açıkça tanımlandığı ürün düşüncesi.",
+      "Ağır endüstri ve robotik problemlerinde sistem düşüncesi ve iletişim yetkinliği.",
     media: [
       {
         kind: "image",
-        src: "/media/projeler/parametrix/hero.jpg",
-        alt: "ParametriX arayüz veya çıktı",
+        src: projeler(SUB, "Adsz_Proje_10.jpg"),
+        alt: "Otonom sualtı kaynak / muayene çalışması görseli",
       },
       {
-        kind: "video",
-        src: "/media/projeler/parametrix/demo.mp4",
-        poster: "/media/projeler/parametrix/demo-poster.jpg",
-        alt: "ParametriX demo",
+        kind: "image",
+        src: projeler(SUB, "Adsız Proje (10).jpg"),
+        alt: "Sualtı robotik / kaynak görseli",
       },
     ],
   },
   {
-    slug: "uav-robotics",
-    title: "İHA / su altı robotik ve kaynak–muayene kavramları",
-    tagline: "Saha gerçekliğine dayalı sistem düşüncesi",
-    problem:
-      "Zorlu ortamlarda görev güvenliği, sensör füzyonu ve operasyonel süreklilik.",
-    context:
-      "Araştırma ve konsept aşamasında robotik, otonomi ve kaynak / muayene hatlarına yönelik mühendislik görüşü.",
-    role: "Mekanik ve sistem tasarımı katkıları, prototip ve görselleştirme, teknik iletişim.",
-    technologies: ["ROS", "CAD", "Kontrol mantığı", "Sensör entegrasyonu"],
-    process: [
-      "Gereksinim ve risk analizi",
-      "Donanım–yazılım sınırının netleştirilmesi",
-      "Deneysel doğrulama adımları",
-    ],
-    impact: [
-      "Kavramların paydaşlarla hizalanmış anlatımı",
-      "Teknik kararların görünür kılınması",
-    ],
-    strategic:
-      "Yazılım ve mekatronik arasında köprü kurabilen, sahayı anlayan bir mühendislik profili.",
-    media: [
-      {
-        kind: "image",
-        src: "/media/projeler/uav/hero.jpg",
-        alt: "İHA veya robotik görsel",
-      },
-    ],
-  },
-  {
-    slug: "talks-stage",
+    slug: "stage-communication",
     title: "Sahne ve teknik iletişim",
-    tagline: "Karmaşık mühendisliği net anlatım",
+    tagline: "Karmaşık mühendisliği yönetim ve ekip önünde net anlatım",
     problem:
-      "Teknik derinliğin yönetim ve geniş ekipler önünde güven oluşturmadan aktarılması zordur.",
+      "Teknik derinliğin güven oluşturmadan aktarılması karar hızını düşürür.",
     context:
-      "Konferans, iç eğitim veya paydaş sunumlarında ürün ve sistem hikâyesinin kurulması.",
-    role: "Sunum mimarisi, görsel kanıt kullanımı, soru–cevap disiplini.",
-    technologies: ["Sunum tasarımı", "Demo disiplini", "Storyboarding"],
+      "Etkinlik / sahne ortamında mühendislik ve ürün mesajlarının profesyonel iletimi.",
+    role: "Sunum disiplini, görsel kanıt kullanımı ve soru–cevap yönetimi.",
+    technologies: ["Sunum", "Storyboard", "Demo"],
     process: [
-      "Hedef kitleye göre mesaj sadeleştirme",
-      "Canlı demo risklerinin yönetimi",
-      "Geri bildirimle içerik iterasyonu",
+      "Kitleye göre mesaj sadeleştirme",
+      "Görsel kanıt ve sahne hazırlığı",
     ],
     impact: [
-      "Teknik kararların daha hızlı onayı",
+      "Teknik kararların daha hızlı hizalanması",
       "Ekipler arası ortak dil",
     ],
     strategic:
-      "Ürün liderliği ve müşteri / yönetim yüzü olarak güvenilirlik sinyali.",
+      "Ürün ve mühendislik liderliği için güvenilir iletişim sinyali.",
     media: [
       {
         kind: "image",
-        src: "/media/projeler/talks/stage.jpg",
-        alt: "Sahne veya konferans fotoğrafı",
+        src: projeler(
+          "1000032332_890c8c34641268895aacba6ef3c538aa-30.04.2023 07_47_02.jpg",
+        ),
+        alt: "Sahne / etkinlik fotoğrafı",
       },
     ],
+  },
+];
+
+/** Medya duvarı: seçilmiş görseller (video hariç) */
+export const curatedWallImages: {
+  src: string;
+  alt: string;
+  caption: string;
+}[] = [
+  {
+    src: projeler("MEHMET_SEYRİMEZ.jpg"),
+    alt: "Mehmet Seyrimez portre",
+    caption: "Portre",
+  },
+  {
+    src: projeler(UAV, "IMG-6016.jpg"),
+    alt: "İHA / proje fotoğrafı",
+    caption: "İnsansız hava aracı",
+  },
+  {
+    src: projeler(UAV, "_DSC1319.NEF.jpg"),
+    alt: "İHA saha / proje görseli",
+    caption: "İHA",
+  },
+  {
+    src: projeler(UAV, "AmphiDrone 3.png"),
+    alt: "AmphiDrone 3",
+    caption: "AmphiDrone",
+  },
+  {
+    src: projeler(SUB, "Adsz_Proje_10.jpg"),
+    alt: "Sualtı robotik",
+    caption: "Otonom sualtı",
+  },
+  {
+    src: projeler("image.png"),
+    alt: "CAD / yazılım",
+    caption: "Mühendislik yazılımı",
   },
 ];
 
 export const timeline: TimelineEntry[] = [
   {
     id: "t1",
-    period: "CV’deki dönem",
-    title: "Mekanik tasarım ve üretim yakınlığı",
-    org: "Üretim odaklı roller — CV ile güncelleyin",
+    period: "Kariyer evresi 1",
+    title: "Üretim ve mekanik tasarım zemini",
+    org: "Ayrıntılı kurum ve tarihler — Güncel CV (PDF)",
     summary:
-      "Üretim hatlarını ve montaj gerçeklerini içselleştiren mekanik tasarım deneyimi; mühendislik kararlarının sahada test edilmesi.",
-    focus: ["Mekanik tasarım", "Üretilebilirlik", "Hat gerçekleri"],
+      "Üretim hatlarına yakın mekanik tasarım; montaj ve üretilebilirlik gerçeklerinin mühendislik kararlarına yansıması.",
+    focus: ["Mekanik tasarım", "Üretilebilirlik", "Saha gerçeği"],
   },
   {
     id: "t2",
-    period: "CV’deki dönem",
-    title: "CAD derinliği ve otomasyon",
-    org: "Mühendislik ve yazılım kesişimi — CV ile güncelleyin",
+    period: "Kariyer evresi 2",
+    title: "CAD–CAM ve SolidWorks otomasyonu",
+    org: "Ayrıntılı kurum ve tarihler — Güncel CV (PDF)",
     summary:
-      "SolidWorks ekosisteminde API ve .NET ile otomasyon; tekrarın azaltılması ve standartların kodlanması.",
-    focus: ["SolidWorks API", "C# / .NET", "İç araçlar"],
+      "SolidWorks ekosisteminde derinleşme; API, makro ve .NET ile tekrarın azaltılması, standartların kodlanması ve iç araçların devreye alınması.",
+    focus: ["SolidWorks API", "C# / .NET", "CAD–CAM"],
   },
   {
     id: "t3",
     period: "Günümüz",
-    title: "AI-native ürün inşası",
-    org: "Bağımsız / proje bazlı — CV ile güncelleyin",
+    title: "Mühendislik yazılımı ve AI-native üretim",
+    org: "Proje ve iş birliği modelleri — CV / iletişim",
     summary:
-      "AI’yi kısayol değil kaldıraç olarak kullanan geliştirme pratiği; hız, gözden geçirilebilirlik ve üretim kalitesi dengesi.",
-    focus: ["AI destekli geliştirme", "Ürün düşüncesi", "Sistem tasarımı"],
+      "Prefabrik ve hafif çelik düşüncesiyle ölçeklenebilir yazılım hatları; AI’yi hız ve kalite dengesinde kontrollü kaldıraç olarak kullanma.",
+    focus: ["Ürün düşüncesi", "Otomasyon", "AI destekli geliştirme"],
   },
 ];
 
@@ -240,9 +367,9 @@ export const capabilityGroups: CapabilityGroup[] = [
     id: "cad",
     title: "CAD ve mühendislik sistemleri",
     items: [
-      "SolidWorks API ve eklenti mimarisi",
+      "SolidWorks API ve eklenti / makro mimarisi",
       "Parametrik modelleme ve konfigürasyon",
-      "CAD–CAM ve üretim çıktıları",
+      "CAD–CAM ve üretilebilir çıktılar",
       "Teknik çizim ve BOM disiplini",
     ],
   },
@@ -251,7 +378,7 @@ export const capabilityGroups: CapabilityGroup[] = [
     title: "Otomasyon ve yazılım",
     items: [
       "C# / .NET",
-      "VBA geçişleri ve modülerleştirme",
+      "VBA’dan modüler yapıya geçiş",
       "İç araçların sürümleme ve devreye alınması",
       "Performans ve hata sınırları",
     ],
@@ -260,9 +387,9 @@ export const capabilityGroups: CapabilityGroup[] = [
     id: "ai",
     title: "AI destekli geliştirme",
     items: [
-      "Kod üretiminde kontrollü kullanım",
+      "Kod ve tasarımda kontrollü AI kullanımı",
       "İnsan gözden geçirmesi ve test ağırlığı",
-      "Tekrarlanabilir prompt / şablon disiplini",
+      "Tekrarlanabilir şablon ve kalite çubuğu",
     ],
   },
   {
@@ -288,21 +415,35 @@ export const capabilityGroups: CapabilityGroup[] = [
 export const about = {
   title: "Sistem inşa eden bir mühendislik zihniyeti",
   paragraphs: [
-    "Yazılımı, üretimde yaşayan bir araç olarak görüyorum: hızlı demolar değil, hataya yer bırakmayan akışlar ve sürdürülebilir iç ürünler.",
-    "AI, kararların yerine geçen bir sihirbaz değil; mühendislik hızını artıran kontrollü bir katman. Asıl mesele, hangi problemin otomasyona ve hangi kararın insana ait kalacağını netleştirmek.",
-    "Endüstriyel gerçekleri anlayan, bunları ölçeklenebilir yazılıma çevirebilen hibrit bir profil sunuyorum: CAD otomasyonu, üretim yazılımı ve ürün disiplininin bir arada olduğu bir çizgi.",
+    "Yazılımı üretimde yaşayan araç olarak ele alıyorum: demolar değil, hataya yer bırakmayan akışlar ve sürdürülebilir iç ürünler.",
+    "AI, kararların yerine geçen bir sihirbaz değil; hız ve netlik katan kontrollü bir katman. Önemli olan, hangi adımın otomasyona ve hangi kararın insana bırakılacağını açıkça tanımlamak.",
+    "CAD otomasyonu, üretim yazılımı ve ürün disiplinini aynı çizgide tutan hibrit bir profil: endüstriyel gerçekleri anlayıp bunları ölçeklenebilir yazılıma taşımak.",
   ],
 };
 
 export const credentials: Credential[] = [
-  { label: "Eğitim", detail: "CV’deki program ve kurum adlarıyla güncelleyin" },
-  { label: "Sertifikalar", detail: "Varsa ilgili sertifika adları — CV’den ekleyin" },
-  { label: "Diller", detail: "Çalışma dilleri — CV ile hizalayın" },
+  {
+    label: "Özgeçmiş",
+    detail:
+      "Güncel deneyim, eğitim ve teknik özet için PDF özgeçmişi indirebilirsiniz.",
+    href: projeler("Güncel CV.pdf"),
+    hrefLabel: "Güncel CV.pdf",
+  },
+  {
+    label: "Eğitim",
+    detail:
+      "Lisans ve ilgili akademik kayıtlar özgeçmiş PDF’inde yer almaktadır.",
+  },
+  {
+    label: "İletişim tercihi",
+    detail: `${person.email} · ${person.phoneDisplay} · LinkedIn`,
+  },
 ];
 
 export const contact = {
   title: "Bir sonraki mühendislik yazılımını birlikte tanımlayalım",
-  body: "CAD otomasyonu, üretim içi araçlar ve AI-native geliştirme ihtiyaçlarınız için doğrudan iletişime geçebilirsiniz. Net problem tanımı ve ölçülebilir hedeflerle ilerlemeyi tercih ediyorum.",
+  body: "CAD otomasyonu, SolidWorks içi araçlar, parametrik hatlar veya prefabrik / üretim odaklı yazılım ihtiyaçlarınız için doğrudan yazın veya arayın. Net problem tanımı ve ölçülebilir hedeflerle ilerlemeyi tercih ediyorum.",
   ctaPrimary: "E-posta gönder",
   ctaSecondary: "LinkedIn",
+  ctaPhone: "Ara",
 };

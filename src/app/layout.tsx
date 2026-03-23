@@ -68,6 +68,9 @@ const jsonLd = {
   "@type": "Person",
   name: person.name,
   url: `https://${person.domain}`,
+  email: person.email,
+  telephone: person.phoneTel,
+  sameAs: [person.linkedin],
   jobTitle: "CAD Automation Engineer",
   knowsAbout: [
     "CAD automation",

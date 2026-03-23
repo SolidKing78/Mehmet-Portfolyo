@@ -40,6 +40,20 @@ export type CapabilityGroup = {
 export type Credential = {
   label: string;
   detail: string;
+  href?: string;
+  hrefLabel?: string;
+};
+
+export type SummaryPillar = {
+  title: string;
+  body: string;
+  href: string;
+};
+
+export type PageMapItem = {
+  label: string;
+  description: string;
+  href: string;
 };
 
 export type ProofChip = {

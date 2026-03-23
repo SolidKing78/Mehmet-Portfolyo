@@ -1,31 +1,29 @@
-# Medya yerleşimi (PROJELER → `public/media`)
+# Medya yerleşimi
 
-CV ve **PROJELER** klasörünüzdeki dosyaları aşağıdaki yapıya kopyalayın; gerekirse dosya adlarını eşleştirip `src/content/site.ts` içindeki `src` yollarını güncelleyin.
+Site, statik dosyaları yalnızca **`public/`** altından sunar. Görseller ve videolar **`public/Projeler/`** yapısından okunur (kökteki `Projeler/` klasörünü güncellediğinizde aynı içeriği `public/Projeler` ile senkron tutun).
 
-## Portre
+## Önemli dosyalar (mevcut eşleşme)
 
-| Hedef yol | Kullanıldığı bölüm |
-|-----------|-------------------|
-| `public/media/portrait/hero.jpg` | Hero sağ sütun |
-| `public/media/portrait/editorial.jpg` | Medya duvarı (üst sıra) |
+| Dosya | Kullanım |
+|-------|----------|
+| `Projeler/MEHMET_SEYRİMEZ.jpg` | Hero portre |
+| `Projeler/Güncel CV.pdf` | Kimlik bölümünden indir / aç |
+| `Projeler/Solidworks Makro API - Eklenti - ParametriX/*.mp4` | ParametriX / makro videoları |
+| `Projeler/İnsansız Hava Aracı/*` | İHA / AmphiDrone görselleri |
+| `Projeler/OTONOM SUALTI KAYNAĞI VE SUALTI/*` | Sualtı kaynak / muayene görselleri |
+| `Projeler/1000032332_...jpg` | Sahne fotoğrafı |
+| `Projeler/image.png` | CAD / yazılım görseli, video poster |
 
-## Proje klasörleri (vaka çalışmaları + medya duvarı)
+**Not:** `20250722.mp4` (~173 MB) GitHub limitini aşar; sitede kullanılmıyor. İsterseniz YouTube / Vimeo veya küçültülmüş bir kopya ekleyin.
 
-| Klasör | İçerik önerisi |
-|--------|----------------|
-| `public/media/projeler/prefab-cad-cam/` | Prefabrik / hafif çelik CAD–CAM arayüz, çıktı, `hero.jpg`, isteğe bağlı `demo.mp4` + `demo-poster.jpg` |
-| `public/media/projeler/solidworks-automation/` | SolidWorks otomasyon ekranları, `hero.jpg` |
-| `public/media/projeler/parametrix/` | 2D→3D / ParametriX, `hero.jpg`, isteğe bağlı `demo.mp4` + `demo-poster.jpg` |
-| `public/media/projeler/uav/` | İHA / robotik görselleri, `hero.jpg` |
-| `public/media/projeler/talks/` | Konferans / sahne fotoğrafları, `stage.jpg` |
+## Senkron
 
-## Dosya adıyla projeye atlama (sizin tarafınızda)
+PowerShell örneği (büyük dosyayı hariç tutarak):
 
-1. PROJELER içindeki dosyaları konuya göre gruplayın (prefab, SolidWorks, İHA, konuşma vb.).
-2. Yukarıdaki klasörlere kopyalayın ve `site.ts` → `caseStudies[].media[].src` değerlerini gerçek dosya adlarıyla eşleştirin.
-3. Videolar için `kind: "video"` ve `poster` ile ilk kare veya statik görsel verin (performans ve güven).
+`robocopy ".\Projeler" ".\public\Projeler" /E /XF "20250722.mp4"`
 
-## İçerik doğruluğu
+Yol ve dosya adlarını değiştirirseniz `src/content/site.ts` ve `src/lib/paths.ts` kullanımını güncelleyin.
 
-- Şirket adları, tarihler, eğitim ve sertifikalar: `src/content/site.ts` içindeki `timeline`, `credentials` ve `person` alanlarını CV ile birebir güncelleyin.
-- Ölçülebilir iddia (yüzde, saat tasarrufu) yalnızca doğrulanabilirse ekleyin; şu an metinler niteliksel tutulmuştur.
+## İçerik
+
+Kurum adları ve kesin tarihler: `site.ts` içindeki `timeline` ile **Güncel CV.pdf** uyumlu olmalıdır.

@@ -3,6 +3,7 @@ import { Capabilities } from "@/components/sections/Capabilities";
 import { CaseStudies } from "@/components/sections/CaseStudies";
 import { Contact } from "@/components/sections/Contact";
 import { Credentials } from "@/components/sections/Credentials";
+import { ExecutiveSummary } from "@/components/sections/ExecutiveSummary";
 import { Hero } from "@/components/sections/Hero";
 import { MediaWall } from "@/components/sections/MediaWall";
 import { ProofStrip } from "@/components/sections/ProofStrip";
@@ -12,6 +13,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <ExecutiveSummary />
       <ProofStrip />
       <CaseStudies />
       <Timeline />

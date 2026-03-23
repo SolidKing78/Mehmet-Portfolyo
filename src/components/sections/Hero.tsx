@@ -3,10 +3,12 @@
 import { person } from "@/content/site";
 import { Reveal } from "@/components/motion/Reveal";
 import { SmartImage } from "@/components/ui/SmartMedia";
+import { projeler } from "@/lib/paths";
 import { motion, useReducedMotion } from "framer-motion";
+import { Linkedin, Mail, Phone } from "lucide-react";
 import Link from "next/link";
 
-const portraitSrc = "/media/portrait/hero.jpg";
+const portraitSrc = projeler("MEHMET_SEYRİMEZ.jpg");
 
 export function Hero() {
   const reduce = useReducedMotion();
@@ -28,7 +30,7 @@ export function Hero() {
         <div>
           <Reveal>
             <p className="font-mono text-[11px] font-medium tracking-[0.2em] text-[var(--color-accent)] uppercase">
-              AI-native engineering software
+              {person.roleTitle}
             </p>
           </Reveal>
           <Reveal delay={0.05}>
@@ -41,17 +43,52 @@ export function Hero() {
               {person.subhead}
             </p>
           </Reveal>
+
+          <Reveal delay={0.12}>
+            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm text-[var(--color-muted)]">
+              <a
+                href={`mailto:${person.email}`}
+                className="inline-flex items-center gap-2 transition-colors hover:text-[var(--color-accent)]"
+              >
+                <Mail className="h-4 w-4 text-[var(--color-accent)]" />
+                {person.email}
+              </a>
+              <a
+                href={`tel:${person.phoneTel}`}
+                className="inline-flex items-center gap-2 transition-colors hover:text-[var(--color-accent)]"
+              >
+                <Phone className="h-4 w-4 text-[var(--color-accent)]" />
+                {person.phoneDisplay}
+              </a>
+              <a
+                href={person.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 transition-colors hover:text-[var(--color-accent)]"
+              >
+                <Linkedin className="h-4 w-4 text-[var(--color-accent)]" />
+                LinkedIn
+              </a>
+            </div>
+          </Reveal>
+
           <Reveal delay={0.14}>
             <div className="mt-10 flex flex-wrap gap-3">
               <Link
-                href="#projeler"
+                href="#ozet"
                 className="inline-flex items-center justify-center rounded-full bg-[var(--color-fg)] px-6 py-3 text-sm font-semibold text-[var(--color-canvas)] transition-opacity hover:opacity-90"
               >
-                Çalışmaları incele
+                Özeti oku
+              </Link>
+              <Link
+                href="#projeler"
+                className="inline-flex items-center justify-center rounded-full border border-[var(--color-border)] px-6 py-3 text-sm font-medium text-[var(--color-fg)] transition-colors hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)]"
+              >
+                Projeler
               </Link>
               <Link
                 href="#iletisim"
-                className="inline-flex items-center justify-center rounded-full border border-[var(--color-border)] px-6 py-3 text-sm font-medium text-[var(--color-fg)] transition-colors hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)]"
+                className="inline-flex items-center justify-center rounded-full border border-transparent px-6 py-3 text-sm font-medium text-[var(--color-muted)] transition-colors hover:text-[var(--color-fg)]"
               >
                 İletişim
               </Link>
@@ -77,7 +114,7 @@ export function Hero() {
             </div>
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[var(--color-canvas)]/90 to-transparent" />
             <p className="absolute bottom-4 left-4 right-4 font-mono text-[10px] tracking-wider text-[var(--color-muted)] uppercase">
-              CAD · Üretim · Otomasyon
+              CAD · Otomasyon · Mühendislik yazılımı
             </p>
           </motion.div>
         </Reveal>
