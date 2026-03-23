@@ -195,6 +195,12 @@
     object-position: 50% 72%;
   }
 
+  @media (min-width: 1024px) {
+    .hero-bg-image {
+      object-position: 50% 16%;
+    }
+  }
+
   .hero-overlay {
     @apply absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.82),rgba(0,0,0,0.62))];
   }
