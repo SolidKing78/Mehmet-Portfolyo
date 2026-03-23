@@ -1,119 +1,141 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
-import { Download, Linkedin, Mail, MapPin, Menu, Phone } from "lucide-react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
+import {
+  Bot,
+  Braces,
+  Building2,
+  CheckCircle2,
+  Code2,
+  Download,
+  DraftingCompass,
+  GraduationCap,
+  Linkedin,
+  Mail,
+  MapPin,
+  Menu,
+  MessageCircle,
+  PencilRuler,
+  Phone,
+  Send,
+  Sparkles,
+  Wrench,
+} from "lucide-react";
 import { person } from "@/content/site";
 import { projeler } from "@/lib/paths";
 import { SmartImage } from "@/components/ui/SmartMedia";
+import { projectDetails } from "@/content/projects";
 
 type Lang = "tr" | "en";
 
 const dictionary = {
   tr: {
-    nav: ["Anasayfa", "Hakkımda", "Yetenekler", "Deneyim", "Portföy", "İletişim"],
-    heroBadge: "RESUME",
+    nav: ["Anasayfa", "Hakkımda", "Yetenekler", "Deneyim", "İletişim"],
+    heroBadge: "Özgeçmiş / CV",
     hello: "Merhaba Ben",
-    role: "Mühendislik Yazılımı Geliştirici",
+    role: "AI Destekli Yazılım Geliştirme & Vibe Coding",
     location: "Pendik, İstanbul, Türkiye",
     aboutTitle: "Hakkımda",
     aboutText:
-      "AI destekli yürütümle, üretime yakın CAD/CAM ve SolidWorks otomasyon ürünleri geliştiriyorum. Hedefim sahadaki tekrar eden mühendislik işlerini hızlandırmak, hata riskini azaltmak ve ekiplerin karar alma hızını artırmak.",
-    aboutTags: ["SolidWorks API", "C#", ".NET", "C++", "CAD/CAM", "AI Workflow"],
+      "CAD yazılımları konusunda teknik destek ve eğitim sağlamak, mühendislik ekiplerine ve üretim süreçlerine yönelik çözümler sunarak sektörde uzmanlaşmak istiyorum. Özellikle otomotiv, savunma sanayi ve endüstriyel üretim alanlarında SolidWorks ve otomasyon yazılımları ile verimliliği artıran, tasarım sürecini hızlandıran çözümler üretmeyi ve bu alanda teknik liderlik geliştirmeyi hedefliyorum.",
+    aboutTags: [
+      "AI-Assisted Development",
+      "Vibe Coding",
+      "Prompt Engineering",
+      "No-Code / Low-Code",
+      "LLM Workflows",
+      "SolidWorks API",
+    ],
     cv: "CV İndir",
     whatIDo: "Neler Yapıyorum",
     services: [
       {
-        title: "CAD Otomasyonu",
-        text: "Parametrik montaj, teknik resim ve üretim çıktısını tek akışta üreten çözümler.",
+        title: "SolidWorks CAD Otomasyonu",
+        text: "Gencer Otomotiv için SolidWorks API, VBA, .NET ve C# kullanarak kamyon/treyler üst yapısına özel parametrik 3D tasarım otomasyonu geliştirdim. Kullanıcıların birkaç ölçü girişiyle komple montaj ve teknik resim çıktıları (PDF, DWG, DXF, büküm resimleri dahil) tek tuşla üretmesini sağlayan bir sistem kurdum.",
       },
       {
-        title: "Üretim Yazılımları",
-        text: "Prefabrik/hafif çelik hatları için roll-form uyumlu CAD/CAM yazılım mimarisi.",
+        title: "Ürün Yazılımları (CAD/CAM)",
+        text: "AI-assisted / vibe coding yaklaşımıyla C++ tabanlı modern bir CAD/CAM yazılımı geliştirdim. Sistem, prefabrik veya hafif çelik yapıların bileşenlerini roll-form hatlarında doğrudan kullanılabilir üretim çıktısına dönüştürüyor. Otomatik modelleme, üretim verisi, hata kontrolü ve lisans yönetimi altyapısını uçtan uca tasarladım.",
       },
       {
-        title: "Ürün Geliştirme",
-        text: "Pilot, ölçüm, sürümleme ve geri bildirimle ölçeklenebilir mühendislik ürünleri.",
+        title: "Vibe Coding & AI-Driven Development",
+        text: "Cursor, Claude, Antigravity ve GPT Codex araçlarını aktif kullanarak geliştirme döngülerini hızlandırıyorum. Modern AI-driven development yaklaşımıyla daha hızlı iterasyon, daha güçlü doğrulama ve daha kısa teslim süresi sağlıyorum.",
       },
     ],
-    featured: "Öne Çıkan Proje",
-    featuredTitle: "Prefabrik & Hafif Çelik CAD/CAM Platformu",
-    featuredDesc:
-      "C++ çekirdeği üzerinde çalışan bu sistem; model oluşturma, üretim verisi, hata kontrolü ve lisans katmanını tek üründe toplar. Eski sisteme göre üretim hazırlığında belirgin hız artışı sağlandı.",
+    featured: "Öne Çıkan Projeler",
     featuredCta: "Detayları Gör",
     skillTitleA: "Teknik Yetenekler",
-    skillTitleB: "Profesyonel Yetenekler",
     education: "Eğitim",
     work: "İş Deneyimi",
-    portfolio: "Güncel Portföy",
-    interested: "Birlikte Çalışmaya Hazır mısın?",
+    interested: "Benimle İletişime Geçin",
     interestedText:
-      "Kurumsal CAD otomasyonu veya üretim yazılımı yatırımı için teknik yol haritasını birlikte çıkaralım.",
+      "CAD otomasyonu ve mühendislik yazılımı konularında e-posta, LinkedIn veya WhatsApp üzerinden doğrudan ulaşabilirsiniz.",
     contact: "İletişim",
     send: "Mesaj Gönder",
     placeholders: ["Adınız", "Soyadınız", "E-posta", "Mesajınız"],
+    required: "Lütfen tüm alanları doldurun.",
+    badEmail: "Lütfen geçerli bir e-posta girin.",
   },
   en: {
-    nav: ["Home", "About", "Skills", "Experience", "Portfolio", "Contact"],
-    heroBadge: "RESUME",
+    nav: ["Home", "About", "Skills", "Experience", "Contact"],
+    heroBadge: "Resume / CV",
     hello: "Hello I'm",
-    role: "Engineering Software Developer",
+    role: "AI-Assisted Software Development & Vibe Coding",
     location: "Pendik, Istanbul, Turkey",
     aboutTitle: "About Me",
     aboutText:
-      "I build AI-assisted, production-focused CAD/CAM and SolidWorks automation products. My goal is to reduce repetitive engineering workload, lower error risk, and improve decision speed for manufacturing teams.",
-    aboutTags: ["SolidWorks API", "C#", ".NET", "C++", "CAD/CAM", "AI Workflow"],
+      "I aim to specialize in CAD software by providing technical support and training while delivering practical solutions for engineering teams and manufacturing workflows. Especially in automotive, defense, and industrial production, I focus on accelerating design cycles and improving efficiency with SolidWorks and automation-driven systems.",
+    aboutTags: [
+      "AI-Assisted Development",
+      "Vibe Coding",
+      "Prompt Engineering",
+      "No-Code / Low-Code",
+      "LLM Workflows",
+      "SolidWorks API",
+    ],
     cv: "Download CV",
     whatIDo: "What I Do",
     services: [
       {
-        title: "CAD Automation",
-        text: "End-to-end flows for parametric assemblies, technical drawings, and production output.",
+        title: "SolidWorks CAD Automation",
+        text: "For Gencer Otomotiv, I built a complete automation system using SolidWorks API, VBA, .NET, and C#. With a few parameter inputs, users can generate full assemblies and one-click documentation including PDF, DWG, DXF, and bending drawings.",
       },
       {
-        title: "Manufacturing Software",
-        text: "Roll-form compatible CAD/CAM product architecture for prefab and light steel lines.",
+        title: "Product Software (CAD/CAM)",
+        text: "Using an AI-assisted vibe coding workflow, I developed a C++ CAD/CAM software platform that converts prefab and light steel models into roll-form-ready production outputs. Automatic modeling, production data generation, validation, and licensing were designed end-to-end.",
       },
       {
-        title: "Product Development",
-        text: "Scalable engineering products through pilot, measurement, release, and feedback loops.",
+        title: "Vibe Coding & AI-Driven Development",
+        text: "I actively use Cursor, Claude, Antigravity, and GPT Codex to accelerate software delivery. This AI-driven development style enables faster iteration, better implementation quality, and shorter release cycles.",
       },
     ],
-    featured: "Featured Project",
-    featuredTitle: "Prefab & Light Steel CAD/CAM Platform",
-    featuredDesc:
-      "Running on a C++ core, this platform unifies model generation, production data, validation checks, and licensing layers. It delivered significant acceleration in pre-production preparation.",
+    featured: "Featured Projects",
     featuredCta: "View Details",
     skillTitleA: "Technical Skills",
-    skillTitleB: "Professional Skills",
     education: "Education",
     work: "Work Experience",
-    portfolio: "Recent Portfolio",
-    interested: "Interested to Work?",
+    interested: "Contact Me Directly",
     interestedText:
-      "Let's define the technical roadmap for your enterprise CAD automation or manufacturing software initiative.",
+      "For CAD automation and engineering software projects, reach me directly via email, LinkedIn, or WhatsApp.",
     contact: "Contact Me",
     send: "Send Message",
     placeholders: ["First Name", "Last Name", "Your Email", "Your Message"],
+    required: "Please fill all fields.",
+    badEmail: "Please enter a valid email address.",
   },
 } as const;
 
-const sectionAnchors = ["#home", "#about", "#skills", "#experience", "#portfolio", "#contact"];
+const sectionAnchors = ["#home", "#about", "#skills", "#experience", "#contact"];
 
 const technicalSkills = [
-  { name: "SolidWorks API", value: 94 },
-  { name: "C# / .NET", value: 92 },
-  { name: "C++ CAD/CAM", value: 90 },
-  { name: "Automation Architecture", value: 89 },
-  { name: "UI / UX", value: 78 },
-  { name: "Validation Workflow", value: 91 },
-];
-
-const professionalSkills = [
-  { nameTr: "İletişim", nameEn: "Communication", value: 95 },
-  { nameTr: "Takım Çalışması", nameEn: "Team Work", value: 93 },
-  { nameTr: "Proje Yönetimi", nameEn: "Project Management", value: 90 },
-  { nameTr: "Yaratıcılık", nameEn: "Creativity", value: 88 },
+  { name: "AI & Automation", icon: Sparkles, value: 96 },
+  { name: "AI-Assisted Development", icon: Bot, value: 95 },
+  { name: "No-Code / Low-Code", icon: PencilRuler, value: 84 },
+  { name: "Prompt Engineering", icon: Braces, value: 90 },
+  { name: "LLM Workflows", icon: Code2, value: 92 },
+  { name: "SolidWorks", icon: Wrench, value: 95 },
+  { name: "SolidWorks API (VBA, .NET, C#)", icon: DraftingCompass, value: 96 },
 ];
 
 const educationCards = [
@@ -121,15 +143,17 @@ const educationCards = [
     title: "Gedik Üniversitesi",
     sub: "Makine Programı",
     period: "2020-2023",
-    bodyTr: "Meslek yüksekokulu düzeyinde makina üretim yaklaşımı, çizim ve uygulama odaklı eğitim.",
-    bodyEn: "Associate-level mechanical engineering education focused on production, drafting, and practical workflow.",
+    bodyTr:
+      "Meslek yüksekokulu düzeyinde makina üretim yaklaşımı, çizim ve uygulama odaklı eğitim.",
+    bodyEn:
+      "Associate-level mechanical engineering education focused on production, drafting, and practical workflow.",
   },
   {
-    title: "Gedik MTAL",
+    title: "Gedik Mesleki ve Teknik Anadolu Lisesi",
     sub: "Çelik Konstrüksiyon ve Kaynak",
     period: "2014-2018",
-    bodyTr: "Çelik yapı ve kaynak pratiği ile sahaya yönelik teknik zemin oluşturuldu.",
-    bodyEn: "Built a hands-on technical foundation in steel construction and welding practice.",
+    bodyTr: "Çelik konstrüksiyon, kaynak ve uygulama odaklı üretim disiplini.",
+    bodyEn: "Production-oriented discipline in steel construction and welding practice.",
   },
 ];
 
@@ -138,67 +162,97 @@ const workCards = [
     title: "AI destekli CAD ürün geliştirme",
     org: "ZMT Prefabrik ve Hafif Çelik A.Ş.",
     period: "2025-Günümüz",
-    pointsTr: ["Roll-form uyumlu üretim çıktısı", "CAD/CAM çekirdek geliştirme", "Sürüm ve doğrulama yönetimi"],
-    pointsEn: ["Roll-form compatible production output", "CAD/CAM core product development", "Release and validation management"],
+    pointsTr: [
+      "C++ tabanlı CAD/CAM çekirdeği geliştirme",
+      "Roll-form uyumlu üretim verisi ve hata kontrolü",
+      "Ölçeklenebilir lisans yönetimi mimarisi",
+      "Legacy sisteme kıyasla ~%70 verimlilik artışı",
+    ],
+    pointsEn: [
+      "C++ CAD/CAM core product development",
+      "Roll-form compatible production output and validation",
+      "Scalable licensing architecture",
+      "~70% efficiency increase vs legacy workflow",
+    ],
   },
   {
     title: "ARGE Teknik Tasarım Uzmanı",
     org: "Gencer Otomotiv",
     period: "2022-2025",
-    pointsTr: ["SolidWorks API ile otomasyon", "PDF/DWG/DXF çıktı akışı", "Fason üretim koordinasyonu"],
-    pointsEn: ["SolidWorks API automation", "PDF/DWG/DXF output pipeline", "Outsource manufacturing coordination"],
+    pointsTr: [
+      "SolidWorks API, VBA, .NET, C# ile otomasyon",
+      "PDF/DWG/DXF ve büküm resimleri tek tuş akışı",
+      "Kamyon/kamyonet/treyler üst yapı modelleme",
+      "Lazer kesim ve abkant dahil fason süreç koordinasyonu",
+    ],
+    pointsEn: [
+      "Automation with SolidWorks API, VBA, .NET, C#",
+      "One-click PDF/DWG/DXF and bending drawing output",
+      "Truck/van/trailer body design workflows",
+      "Outsource process coordination including laser and bending",
+    ],
+  },
+  {
+    title: "ARGE Makine Tasarım / Üretim",
+    org: "Gedik Holding",
+    period: "2018-2022",
+    pointsTr: [
+      "SolidWorks & Fusion 360 ile makine/ekipman tasarımı",
+      "Konveyör, paketleme ve kaynak robotu tasarım süreçleri",
+      "Katmanlı imalat ve mekanik tasarım desteği",
+    ],
+    pointsEn: [
+      "Machine/equipment design with SolidWorks & Fusion 360",
+      "Conveyor, packaging, and welding robot design",
+      "Additive manufacturing and mechanical design support",
+    ],
+  },
+  {
+    title: "Stajyer",
+    org: "Gedik Holding",
+    period: "2017-2018",
+    pointsTr: [
+      "Freze, torna ve makine imalat tasarımında temel uygulamalar",
+      "Üretim teknikleri ve atölye süreçlerine aktif katılım",
+    ],
+    pointsEn: [
+      "Foundational work in milling, lathe, and manufacturing design",
+      "Active contribution to workshop and production operations",
+    ],
   },
 ];
 
-const portfolioItems = [
-  projeler("image.png"),
-  projeler("İnsansız Hava Aracı", "AmphiDrone 1.png"),
-  projeler("İnsansız Hava Aracı", "AmphiDrone 2.png"),
-  projeler("İnsansız Hava Aracı", "AmphiDrone 3.png"),
-  projeler("İnsansız Hava Aracı", "AmphiDrone 4.png"),
-  projeler("İnsansız Hava Aracı", "IMG-6016.jpg"),
-  projeler("OTONOM SUALTI KAYNAĞI VE SUALTI", "Adsz_Proje_10.jpg"),
-  projeler("OTONOM SUALTI KAYNAĞI VE SUALTI", "Adsız Proje (10).jpg"),
-  projeler("1000032332_890c8c34641268895aacba6ef3c538aa-30.04.2023 07_47_02.jpg"),
+const introVariants = [
+  "intro-v1",
+  "intro-v2",
+  "intro-v3",
+  "intro-v4",
+  "intro-v5",
+  "intro-v6",
+  "intro-v7",
+  "intro-v8",
+  "intro-v9",
+  "intro-v10",
+  "intro-v11",
+  "intro-v12",
 ];
 
 function IntroOverlay({ hidden }: { hidden: boolean }) {
+  const [variant, setVariant] = useState("intro-v1");
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      const index = Math.floor(Math.random() * introVariants.length);
+      setVariant(introVariants[index] ?? "intro-v1");
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
+
   return (
-    <div className={`intro-overlay${hidden ? " intro-overlay-hidden" : ""}`}>
+    <div className={`intro-overlay ${variant}${hidden ? " intro-overlay-hidden" : ""}`}>
       <p className="intro-name">Mehmet Seyrimez</p>
       <div className="intro-shutter intro-shutter-top" />
       <div className="intro-shutter intro-shutter-bottom" />
-    </div>
-  );
-}
-
-function CircleSkill({
-  label,
-  value,
-  active,
-}: {
-  label: string;
-  value: number;
-  active: boolean;
-}) {
-  const radius = 46;
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (active ? value : 0) / 100 * circumference;
-
-  return (
-    <div className="circle-item">
-      <svg viewBox="0 0 120 120">
-        <circle cx="60" cy="60" r={radius} className="circle-track" />
-        <circle
-          cx="60"
-          cy="60"
-          r={radius}
-          className="circle-progress"
-          style={{ strokeDasharray: circumference, strokeDashoffset: offset }}
-        />
-      </svg>
-      <strong>{value}%</strong>
-      <span>{label}</span>
     </div>
   );
 }
@@ -209,6 +263,14 @@ export default function HomePage() {
   const [barsActive, setBarsActive] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
+  const [activeFeatured, setActiveFeatured] = useState(0);
+  const [formError, setFormError] = useState("");
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    message: "",
+  });
   const t = useMemo(() => dictionary[lang], [lang]);
 
   useEffect(() => {
@@ -224,6 +286,9 @@ export default function HomePage() {
     media.addEventListener("change", onUpdate);
 
     const introTimer = window.setTimeout(() => setShowIntro(false), 2100);
+    const sliderInterval = window.setInterval(() => {
+      setActiveFeatured((prev) => (prev + 1) % projectDetails.length);
+    }, 5200);
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -243,8 +308,44 @@ export default function HomePage() {
       media.removeEventListener("change", onUpdate);
       observer.disconnect();
       window.clearTimeout(introTimer);
+      window.clearInterval(sliderInterval);
     };
   }, []);
+
+  const toggleFeatured = (direction: "next" | "prev") => {
+    setActiveFeatured((prev) => {
+      if (direction === "next") return (prev + 1) % projectDetails.length;
+      return (prev - 1 + projectDetails.length) % projectDetails.length;
+    });
+  };
+
+  const activeProject = projectDetails[activeFeatured];
+
+  const onSubmitMail = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setFormError("");
+
+    if (!form.firstName || !form.lastName || !form.email || !form.message) {
+      setFormError(t.required);
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email)) {
+      setFormError(t.badEmail);
+      return;
+    }
+
+    const subject = encodeURIComponent(
+      `[Website Contact] ${form.firstName} ${form.lastName} - ${form.email}`,
+    );
+    const body = encodeURIComponent(
+      `${lang === "tr" ? "İsim" : "Name"}: ${form.firstName} ${form.lastName}\nEmail: ${
+        form.email
+      }\n\n${form.message}`,
+    );
+    window.location.href = `mailto:mehmetseyrimez@gmail.com?subject=${subject}&body=${body}`;
+  };
 
   return (
     <div className={`portfolio-root${isMobile ? " mobile-mode" : ""}`}>
@@ -252,7 +353,11 @@ export default function HomePage() {
 
       <header className="site-header">
         <div className="brand-pill">{t.heroBadge}</div>
-        <button className="mobile-menu-btn" onClick={() => setOpenMenu((v) => !v)} aria-label="Toggle menu">
+        <button
+          className="mobile-menu-btn"
+          onClick={() => setOpenMenu((v) => !v)}
+          aria-label="Toggle menu"
+        >
           <Menu size={18} />
         </button>
         <nav className={`top-nav${isMobile && !openMenu ? " top-nav-hidden" : ""}`}>
@@ -274,7 +379,11 @@ export default function HomePage() {
 
       <section id="home" className="hero-section reveal is-visible">
         <div className="hero-bg">
-          <SmartImage src={projeler("1000032332_890c8c34641268895aacba6ef3c538aa-30.04.2023 07_47_02.jpg")} alt="Hero background" />
+          <SmartImage
+            src={projeler("1000032332_890c8c34641268895aacba6ef3c538aa-30.04.2023 07_47_02.jpg")}
+            alt="Hero background"
+            className="hero-bg-image"
+          />
         </div>
         <div className="hero-overlay" />
         <div className="hero-left">
@@ -297,13 +406,16 @@ export default function HomePage() {
           </ul>
           <div className="hero-social">
             <a href={`mailto:${person.email}`} aria-label="Email">
-              <Mail size={16} />
+              <Mail size={20} />
             </a>
             <a href={`tel:${person.phoneTel}`} aria-label="Phone">
-              <Phone size={16} />
+              <Phone size={20} />
+            </a>
+            <a href="https://wa.me/905383940137" target="_blank" rel="noreferrer" aria-label="WhatsApp">
+              <MessageCircle size={20} />
             </a>
             <a href={person.linkedin} target="_blank" rel="noreferrer" aria-label="Linkedin">
-              <Linkedin size={16} />
+              <Linkedin size={20} />
             </a>
           </div>
         </div>
@@ -316,7 +428,10 @@ export default function HomePage() {
 
       <section id="about" className="about-section reveal">
         <div className="about-image">
-          <SmartImage src={projeler("İnsansız Hava Aracı", "AmphiDrone 2.png")} alt="About visual" />
+          <SmartImage
+            src={projeler("İnsansız Hava Aracı", "_DSC1307.NEF.jpg")}
+            alt="About visual"
+          />
         </div>
         <div className="about-content">
           <h2>{t.aboutTitle}</h2>
@@ -349,60 +464,72 @@ export default function HomePage() {
         <h2>{t.featured}</h2>
         <div className="featured-grid">
           <div className="featured-media">
-            <SmartImage src={projeler("image.png")} alt="Featured project" />
+            <SmartImage
+              src={activeProject.heroMedia.poster ?? activeProject.heroMedia.src}
+              alt={activeProject.titleTr}
+            />
+            <button className="slider-btn slider-btn-left" onClick={() => toggleFeatured("prev")}>
+              ‹
+            </button>
+            <button className="slider-btn slider-btn-right" onClick={() => toggleFeatured("next")}>
+              ›
+            </button>
           </div>
           <div className="featured-copy">
-            <span>CAD/CAM</span>
-            <h3>{t.featuredTitle}</h3>
-            <p>{t.featuredDesc}</p>
-            <Link href="#contact" className="cv-btn">
+            <span>{activeProject.label}</span>
+            <h3>{lang === "tr" ? activeProject.titleTr : activeProject.titleEn}</h3>
+            <p>{lang === "tr" ? activeProject.summaryTr : activeProject.summaryEn}</p>
+            <Link href={`/projeler/${activeProject.slug}`} className="cv-btn">
               {t.featuredCta}
             </Link>
+            <div className="slider-dots">
+              {projectDetails.map((item, idx) => (
+                <button
+                  key={item.slug}
+                  className={idx === activeFeatured ? "active" : ""}
+                  onClick={() => setActiveFeatured(idx)}
+                  aria-label={item.slug}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       <section id="skills" className="skills-section reveal">
-        <div>
-          <h2>{t.skillTitleA}</h2>
-          <div className="bars">
-            {technicalSkills.map((skill, idx) => (
-              <div key={skill.name} className="bar-item">
-                <div className="bar-top">
-                  <span>{skill.name}</span>
-                  <strong>{skill.value}%</strong>
+        <h2>{t.skillTitleA}</h2>
+        <div className="skill-icon-grid">
+          {technicalSkills.map((skill, idx) => {
+            const Icon = skill.icon;
+            return (
+              <article key={skill.name} className="skill-icon-card">
+                <div className="skill-icon-head">
+                  <span className="skill-icon-wrap">
+                    <Icon size={18} />
+                  </span>
+                  <strong>{skill.name}</strong>
                 </div>
                 <div className="bar-track">
                   <span
                     className={`bar-fill${barsActive ? " active" : ""}`}
                     style={{
                       width: barsActive ? `${skill.value}%` : "0%",
-                      transitionDelay: `${idx * 140}ms`,
+                      transitionDelay: `${idx * 120}ms`,
                     }}
                   />
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div>
-          <h2>{t.skillTitleB}</h2>
-          <div className="circle-grid">
-            {professionalSkills.map((item) => (
-              <CircleSkill
-                key={item.nameEn}
-                label={lang === "tr" ? item.nameTr : item.nameEn}
-                value={item.value}
-                active={barsActive}
-              />
-            ))}
-          </div>
+              </article>
+            );
+          })}
         </div>
       </section>
 
       <section id="experience" className="experience-section reveal">
         <div>
-          <h2>{t.education}</h2>
+          <h2 className="section-title-icon">
+            <GraduationCap size={20} />
+            {t.education}
+          </h2>
           <div className="exp-stack">
             {educationCards.map((card) => (
               <article key={card.title} className="exp-card">
@@ -415,7 +542,10 @@ export default function HomePage() {
           </div>
         </div>
         <div>
-          <h2>{t.work}</h2>
+          <h2 className="section-title-icon">
+            <Building2 size={20} />
+            {t.work}
+          </h2>
           <div className="exp-stack">
             {workCards.map((card) => (
               <article key={card.title} className="exp-card">
@@ -424,7 +554,10 @@ export default function HomePage() {
                 <small>{card.period}</small>
                 <ul>
                   {(lang === "tr" ? card.pointsTr : card.pointsEn).map((point) => (
-                    <li key={point}>{point}</li>
+                    <li key={point}>
+                      <CheckCircle2 size={14} />
+                      <span>{point}</span>
+                    </li>
                   ))}
                 </ul>
               </article>
@@ -433,23 +566,23 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="portfolio" className="portfolio-section reveal">
-        <h2>{t.portfolio}</h2>
-        <div className="masonry-grid">
-          {portfolioItems.map((src, idx) => (
-            <article key={`${src}-${idx}`} className="masonry-item">
-              <SmartImage src={src} alt={`Portfolio ${idx + 1}`} />
-            </article>
-          ))}
-        </div>
-      </section>
-
       <section className="cta-strip reveal">
         <h2>{t.interested}</h2>
         <p>{t.interestedText}</p>
-        <a href="#contact" className="cv-btn">
-          {lang === "tr" ? "İletişime Geç" : "Contact"}
-        </a>
+        <div className="cta-direct-links">
+          <a href={`mailto:${person.email}`}>
+            <Mail size={16} />
+            {person.email}
+          </a>
+          <a href={person.linkedin} target="_blank" rel="noreferrer">
+            <Linkedin size={16} />
+            LinkedIn
+          </a>
+          <a href="https://wa.me/905383940137" target="_blank" rel="noreferrer">
+            <MessageCircle size={16} />
+            WhatsApp
+          </a>
+        </div>
       </section>
 
       <section id="contact" className="contact-section reveal">
@@ -457,25 +590,67 @@ export default function HomePage() {
         <div className="contact-grid">
           <div className="contact-cards">
             <article>
+              <MapPin size={18} />
               <h3>{lang === "tr" ? "Adres" : "Address"}</h3>
               <p>{t.location}</p>
             </article>
             <article>
+              <Mail size={18} />
               <h3>Email</h3>
-              <p>{person.email}</p>
               <p>{person.email}</p>
             </article>
             <article>
+              <Linkedin size={18} />
               <h3>LinkedIn</h3>
               <p>{person.linkedin}</p>
             </article>
+            <article>
+              <MessageCircle size={18} />
+              <h3>WhatsApp</h3>
+              <p>+90 538 394 01 37</p>
+            </article>
           </div>
-          <form className="contact-form">
-            <input type="text" placeholder={t.placeholders[0]} />
-            <input type="text" placeholder={t.placeholders[1]} />
-            <input type="email" placeholder={t.placeholders[2]} />
-            <textarea rows={5} placeholder={t.placeholders[3]} />
-            <button type="button">{t.send}</button>
+          <form className="contact-form" onSubmit={onSubmitMail}>
+            <input
+              type="text"
+              placeholder={t.placeholders[0]}
+              value={form.firstName}
+              onChange={(e) => setForm((prev) => ({ ...prev, firstName: e.target.value }))}
+            />
+            <input
+              type="text"
+              placeholder={t.placeholders[1]}
+              value={form.lastName}
+              onChange={(e) => setForm((prev) => ({ ...prev, lastName: e.target.value }))}
+            />
+            <input
+              type="email"
+              placeholder={t.placeholders[2]}
+              value={form.email}
+              onChange={(e) => setForm((prev) => ({ ...prev, email: e.target.value }))}
+            />
+            <textarea
+              rows={5}
+              placeholder={t.placeholders[3]}
+              value={form.message}
+              onChange={(e) => setForm((prev) => ({ ...prev, message: e.target.value }))}
+            />
+            {formError ? <p className="form-error">{formError}</p> : null}
+            <button type="submit">
+              <Send size={16} />
+              {t.send}
+            </button>
+            <div className="contact-form-links">
+              <a href={`mailto:${person.email}`} aria-label="Email">
+                <Mail size={18} />
+              </a>
+              <a href={person.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn">
+                <Linkedin size={18} />
+              </a>
+              <a href="https://wa.me/905383940137" target="_blank" rel="noreferrer" aria-label="WhatsApp">
+                <MessageCircle size={18} />
+              </a>
+            </div>
           </form>
         </div>
       </section>
