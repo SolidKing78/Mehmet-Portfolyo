@@ -24,6 +24,7 @@ import {
   Menu,
   PencilRuler,
   Phone,
+  Play,
   Send,
   Sparkles,
   Wrench,
@@ -44,8 +45,12 @@ const dictionary = {
     role: "AI Destekli Yazılım Geliştirme & Vibe Coding",
     location: "Pendik, İstanbul, Türkiye",
     aboutTitle: "Hakkımda",
-    aboutText:
-      "CAD yazılımları konusunda teknik destek ve eğitim sağlamak, mühendislik ekiplerine ve üretim süreçlerine yönelik çözümler sunarak sektörde uzmanlaşmak istiyorum. Özellikle otomotiv, savunma sanayi ve endüstriyel üretim alanlarında SolidWorks ve otomasyon yazılımları ile verimliliği artıran, tasarım sürecini hızlandıran çözümler üretmeyi ve bu alanda teknik liderlik geliştirmeyi hedefliyorum.",
+    aboutText: `Yapay zeka destekli otomasyon sistemleri ve ajan tabanlı çözümler
+geliştirerek, mühendislik ve iş süreçlerini yeniden tanımlayan ölçeklenebilir
+ürünler oluşturmayı hedefliyorum. CAD otomasyonu, no-code/low-code
+geliştirme ve LLM teknolojilerini birleştirerek, firmalara özel yüksek katma
+değerli çözümler sunmak ve bu alanda yapay zeka danışmanlığı ile
+ürünleşmiş sistemler geliştirmek temel kariyer vizyonumdur.`,
     aboutTags: [
       "AI-Assisted Development",
       "Vibe Coding",
@@ -72,6 +77,7 @@ const dictionary = {
     ],
     featured: "Öne Çıkan Projeler",
     featuredCta: "Detayları Gör",
+    watchVideo: "Video izle",
     skillTitleA: "Teknik Yetenekler",
     education: "Eğitim",
     work: "İş Deneyimi",
@@ -83,6 +89,13 @@ const dictionary = {
     placeholders: ["Adınız", "Soyadınız", "E-posta", "Mesajınız"],
     required: "Lütfen tüm alanları doldurun.",
     badEmail: "Lütfen geçerli bir e-posta girin.",
+    sending: "Gönderiliyor…",
+    scriptMissing:
+      "Form şu an yapılandırılmamış. NEXT_PUBLIC_GOOGLE_APPS_SCRIPT_URL ortam değişkenini ekleyin.",
+    sendFailed: "Gönderim sırasında bir hata oluştu. Lütfen tekrar deneyin.",
+    messageSentTitle: "Mesaj gönderildi",
+    messageSentBody: "Teşekkürler — mesajınız alındı. En kısa sürede dönüş yapacağım.",
+    messageSentClose: "Tamam",
   },
   en: {
     nav: ["Home", "About", "Skills", "Experience", "Contact"],
@@ -91,8 +104,11 @@ const dictionary = {
     role: "AI-Assisted Software Development & Vibe Coding",
     location: "Pendik, Istanbul, Turkey",
     aboutTitle: "About Me",
-    aboutText:
-      "I aim to specialize in CAD software by providing technical support and training while delivering practical solutions for engineering teams and manufacturing workflows. Especially in automotive, defense, and industrial production, I focus on accelerating design cycles and improving efficiency with SolidWorks and automation-driven systems.",
+    aboutText: `I build AI-powered automation systems and agent-based solutions,
+aiming to create scalable products that redefine engineering and business workflows.
+Combining CAD automation, no-code/low-code development, and LLM technologies,
+my core career vision is to deliver high–value bespoke solutions for companies
+and to ship productized systems alongside AI consulting in this space.`,
     aboutTags: [
       "AI-Assisted Development",
       "Vibe Coding",
@@ -119,6 +135,7 @@ const dictionary = {
     ],
     featured: "Featured Projects",
     featuredCta: "View Details",
+    watchVideo: "Watch video",
     skillTitleA: "Technical Skills",
     education: "Education",
     work: "Work Experience",
@@ -130,6 +147,13 @@ const dictionary = {
     placeholders: ["First Name", "Last Name", "Your Email", "Your Message"],
     required: "Please fill all fields.",
     badEmail: "Please enter a valid email address.",
+    sending: "Sending…",
+    scriptMissing:
+      "The form is not configured yet. Add NEXT_PUBLIC_GOOGLE_APPS_SCRIPT_URL to your environment.",
+    sendFailed: "Something went wrong while sending. Please try again.",
+    messageSentTitle: "Message sent",
+    messageSentBody: "Thank you — your message was received. I’ll get back to you shortly.",
+    messageSentClose: "OK",
   },
 } as const;
 
@@ -147,8 +171,11 @@ const technicalSkills = [
 
 const educationCards = [
   {
-    title: "Gedik Üniversitesi",
-    sub: "Makine Programı",
+    id: "gedik-uni",
+    titleTr: "Gedik Üniversitesi",
+    titleEn: "Gedik University",
+    subTr: "Makine Programı",
+    subEn: "Mechanical Engineering (Associate Degree)",
     period: "2020-2023",
     bodyTr:
       "Meslek yüksekokulu düzeyinde makina üretim yaklaşımı, çizim ve uygulama odaklı eğitim.",
@@ -156,8 +183,11 @@ const educationCards = [
       "Associate-level mechanical engineering education focused on production, drafting, and practical workflow.",
   },
   {
-    title: "Gedik Mesleki ve Teknik Anadolu Lisesi",
-    sub: "Çelik Konstrüksiyon ve Kaynak",
+    id: "gedik-lise",
+    titleTr: "Gedik Mesleki ve Teknik Anadolu Lisesi",
+    titleEn: "Gedik Vocational and Technical Anatolian High School",
+    subTr: "Çelik Konstrüksiyon ve Kaynak",
+    subEn: "Steel Construction & Welding",
     period: "2014-2018",
     bodyTr: "Çelik konstrüksiyon, kaynak ve uygulama odaklı üretim disiplini.",
     bodyEn: "Production-oriented discipline in steel construction and welding practice.",
@@ -166,9 +196,12 @@ const educationCards = [
 
 const workCards = [
   {
-    title: "AI destekli CAD ürün geliştirme",
+    id: "zmt-cad",
+    titleTr: "AI destekli CAD ürün geliştirme",
+    titleEn: "AI-assisted CAD product development",
     org: "ZMT Prefabrik ve Hafif Çelik A.Ş.",
-    period: "2025-Günümüz",
+    periodTr: "2025-Günümüz",
+    periodEn: "2025–Present",
     pointsTr: [
       "C++ tabanlı CAD/CAM çekirdeği geliştirme",
       "Roll-form uyumlu üretim verisi ve hata kontrolü",
@@ -183,9 +216,12 @@ const workCards = [
     ],
   },
   {
-    title: "ARGE Teknik Tasarım Uzmanı",
+    id: "gencer",
+    titleTr: "ARGE Teknik Tasarım Uzmanı",
+    titleEn: "R&D Technical Design Specialist",
     org: "Gencer Otomotiv",
-    period: "2022-2025",
+    periodTr: "2022-2025",
+    periodEn: "2022–2025",
     pointsTr: [
       "SolidWorks API, VBA, .NET, C# ile otomasyon",
       "PDF/DWG/DXF ve büküm resimleri tek tuş akışı",
@@ -200,9 +236,12 @@ const workCards = [
     ],
   },
   {
-    title: "ARGE Makine Tasarım / Üretim",
+    id: "gedik-rd",
+    titleTr: "ARGE Makine Tasarım / Üretim",
+    titleEn: "R&D Mechanical Design / Manufacturing",
     org: "Gedik Holding",
-    period: "2018-2022",
+    periodTr: "2018-2022",
+    periodEn: "2018–2022",
     pointsTr: [
       "SolidWorks & Fusion 360 ile makine/ekipman tasarımı",
       "Konveyör, paketleme ve kaynak robotu tasarım süreçleri",
@@ -215,9 +254,12 @@ const workCards = [
     ],
   },
   {
-    title: "Stajyer",
+    id: "gedik-intern",
+    titleTr: "Stajyer",
+    titleEn: "Intern",
     org: "Gedik Holding",
-    period: "2017-2018",
+    periodTr: "2017-2018",
+    periodEn: "2017–2018",
     pointsTr: [
       "Freze, torna ve makine imalat tasarımında temel uygulamalar",
       "Üretim teknikleri ve atölye süreçlerine aktif katılım",
@@ -307,6 +349,8 @@ export default function HomePage() {
   const [activeFeatured, setActiveFeatured] = useState(0);
   const [sliderCycle, setSliderCycle] = useState(0);
   const [formError, setFormError] = useState("");
+  const [contactSending, setContactSending] = useState(false);
+  const [showSentModal, setShowSentModal] = useState(false);
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -404,7 +448,7 @@ export default function HomePage() {
 
   const activeProject = projectDetails[activeFeatured];
 
-  const onSubmitMail = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmitContact = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setFormError("");
 
@@ -419,15 +463,33 @@ export default function HomePage() {
       return;
     }
 
-    const subject = encodeURIComponent(
-      `[Website Contact] ${form.firstName} ${form.lastName} - ${form.email}`,
-    );
-    const body = encodeURIComponent(
-      `${lang === "tr" ? "İsim" : "Name"}: ${form.firstName} ${form.lastName}\nEmail: ${
-        form.email
-      }\n\n${form.message}`,
-    );
-    window.location.href = `mailto:mehmetseyrimez@gmail.com?subject=${subject}&body=${body}`;
+    const url = process.env.NEXT_PUBLIC_GOOGLE_APPS_SCRIPT_URL?.trim();
+    if (!url) {
+      setFormError(t.scriptMissing);
+      return;
+    }
+
+    setContactSending(true);
+    try {
+      await fetch(url, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+          firstName: form.firstName.trim(),
+          lastName: form.lastName.trim(),
+          email: form.email.trim(),
+          message: form.message.trim(),
+          lang,
+        }),
+      });
+      setShowSentModal(true);
+      setForm({ firstName: "", lastName: "", email: "", message: "" });
+    } catch {
+      setFormError(t.sendFailed);
+    } finally {
+      setContactSending(false);
+    }
   };
 
   return (
@@ -518,7 +580,7 @@ export default function HomePage() {
         </div>
         <div className="about-content">
           <h2>{t.aboutTitle}</h2>
-          <p>{t.aboutText}</p>
+          <p className="about-multiline">{t.aboutText}</p>
           <div className="tag-row">
             {t.aboutTags.map((tag) => (
               <span key={tag}>{tag}</span>
@@ -549,8 +611,20 @@ export default function HomePage() {
           <div className="featured-media">
             <SmartImage
               src={activeProject.heroMedia.poster ?? activeProject.heroMedia.src}
-              alt={activeProject.titleTr}
+              alt={lang === "tr" ? activeProject.titleTr : activeProject.titleEn}
+              className={activeProject.heroMedia.kind === "video" ? "featured-media-dim" : undefined}
             />
+            {activeProject.heroMedia.kind === "video" ? (
+              <Link
+                href={`/projeler/${activeProject.slug}#project-media`}
+                className="featured-video-overlay"
+              >
+                <span className="featured-video-play" aria-hidden>
+                  <Play size={36} strokeWidth={1.6} />
+                </span>
+                <span className="featured-video-label">{t.watchVideo}</span>
+              </Link>
+            ) : null}
             <button
               type="button"
               className="slider-btn slider-btn-left"
@@ -623,13 +697,13 @@ export default function HomePage() {
           </h2>
           <div className="exp-timeline">
             {educationCards.map((card) => (
-              <article key={card.title} className="exp-item">
+              <article key={card.id} className="exp-item">
                 <span className="exp-dot">
                   <GraduationCap size={14} />
                 </span>
                 <div className="exp-card">
-                  <h3>{card.title}</h3>
-                  <h4>{card.sub}</h4>
+                  <h3>{lang === "tr" ? card.titleTr : card.titleEn}</h3>
+                  <h4>{lang === "tr" ? card.subTr : card.subEn}</h4>
                   <small>{card.period}</small>
                   <p>{lang === "tr" ? card.bodyTr : card.bodyEn}</p>
                 </div>
@@ -644,14 +718,14 @@ export default function HomePage() {
           </h2>
           <div className="exp-timeline">
             {workCards.map((card) => (
-              <article key={card.title} className="exp-item">
+              <article key={card.id} className="exp-item">
                 <span className="exp-dot">
                   <Building2 size={14} />
                 </span>
                 <div className="exp-card">
-                  <h3>{card.title}</h3>
+                  <h3>{lang === "tr" ? card.titleTr : card.titleEn}</h3>
                   <h4>{card.org}</h4>
-                  <small>{card.period}</small>
+                  <small>{lang === "tr" ? card.periodTr : card.periodEn}</small>
                   <ul>
                     {(lang === "tr" ? card.pointsTr : card.pointsEn).map((point) => (
                       <li key={point}>
@@ -711,7 +785,7 @@ export default function HomePage() {
               <p>+90 538 394 01 37</p>
             </article>
           </div>
-          <form className="contact-form" onSubmit={onSubmitMail}>
+          <form className="contact-form" onSubmit={onSubmitContact}>
             <input
               type="text"
               placeholder={t.placeholders[0]}
@@ -737,9 +811,9 @@ export default function HomePage() {
               onChange={(e) => setForm((prev) => ({ ...prev, message: e.target.value }))}
             />
             {formError ? <p className="form-error">{formError}</p> : null}
-            <button type="submit">
+            <button type="submit" disabled={contactSending}>
               <Send size={16} />
-              {t.send}
+              {contactSending ? t.sending : t.send}
             </button>
             <div className="contact-form-links">
               <a href={`mailto:${person.email}`} aria-label="Email">
@@ -755,6 +829,24 @@ export default function HomePage() {
           </form>
         </div>
       </section>
+
+      {showSentModal ? (
+        <div
+          className="contact-modal-backdrop"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="contact-sent-title"
+        >
+          <div className="contact-modal-panel">
+            <CheckCircle2 size={40} className="contact-modal-icon" aria-hidden />
+            <h3 id="contact-sent-title">{t.messageSentTitle}</h3>
+            <p>{t.messageSentBody}</p>
+            <button type="button" className="contact-modal-close" onClick={() => setShowSentModal(false)}>
+              {t.messageSentClose}
+            </button>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

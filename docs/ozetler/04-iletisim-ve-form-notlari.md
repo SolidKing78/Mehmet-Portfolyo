@@ -1,41 +1,29 @@
-# Iletisim ve Form Notlari
+# İletişim ve form notları
 
-Bu dosya iletisim bolumunun amacini ve en saglikli form mimarisini ozetler.
+## Mevcut durum
 
-## Mevcut Durum
+- Form, `NEXT_PUBLIC_GOOGLE_APPS_SCRIPT_URL` adresine JSON **POST** atar (`mode: "no-cors"` — tarayıcı yanıt gövdesini okuyamaz; başarı varsayılır).
+- Başarılı gönderimden sonra kullanıcıya sitede **modal (pop-up)** gösterilir.
+- URL tanımlı değilse gönder butonu hata metni gösterir (`scriptMissing`).
 
-- Form su an `mailto:` ile calisiyor
-- Avantaj: Hemen calisir, backend gerekmez
-- Dezavantaj: Kullanici mail uygulamasina bagimli, kayit tutmaz
+## Kurulum
 
-## Onerilen Uretim Mimari
+1. `google-apps/Code.gs` ve `google-apps/README.md` dosyalarını takip edin.
+2. Proje kökünde `.env.local` oluşturup şunu ekleyin:
 
-En mantikli yapi:
+   ```env
+   NEXT_PUBLIC_GOOGLE_APPS_SCRIPT_URL=https://script.google.com/macros/s/.../exec
+   ```
 
-1. `POST /api/contact` endpoint
-2. Sunucu tarafinda dogrulama
-3. Mail gonderimi (Resend / SendGrid / Postmark)
-4. Ayni anda DB yedegi (Supabase / Neon / Vercel Postgres)
+3. Örnek için `.env.example` dosyasına bakın.
 
-## Neden Bu Yapi?
+## Google Apps Script tarafı
 
-- Mesajlar kaybolmaz (mail + db)
-- Yonetilebilir raporlama saglar
-- Spam ve guvenlik kontrolleri eklenebilir
-- Gelecekte CRM veya panel entegrasyonu kolaylasir
+- `doPost` gelen JSON’u ayrıştırır ve E-Tabloya satır ekler.
+- `SHEET_ID` ve isteğe bağlı `SHEET_NAME` script içinde doldurulmalıdır.
 
-## Ek Guvenlik Onerileri
+## Notlar
 
-- Rate limiting
-- Honeypot alan
-- Basit captcha
-- Sunucuda e-posta format/doluluk kontrolu
-
-## Hedef Kullanici Akisi
-
-1. Kullanici formu doldurur
-2. Sunucu dogrular
-3. Mesaj DB'ye yazilir
-4. Mehmet'e bildirim maili gider
-5. Kullaniciya basari mesaji doner
-
+- Web uygulaması “Herkes” erişiminde yayınlanmalıdır (anonim form gönderimi için).
+- İstemci tarafında spam önleme yok; gerekirse script tarafında ek kontroller eklenebilir.
+- Alternatif üretim mimarisi: `POST /api/contact` + Resend/SendGrid + veritabanı (daha güçlü doğrulama ve raporlama).

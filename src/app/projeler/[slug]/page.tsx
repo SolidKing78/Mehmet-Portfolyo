@@ -34,7 +34,10 @@ export default async function ProjectDetailPage({ params }: Params) {
         <p className="mt-3 max-w-[72ch] text-sm leading-relaxed text-zinc-300">{project.summaryTr}</p>
       </section>
 
-      <section className="mt-6 overflow-hidden rounded-md border border-white/10 bg-black/40">
+      <section
+        id="project-media"
+        className="mt-6 overflow-hidden rounded-md border border-white/10 bg-black/40"
+      >
         <div className="relative min-h-[320px] sm:min-h-[430px]">
           {project.heroMedia.kind === "video" ? (
             <SmartVideo src={project.heroMedia.src} poster={project.heroMedia.poster} />

@@ -360,6 +360,10 @@
     @apply mt-3 max-w-[62ch] text-sm leading-relaxed text-zinc-300;
   }
 
+  .about-content p.about-multiline {
+    white-space: pre-line;
+  }
+
   .tag-row {
     @apply mt-4 flex flex-wrap gap-2;
   }
@@ -403,6 +407,30 @@
 
   .featured-media {
     @apply relative min-h-[380px] overflow-hidden rounded-md border border-white/10;
+  }
+
+  .featured-media .featured-media-dim {
+    filter: brightness(0.72);
+  }
+
+  .featured-video-overlay {
+    @apply absolute inset-0 z-[8] flex flex-col items-center justify-center gap-3 no-underline transition-colors;
+    background: rgba(0, 0, 0, 0.38);
+    color: #ecfeff;
+  }
+
+  .featured-video-overlay:hover {
+    background: rgba(0, 0, 0, 0.52);
+  }
+
+  .featured-video-play {
+    @apply grid h-[4.5rem] w-[4.5rem] place-items-center rounded-full border-2 border-cyan-300/70 text-cyan-200;
+    background: rgba(0, 255, 251, 0.14);
+    box-shadow: 0 0 24px rgba(0, 255, 251, 0.2);
+  }
+
+  .featured-video-label {
+    @apply text-xs font-semibold tracking-[0.14em] text-cyan-100 uppercase;
   }
 
   .slider-btn {
@@ -573,7 +601,31 @@
   }
 
   .contact-form button {
-    @apply mt-1 inline-flex w-full items-center justify-center gap-2 rounded-full bg-cyan-400/85 px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-cyan-300;
+    @apply mt-1 inline-flex w-full items-center justify-center gap-2 rounded-full bg-cyan-400/85 px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-55;
+  }
+
+  .contact-modal-backdrop {
+    @apply fixed inset-0 z-[100] flex items-center justify-center bg-black/65 p-4 backdrop-blur-[2px];
+  }
+
+  .contact-modal-panel {
+    @apply max-w-md rounded-lg border border-cyan-400/35 bg-[#060919] p-6 text-center shadow-[0_24px_80px_rgba(0,0,0,0.55)];
+  }
+
+  .contact-modal-icon {
+    @apply mx-auto mb-3 text-cyan-300;
+  }
+
+  .contact-modal-panel h3 {
+    @apply text-lg font-semibold text-white;
+  }
+
+  .contact-modal-panel p {
+    @apply mt-2 text-sm leading-relaxed text-zinc-300;
+  }
+
+  .contact-modal-close {
+    @apply mt-5 w-full rounded-full bg-cyan-400/85 px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-cyan-300;
   }
 
   .form-error {

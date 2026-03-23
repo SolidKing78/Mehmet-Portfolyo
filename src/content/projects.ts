@@ -121,7 +121,7 @@ export const projectDetails: ProjectDetail[] = [
         "Solidworks Makro API - Eklenti - ParametriX",
         "ParametriX_2D-3D_Converter.mp4",
       ),
-      poster: projeler("İnsansız Hava Aracı", "AmphiDrone 1.png"),
+      poster: projeler("image.png"),
     },
   },
 ];
