@@ -29,7 +29,7 @@ export const publications: PublicationEntry[] = [
     dateEn: "May 16, 2022",
     documentUrl:
       "https://drive.google.com/file/d/1Ph4NBWWsnj4WsJlJu4AP3DIyBzfBXThi/view",
-    imageSegments: ["İnsansız Hava Aracı", "_DSC1307.NEF.jpg"],
+    imageSegments: ["Yayinlar", "otonom-sualti-kongre-karsilastirma.png"],
   },
 ];
 

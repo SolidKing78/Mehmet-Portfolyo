@@ -359,16 +359,62 @@
     @apply z-[1] opacity-100;
   }
 
+  .about-slide-img {
+    object-position: center 28%;
+  }
+
+  @media (min-width: 640px) {
+    .about-slide-img {
+      object-position: center 22%;
+    }
+  }
+
+  .about-slider-arrow {
+    @apply absolute top-1/2 z-[3] -translate-y-1/2 grid h-11 w-11 place-items-center rounded-full border border-white/10 bg-black/22 text-white/40 opacity-30 backdrop-blur-[3px] transition-all duration-300;
+  }
+
+  .about-slider-arrow:hover {
+    @apply border-white/25 bg-black/60 text-white opacity-100;
+  }
+
+  .about-image-slider:hover .about-slider-arrow {
+    @apply opacity-55 text-white/65;
+  }
+
+  .about-image-slider:hover .about-slider-arrow:hover {
+    @apply opacity-100 text-white;
+  }
+
+  .about-image-slider:focus-within .about-slider-arrow {
+    @apply opacity-50;
+  }
+
+  .about-slider-arrow-prev {
+    left: 10px;
+  }
+
+  .about-slider-arrow-next {
+    right: 10px;
+  }
+
   .about-slider-dots {
-    @apply absolute bottom-3 left-1/2 z-[2] flex -translate-x-1/2 gap-2 rounded-full border border-white/15 bg-black/45 px-2.5 py-1.5 backdrop-blur-sm;
+    @apply absolute bottom-3 left-1/2 z-[2] flex -translate-x-1/2 gap-2 rounded-full border border-white/10 bg-black/28 px-2.5 py-1.5 opacity-40 backdrop-blur-sm transition-opacity duration-300;
+  }
+
+  .about-image-slider:hover .about-slider-dots {
+    @apply opacity-90;
+  }
+
+  .about-slider-dots:hover {
+    @apply border-white/18 bg-black/48 opacity-100;
   }
 
   .about-slider-dot {
-    @apply h-2 w-2 rounded-full border border-cyan-400/35 bg-white/20 transition-all;
+    @apply h-2 w-2 rounded-full border border-cyan-400/30 bg-white/18 transition-all;
   }
 
   .about-slider-dot-active {
-    @apply w-5 border-cyan-300/60 bg-cyan-300/80;
+    @apply w-5 border-cyan-300/55 bg-cyan-300/70;
   }
 
   #about,

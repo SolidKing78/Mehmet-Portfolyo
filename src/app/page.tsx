@@ -18,6 +18,8 @@ import {
   Braces,
   Building2,
   CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
   Code2,
   Download,
   DraftingCompass,
@@ -533,6 +535,16 @@ export default function HomePage() {
     return () => window.clearTimeout(t);
   }, [aboutSlideIdx]);
 
+  const goAboutPrev = () => {
+    setAboutSlideIdx(
+      (i) => (i - 1 + aboutGallerySlides.length) % aboutGallerySlides.length,
+    );
+  };
+
+  const goAboutNext = () => {
+    setAboutSlideIdx((i) => (i + 1) % aboutGallerySlides.length);
+  };
+
   const toggleFeatured = (direction: "next" | "prev") => {
     if (sliderLockRef.current) return;
     sliderLockRef.current = true;
@@ -701,10 +713,27 @@ export default function HomePage() {
                     ? `Mehmet Seyrimez — sunum ve proje görseli ${i + 1}/${aboutGallerySlides.length}`
                     : `Mehmet Seyrimez — presentation & project photo ${i + 1}/${aboutGallerySlides.length}`
                 }
+                className="about-slide-img"
                 priority={i === 0}
               />
             </div>
           ))}
+          <button
+            type="button"
+            className="about-slider-arrow about-slider-arrow-prev"
+            onClick={goAboutPrev}
+            aria-label={lang === "tr" ? "Önceki görsel" : "Previous photo"}
+          >
+            <ChevronLeft size={26} strokeWidth={1.75} aria-hidden />
+          </button>
+          <button
+            type="button"
+            className="about-slider-arrow about-slider-arrow-next"
+            onClick={goAboutNext}
+            aria-label={lang === "tr" ? "Sonraki görsel" : "Next photo"}
+          >
+            <ChevronRight size={26} strokeWidth={1.75} aria-hidden />
+          </button>
           <div className="about-slider-dots" role="tablist" aria-label={lang === "tr" ? "Hakkımda görselleri" : "About photos"}>
             {aboutGallerySlides.map((slide, i) => (
               <button
