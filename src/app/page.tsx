@@ -11,6 +11,8 @@ import {
 } from "react";
 import {
   Award,
+  BadgeCheck,
+  BookOpen,
   Bot,
   Braces,
   Building2,
@@ -29,6 +31,7 @@ import {
   Phone,
   Play,
   Send,
+  ShieldCheck,
   Sparkles,
   Wrench,
 } from "lucide-react";
@@ -41,7 +44,9 @@ import {
   certificationPdfHref,
   certificationThumbnailHref,
   linkedinCertificationsProfileUrl,
+  type CertVerifyLinkKind,
 } from "@/content/certifications";
+import { publications, publicationImageHref } from "@/content/publications";
 import { linkedInHighlightSkills } from "@/content/linkedinSkills";
 import { projectDetails } from "@/content/projects";
 import { useVideoPosterFromSrc } from "@/hooks/useVideoPosterFromSrc";
@@ -50,7 +55,15 @@ type Lang = "tr" | "en";
 
 const dictionary = {
   tr: {
-    nav: ["Anasayfa", "Hakkımda", "Yetenekler", "Sertifikalar", "Deneyim", "İletişim"],
+    nav: [
+      "Anasayfa",
+      "Hakkımda",
+      "Yetenekler",
+      "Deneyim",
+      "Yayınlar",
+      "Sertifikalar",
+      "İletişim",
+    ],
     heroBadge: "Özgeçmiş / CV",
     hello: "Merhaba Ben",
     role: "AI Destekli Yazılım Geliştirme & Vibe Coding",
@@ -96,6 +109,10 @@ const dictionary = {
     credSkills: "İlgili yetenekler",
     issuedPrefix: "Veriliş",
     openPdf: "PDF’i aç",
+    pubTitle: "Yayınlar",
+    pubIntro:
+      "Kongre bildirileri ve akademik paylaşımlar. Tam metin ve ekler için bağlantıya tıklayın.",
+    showPublication: "Yayını görüntüle",
     education: "Eğitim",
     work: "İş Deneyimi",
     interested: "Benimle İletişime Geçin",
@@ -115,7 +132,15 @@ const dictionary = {
     messageSentClose: "Tamam",
   },
   en: {
-    nav: ["Home", "About", "Skills", "Certifications", "Experience", "Contact"],
+    nav: [
+      "Home",
+      "About",
+      "Skills",
+      "Experience",
+      "Publications",
+      "Certifications",
+      "Contact",
+    ],
     heroBadge: "Resume / CV",
     hello: "Hello I'm",
     role: "AI-Assisted Software Development & Vibe Coding",
@@ -164,6 +189,10 @@ and to ship productized systems alongside AI consulting in this space.`,
     credSkills: "Related skills",
     issuedPrefix: "Issued",
     openPdf: "Open PDF",
+    pubTitle: "Publications",
+    pubIntro:
+      "Conference papers and academic contributions. Open the link for the full document.",
+    showPublication: "View publication",
     education: "Education",
     work: "Work Experience",
     interested: "Contact Me Directly",
@@ -188,10 +217,24 @@ const sectionAnchors = [
   "#home",
   "#about",
   "#skills",
-  "#certifications",
   "#experience",
+  "#publications",
+  "#certifications",
   "#contact",
 ];
+
+function CertVerifyIcon({ kind }: { kind: CertVerifyLinkKind }) {
+  switch (kind) {
+    case "solidworks":
+      return <ShieldCheck size={15} strokeWidth={2} aria-hidden />;
+    case "linkedin-learning":
+      return <Linkedin size={14} aria-hidden />;
+    case "pdf":
+      return <FileText size={14} aria-hidden />;
+    case "verify":
+      return <BadgeCheck size={15} strokeWidth={2} aria-hidden />;
+  }
+}
 
 const technicalSkills = [
   { name: "AI & Automation", icon: Sparkles },
@@ -749,84 +792,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="certifications" className="certifications-section reveal">
-        <h2 className="section-title-icon">
-          <Award size={20} />
-          {t.certTitle}
-        </h2>
-        <p className="cert-section-intro">{t.certIntro}</p>
-        <a
-          href={linkedinCertificationsProfileUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="cert-linkedin-banner"
-        >
-          <Linkedin size={16} />
-          {t.verifyLinkedIn}
-          <ExternalLink size={12} className="opacity-70" aria-hidden />
-        </a>
-        <div className="cert-grid">
-          {certificationEntries.map((c) => {
-            const thumb = certificationThumbnailHref(c);
-            const pdf = certificationPdfHref(c);
-            const title = lang === "tr" ? c.nameTr : c.nameEn;
-            const issuer = lang === "tr" ? c.issuerTr : c.issuerEn;
-            const detail = lang === "tr" ? c.detailTr : c.detailEn;
-            const skills = lang === "tr" ? c.skillsTr : c.skillsEn;
-            return (
-              <article key={c.id} className="cert-card">
-                <div className="cert-thumb">
-                  {thumb ? (
-                    <SmartImage
-                      src={thumb}
-                      alt={lang === "tr" ? `${title} — sertifika görseli` : `${title} — certificate image`}
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                    />
-                  ) : (
-                    <div className="cert-thumb-fallback" aria-hidden>
-                      <Award size={40} strokeWidth={1.2} />
-                    </div>
-                  )}
-                </div>
-                <div className="cert-card-body">
-                  <h3>{title}</h3>
-                  <p className="cert-issuer">{issuer}</p>
-                  {c.issued ? (
-                    <p className="cert-issued">
-                      {t.issuedPrefix}: {c.issued}
-                    </p>
-                  ) : null}
-                  {c.credentialId ? (
-                    <p className="cert-issued">ID: {c.credentialId}</p>
-                  ) : null}
-                  <p className="cert-detail">{detail}</p>
-                  <p className="mt-3 font-mono text-[9px] tracking-wider text-zinc-500 uppercase">
-                    {t.credSkills}
-                  </p>
-                  <div className="cert-skills">
-                    {skills.map((s) => (
-                      <span key={s}>{s}</span>
-                    ))}
-                  </div>
-                  <div className="cert-actions">
-                    <a href={linkedinCertificationsProfileUrl} target="_blank" rel="noreferrer">
-                      <Linkedin size={14} />
-                      LinkedIn
-                    </a>
-                    {pdf ? (
-                      <a href={pdf} target="_blank" rel="noreferrer">
-                        <FileText size={14} />
-                        {t.openPdf}
-                      </a>
-                    ) : null}
-                  </div>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      </section>
-
       <section id="experience" className="experience-section reveal">
         <div>
           <h2 className="section-title-icon">
@@ -876,6 +841,147 @@ export default function HomePage() {
               </article>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section id="publications" className="publications-section reveal">
+        <h2 className="section-title-icon">
+          <BookOpen size={20} />
+          {t.pubTitle}
+        </h2>
+        <p className="pub-intro">{t.pubIntro}</p>
+        <div className="pub-grid">
+          {publications.map((pub) => {
+            const img = publicationImageHref(pub);
+            const title = lang === "tr" ? pub.titleTr : pub.titleEn;
+            const venue = lang === "tr" ? pub.venueTr : pub.venueEn;
+            const date = lang === "tr" ? pub.dateTr : pub.dateEn;
+            return (
+              <article key={pub.id} className="pub-card">
+                <div className="pub-card-media">
+                  {img ? (
+                    <SmartImage
+                      src={img}
+                      alt={lang === "tr" ? `${title} — kongre görseli` : `${title} — congress visual`}
+                      sizes="(max-width: 640px) 100vw, 240px"
+                    />
+                  ) : (
+                    <div className="pub-fallback" aria-hidden>
+                      <BookOpen size={44} strokeWidth={1.2} />
+                    </div>
+                  )}
+                </div>
+                <div className="pub-card-body">
+                  <h3>{title}</h3>
+                  <p className="pub-venue">{venue}</p>
+                  <p className="pub-date">{date}</p>
+                  <a
+                    href={pub.documentUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="pub-open"
+                  >
+                    <FileText size={16} />
+                    {t.showPublication}
+                    <ExternalLink size={12} className="opacity-80" aria-hidden />
+                  </a>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      <section id="certifications" className="certifications-section reveal">
+        <h2 className="section-title-icon">
+          <Award size={20} />
+          {t.certTitle}
+        </h2>
+        <p className="cert-section-intro">{t.certIntro}</p>
+        <a
+          href={linkedinCertificationsProfileUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="cert-linkedin-banner"
+        >
+          <Linkedin size={16} />
+          {t.verifyLinkedIn}
+          <ExternalLink size={12} className="opacity-70" aria-hidden />
+        </a>
+        <div className="cert-grid">
+          {certificationEntries.map((c) => {
+            const thumb = certificationThumbnailHref(c);
+            const pdf = certificationPdfHref(c);
+            const title = lang === "tr" ? c.nameTr : c.nameEn;
+            const issuer = lang === "tr" ? c.issuerTr : c.issuerEn;
+            const detail = lang === "tr" ? c.detailTr : c.detailEn;
+            const skills = lang === "tr" ? c.skillsTr : c.skillsEn;
+            const showLi = c.showLinkedInSectionLink !== false;
+            return (
+              <article key={c.id} className="cert-card">
+                <div className="cert-thumb">
+                  {thumb ? (
+                    <SmartImage
+                      src={thumb}
+                      alt={lang === "tr" ? `${title} — sertifika görseli` : `${title} — certificate image`}
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                  ) : (
+                    <div className="cert-thumb-fallback" aria-hidden>
+                      <Award size={40} strokeWidth={1.2} />
+                    </div>
+                  )}
+                </div>
+                <div className="cert-card-body">
+                  <h3>{title}</h3>
+                  <p className="cert-issuer">{issuer}</p>
+                  {c.issued ? (
+                    <p className="cert-issued">
+                      {t.issuedPrefix}: {c.issued}
+                    </p>
+                  ) : null}
+                  {c.credentialId ? (
+                    <p className="cert-issued">ID: {c.credentialId}</p>
+                  ) : null}
+                  <p className="cert-detail">{detail}</p>
+                  <p className="mt-3 font-mono text-[9px] tracking-wider text-zinc-500 uppercase">
+                    {t.credSkills}
+                  </p>
+                  <div className="cert-skills">
+                    {skills.map((s) => (
+                      <span key={s}>{s}</span>
+                    ))}
+                  </div>
+                  <div className="cert-actions">
+                    {(c.verifyLinks ?? []).map((vl) => (
+                      <a
+                        key={vl.href}
+                        href={vl.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        className={`cert-action-btn cert-action-btn--${vl.kind}`}
+                      >
+                        <CertVerifyIcon kind={vl.kind} />
+                        {lang === "tr" ? vl.labelTr : vl.labelEn}
+                      </a>
+                    ))}
+                    {showLi ? (
+                      <a href={linkedinCertificationsProfileUrl} target="_blank" rel="noreferrer">
+                        <Linkedin size={14} />
+                        LinkedIn
+                      </a>
+                    ) : null}
+                    {pdf ? (
+                      <a href={pdf} target="_blank" rel="noreferrer">
+                        <FileText size={14} />
+                        {t.openPdf}
+                      </a>
+                    ) : null}
+                  </div>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </section>
 
