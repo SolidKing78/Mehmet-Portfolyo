@@ -7,3 +7,6 @@ export function publicAsset(...segments: string[]): string {
 export function projeler(...pathWithin: string[]): string {
   return publicAsset("Projeler", ...pathWithin);
 }
+
+/** Proje videoları için ortak kapak görseli (`public/Projeler/image.png`). */
+export const VIDEO_POSTER_DEFAULT = projeler("image.png");

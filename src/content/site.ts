@@ -1,4 +1,4 @@
-import { projeler } from "@/lib/paths";
+import { projeler, VIDEO_POSTER_DEFAULT } from "@/lib/paths";
 import type {
   CapabilitySignal,
   Certification,
@@ -119,7 +119,7 @@ export const flagshipProjects: FlagshipProject[] = [
       {
         kind: "video",
         src: projeler(SW, "Makro_Video.mp4"),
-        poster: projeler("image.png"),
+        poster: VIDEO_POSTER_DEFAULT,
         alt: "SolidWorks makro otomasyon demosu",
         caption: "Makro otomasyon",
       },
@@ -138,7 +138,7 @@ export const flagshipProjects: FlagshipProject[] = [
       {
         kind: "video",
         src: projeler(SW, "ParametriX_2D-3D_Converter.mp4"),
-        poster: projeler("image.png"),
+        poster: VIDEO_POSTER_DEFAULT,
         alt: "ParametriX 2D–3D Converter demo",
         caption: "ParametriX 2D–3D Converter",
       },

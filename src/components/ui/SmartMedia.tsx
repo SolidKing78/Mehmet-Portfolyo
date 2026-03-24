@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useState } from "react";
+import { Play } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { VIDEO_POSTER_DEFAULT } from "@/lib/paths";
 import { cn } from "@/lib/utils";
 
 type SmartImageProps = {
@@ -55,7 +57,41 @@ type SmartVideoProps = {
   caption?: string;
 };
 
+function syncPlayOverlay(video: HTMLVideoElement): boolean {
+  return video.paused && (video.currentTime < 0.05 || video.ended);
+}
+
 export function SmartVideo({ src, poster, className, caption }: SmartVideoProps) {
+  const resolvedPoster = poster ?? VIDEO_POSTER_DEFAULT;
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [showPlayOverlay, setShowPlayOverlay] = useState(true);
+
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el) return;
+
+    const sync = () => {
+      setShowPlayOverlay(syncPlayOverlay(el));
+    };
+
+    el.addEventListener("play", sync);
+    el.addEventListener("pause", sync);
+    el.addEventListener("timeupdate", sync);
+    el.addEventListener("ended", sync);
+    sync();
+
+    return () => {
+      el.removeEventListener("play", sync);
+      el.removeEventListener("pause", sync);
+      el.removeEventListener("timeupdate", sync);
+      el.removeEventListener("ended", sync);
+    };
+  }, [src]);
+
+  const onPlayOverlayClick = useCallback(() => {
+    void videoRef.current?.play();
+  }, []);
+
   return (
     <figure
       className={cn(
@@ -63,15 +99,30 @@ export function SmartVideo({ src, poster, className, caption }: SmartVideoProps)
         className,
       )}
     >
-      <video
-        className="min-h-0 w-full flex-1 object-cover"
-        controls
-        playsInline
-        preload="metadata"
-        poster={poster}
-      >
-        <source src={src} />
-      </video>
+      <div className="relative min-h-0 flex-1">
+        <video
+          ref={videoRef}
+          className="min-h-0 h-full w-full flex-1 object-cover"
+          controls
+          playsInline
+          preload="metadata"
+          poster={resolvedPoster}
+        >
+          <source src={src} />
+        </video>
+        {showPlayOverlay ? (
+          <button
+            type="button"
+            className="absolute inset-0 z-10 flex cursor-pointer items-center justify-center bg-black/40 transition-colors hover:bg-black/50"
+            onClick={onPlayOverlayClick}
+            aria-label="Videoyu oynat"
+          >
+            <span className="flex h-[4.25rem] w-[4.25rem] items-center justify-center rounded-full bg-white/95 text-zinc-900 shadow-lg ring-2 ring-white/40">
+              <Play className="ml-1 h-9 w-9" fill="currentColor" strokeWidth={0} aria-hidden />
+            </span>
+          </button>
+        ) : null}
+      </div>
       {caption ? (
         <figcaption className="shrink-0 border-t border-[var(--color-border)] bg-[var(--color-panel)] px-3 py-2 font-mono text-[10px] tracking-wider text-[var(--color-muted)] uppercase">
           {caption}

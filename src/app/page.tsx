@@ -45,12 +45,8 @@ const dictionary = {
     role: "AI Destekli Yazılım Geliştirme & Vibe Coding",
     location: "Pendik, İstanbul, Türkiye",
     aboutTitle: "Hakkımda",
-    aboutText: `Yapay zeka destekli otomasyon sistemleri ve ajan tabanlı çözümler
-geliştirerek, mühendislik ve iş süreçlerini yeniden tanımlayan ölçeklenebilir
-ürünler oluşturmayı hedefliyorum. CAD otomasyonu, no-code/low-code
-geliştirme ve LLM teknolojilerini birleştirerek, firmalara özel yüksek katma
-değerli çözümler sunmak ve bu alanda yapay zeka danışmanlığı ile
-ürünleşmiş sistemler geliştirmek temel kariyer vizyonumdur.`,
+    aboutText:
+      "Yapay zeka destekli otomasyon sistemleri ve ajan tabanlı çözümler geliştirerek, mühendislik ve iş süreçlerini yeniden tanımlayan ölçeklenebilir ürünler oluşturmayı hedefliyorum. CAD otomasyonu, no-code/low-code geliştirme ve LLM teknolojilerini birleştirerek, firmalara özel yüksek katma değerli çözümler sunmak ve bu alanda yapay zeka danışmanlığı ile ürünleşmiş sistemler geliştirmek temel kariyer vizyonumdur.",
     aboutTags: [
       "AI-Assisted Development",
       "Vibe Coding",
