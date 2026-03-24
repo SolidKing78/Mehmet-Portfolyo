@@ -10,6 +10,7 @@ import {
   type FormEvent,
 } from "react";
 import {
+  Award,
   Bot,
   Braces,
   Building2,
@@ -17,6 +18,8 @@ import {
   Code2,
   Download,
   DraftingCompass,
+  ExternalLink,
+  FileText,
   GraduationCap,
   Linkedin,
   Mail,
@@ -33,13 +36,21 @@ import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { person } from "@/content/site";
 import { projeler } from "@/lib/paths";
 import { SmartImage } from "@/components/ui/SmartMedia";
+import {
+  certificationEntries,
+  certificationPdfHref,
+  certificationThumbnailHref,
+  linkedinCertificationsProfileUrl,
+} from "@/content/certifications";
+import { linkedInHighlightSkills } from "@/content/linkedinSkills";
 import { projectDetails } from "@/content/projects";
+import { useVideoPosterFromSrc } from "@/hooks/useVideoPosterFromSrc";
 
 type Lang = "tr" | "en";
 
 const dictionary = {
   tr: {
-    nav: ["Anasayfa", "Hakkımda", "Yetenekler", "Deneyim", "İletişim"],
+    nav: ["Anasayfa", "Hakkımda", "Yetenekler", "Sertifikalar", "Deneyim", "İletişim"],
     heroBadge: "Özgeçmiş / CV",
     hello: "Merhaba Ben",
     role: "AI Destekli Yazılım Geliştirme & Vibe Coding",
@@ -75,6 +86,16 @@ const dictionary = {
     featuredCta: "Detayları Gör",
     watchVideo: "Video izle",
     skillTitleA: "Teknik Yetenekler",
+    skillLinkedInTitle: "Profilde öne çıkan yetenekler",
+    skillLinkedInBlurb:
+      "LinkedIn profilimdeki beceri ve proje temalarıyla uyumlu etiketler. Güncel liste ve doğrulamalar için profilime bakın.",
+    certTitle: "Sertifikalar ve eğitimler",
+    certIntro:
+      "Aşağıdaki kayıtlar LinkedIn’deki lisanslar ve sertifikalar bölümümle uyumludur. PDF veya kapak görseli, dosyaları siteye ekledikçe burada görünür.",
+    verifyLinkedIn: "LinkedIn’de tüm sertifikaları gör",
+    credSkills: "İlgili yetenekler",
+    issuedPrefix: "Veriliş",
+    openPdf: "PDF’i aç",
     education: "Eğitim",
     work: "İş Deneyimi",
     interested: "Benimle İletişime Geçin",
@@ -94,7 +115,7 @@ const dictionary = {
     messageSentClose: "Tamam",
   },
   en: {
-    nav: ["Home", "About", "Skills", "Experience", "Contact"],
+    nav: ["Home", "About", "Skills", "Certifications", "Experience", "Contact"],
     heroBadge: "Resume / CV",
     hello: "Hello I'm",
     role: "AI-Assisted Software Development & Vibe Coding",
@@ -133,6 +154,16 @@ and to ship productized systems alongside AI consulting in this space.`,
     featuredCta: "View Details",
     watchVideo: "Watch video",
     skillTitleA: "Technical Skills",
+    skillLinkedInTitle: "Highlighted skills (LinkedIn-aligned)",
+    skillLinkedInBlurb:
+      "Tags aligned with themes on my LinkedIn profile. See my profile for the live, verifiable skill list.",
+    certTitle: "Licenses & certifications",
+    certIntro:
+      "These entries mirror the Licenses & certifications section on my LinkedIn. PDFs and thumbnails appear here once you add files under public/Projeler/Sertifikalar.",
+    verifyLinkedIn: "View all on LinkedIn",
+    credSkills: "Related skills",
+    issuedPrefix: "Issued",
+    openPdf: "Open PDF",
     education: "Education",
     work: "Work Experience",
     interested: "Contact Me Directly",
@@ -153,7 +184,14 @@ and to ship productized systems alongside AI consulting in this space.`,
   },
 } as const;
 
-const sectionAnchors = ["#home", "#about", "#skills", "#experience", "#contact"];
+const sectionAnchors = [
+  "#home",
+  "#about",
+  "#skills",
+  "#certifications",
+  "#experience",
+  "#contact",
+];
 
 const technicalSkills = [
   { name: "AI & Automation", icon: Sparkles },
@@ -443,6 +481,13 @@ export default function HomePage() {
   };
 
   const activeProject = projectDetails[activeFeatured];
+  const featuredVideoSrc =
+    activeProject.heroMedia.kind === "video" ? activeProject.heroMedia.src : null;
+  const featuredVideoCover = useVideoPosterFromSrc(featuredVideoSrc);
+  const featuredVisualSrc =
+    activeProject.heroMedia.kind === "video"
+      ? featuredVideoCover
+      : activeProject.heroMedia.src;
 
   const onSubmitContact = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -606,7 +651,7 @@ export default function HomePage() {
         <div className="featured-grid">
           <div className="featured-media">
             <SmartImage
-              src={activeProject.heroMedia.poster ?? activeProject.heroMedia.src}
+              src={featuredVisualSrc}
               alt={lang === "tr" ? activeProject.titleTr : activeProject.titleEn}
               className={activeProject.heroMedia.kind === "video" ? "featured-media-dim" : undefined}
             />
@@ -678,6 +723,103 @@ export default function HomePage() {
                     <Icon size={18} />
                   </span>
                   <strong>{skill.name}</strong>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+        <div className="linkedin-skills-block">
+          <h3>{t.skillLinkedInTitle}</h3>
+          <p>{t.skillLinkedInBlurb}</p>
+          <div className="linkedin-skill-pills">
+            {linkedInHighlightSkills.map((s) => (
+              <span key={s.tr}>{lang === "tr" ? s.tr : s.en}</span>
+            ))}
+          </div>
+          <a
+            href={person.linkedin}
+            target="_blank"
+            rel="noreferrer"
+            className="cert-linkedin-banner mt-5"
+          >
+            <Linkedin size={16} />
+            LinkedIn
+            <ExternalLink size={12} className="opacity-70" aria-hidden />
+          </a>
+        </div>
+      </section>
+
+      <section id="certifications" className="certifications-section reveal">
+        <h2 className="section-title-icon">
+          <Award size={20} />
+          {t.certTitle}
+        </h2>
+        <p className="cert-section-intro">{t.certIntro}</p>
+        <a
+          href={linkedinCertificationsProfileUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="cert-linkedin-banner"
+        >
+          <Linkedin size={16} />
+          {t.verifyLinkedIn}
+          <ExternalLink size={12} className="opacity-70" aria-hidden />
+        </a>
+        <div className="cert-grid">
+          {certificationEntries.map((c) => {
+            const thumb = certificationThumbnailHref(c);
+            const pdf = certificationPdfHref(c);
+            const title = lang === "tr" ? c.nameTr : c.nameEn;
+            const issuer = lang === "tr" ? c.issuerTr : c.issuerEn;
+            const detail = lang === "tr" ? c.detailTr : c.detailEn;
+            const skills = lang === "tr" ? c.skillsTr : c.skillsEn;
+            return (
+              <article key={c.id} className="cert-card">
+                <div className="cert-thumb">
+                  {thumb ? (
+                    <SmartImage
+                      src={thumb}
+                      alt={lang === "tr" ? `${title} — sertifika görseli` : `${title} — certificate image`}
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                  ) : (
+                    <div className="cert-thumb-fallback" aria-hidden>
+                      <Award size={40} strokeWidth={1.2} />
+                    </div>
+                  )}
+                </div>
+                <div className="cert-card-body">
+                  <h3>{title}</h3>
+                  <p className="cert-issuer">{issuer}</p>
+                  {c.issued ? (
+                    <p className="cert-issued">
+                      {t.issuedPrefix}: {c.issued}
+                    </p>
+                  ) : null}
+                  {c.credentialId ? (
+                    <p className="cert-issued">ID: {c.credentialId}</p>
+                  ) : null}
+                  <p className="cert-detail">{detail}</p>
+                  <p className="mt-3 font-mono text-[9px] tracking-wider text-zinc-500 uppercase">
+                    {t.credSkills}
+                  </p>
+                  <div className="cert-skills">
+                    {skills.map((s) => (
+                      <span key={s}>{s}</span>
+                    ))}
+                  </div>
+                  <div className="cert-actions">
+                    <a href={linkedinCertificationsProfileUrl} target="_blank" rel="noreferrer">
+                      <Linkedin size={14} />
+                      LinkedIn
+                    </a>
+                    {pdf ? (
+                      <a href={pdf} target="_blank" rel="noreferrer">
+                        <FileText size={14} />
+                        {t.openPdf}
+                      </a>
+                    ) : null}
+                  </div>
                 </div>
               </article>
             );

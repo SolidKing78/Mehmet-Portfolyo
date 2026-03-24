@@ -1,7 +1,6 @@
-import { projeler, VIDEO_POSTER_DEFAULT } from "@/lib/paths";
+import { projeler } from "@/lib/paths";
 import type {
   CapabilitySignal,
-  Certification,
   EducationEntry,
   FlagshipProject,
   RailNavItem,
@@ -119,7 +118,6 @@ export const flagshipProjects: FlagshipProject[] = [
       {
         kind: "video",
         src: projeler(SW, "Makro_Video.mp4"),
-        poster: VIDEO_POSTER_DEFAULT,
         alt: "SolidWorks makro otomasyon demosu",
         caption: "Makro otomasyon",
       },
@@ -138,7 +136,6 @@ export const flagshipProjects: FlagshipProject[] = [
       {
         kind: "video",
         src: projeler(SW, "ParametriX_2D-3D_Converter.mp4"),
-        poster: VIDEO_POSTER_DEFAULT,
         alt: "ParametriX 2D–3D Converter demo",
         caption: "ParametriX 2D–3D Converter",
       },
@@ -186,15 +183,7 @@ export const education: EducationEntry[] = [
   },
 ];
 
-export const certifications: Certification[] = [
-  { name: "SolidWorks CSWA" },
-  { name: "SolidWorks CSWPA-SM (Sheet Metal)" },
-  { name: "Yalın dönüşüm — yalın üretim ve yalın düşünce" },
-  { name: "ISO 9001:2015 kalite yönetim sistemi temel eğitimi" },
-  {
-    name: "Eklemeli imalat ile nikel-titanyum şekil hafızalı alaşım ve 4D printing",
-  },
-];
+export { certifications } from "./certifications";
 
 export const personalMeta = {
   birth: "14.07.2000",

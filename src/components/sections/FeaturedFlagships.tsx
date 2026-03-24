@@ -24,8 +24,8 @@ export function FeaturedFlagships() {
               <div className="relative aspect-[16/9] w-full border-b border-[var(--color-border)] bg-black sm:aspect-[2/1]">
                 {project.media[0]?.kind === "video" ? (
                   <SmartVideo
+                    key={project.media[0].src}
                     src={project.media[0].src}
-                    poster={project.media[0].poster}
                     caption={project.media[0].caption}
                     className="h-full"
                   />

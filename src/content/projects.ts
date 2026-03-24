@@ -1,4 +1,4 @@
-import { projeler, VIDEO_POSTER_DEFAULT } from "@/lib/paths";
+import { projeler } from "@/lib/paths";
 
 export type ProjectDetail = {
   slug: string;
@@ -87,7 +87,6 @@ export const projectDetails: ProjectDetail[] = [
     heroMedia: {
       kind: "video",
       src: projeler("Solidworks Makro API - Eklenti - ParametriX", "Makro_Video.mp4"),
-      poster: VIDEO_POSTER_DEFAULT,
     },
   },
   {
@@ -121,7 +120,6 @@ export const projectDetails: ProjectDetail[] = [
         "Solidworks Makro API - Eklenti - ParametriX",
         "ParametriX_2D-3D_Converter.mp4",
       ),
-      poster: VIDEO_POSTER_DEFAULT,
     },
   },
 ];

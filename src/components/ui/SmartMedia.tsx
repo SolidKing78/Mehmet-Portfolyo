@@ -2,8 +2,13 @@
 
 import Image from "next/image";
 import { Play } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { VIDEO_POSTER_DEFAULT } from "@/lib/paths";
+import {
+  cachePoster,
+  peekCachedPoster,
+  scheduleCaptureFromVideoElement,
+} from "@/lib/videoFramePoster";
 import { cn } from "@/lib/utils";
 
 type SmartImageProps = {
@@ -37,6 +42,18 @@ export function SmartImage({
     );
   }
 
+  if (src.startsWith("data:image")) {
+    return (
+      // data URL (videodan yakalanan kare); Next/Image bu src ile uyumlu değil
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={src}
+        alt={alt}
+        className={cn("absolute inset-0 h-full w-full object-cover", className)}
+      />
+    );
+  }
+
   return (
     <Image
       src={src}
@@ -52,6 +69,7 @@ export function SmartImage({
 
 type SmartVideoProps = {
   src: string;
+  /** Kare yakalama başarısız olursa kullanılır */
   poster?: string;
   className?: string;
   caption?: string;
@@ -62,9 +80,40 @@ function syncPlayOverlay(video: HTMLVideoElement): boolean {
 }
 
 export function SmartVideo({ src, poster, className, caption }: SmartVideoProps) {
-  const resolvedPoster = poster ?? VIDEO_POSTER_DEFAULT;
   const videoRef = useRef<HTMLVideoElement>(null);
+  const basePoster = useMemo(
+    () => peekCachedPoster(src) ?? poster ?? VIDEO_POSTER_DEFAULT,
+    [src, poster],
+  );
+  const [capturedPoster, setCapturedPoster] = useState<string | null>(null);
+  const posterUrl = capturedPoster ?? basePoster;
   const [showPlayOverlay, setShowPlayOverlay] = useState(true);
+
+  useEffect(() => {
+    const cached = peekCachedPoster(src);
+    if (cached) return;
+
+    let dispose: (() => void) | undefined;
+    let cancelled = false;
+    const frame = requestAnimationFrame(() => {
+      if (cancelled) return;
+      const el = videoRef.current;
+      if (!el) return;
+      dispose = scheduleCaptureFromVideoElement(el, (url) => {
+        if (cancelled) return;
+        if (url) {
+          cachePoster(src, url);
+          setCapturedPoster(url);
+        }
+      });
+    });
+
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(frame);
+      dispose?.();
+    };
+  }, [src, poster]);
 
   useEffect(() => {
     const el = videoRef.current;
@@ -105,8 +154,8 @@ export function SmartVideo({ src, poster, className, caption }: SmartVideoProps)
           className="min-h-0 h-full w-full flex-1 object-cover"
           controls
           playsInline
-          preload="metadata"
-          poster={resolvedPoster}
+          preload="auto"
+          poster={posterUrl}
         >
           <source src={src} />
         </video>

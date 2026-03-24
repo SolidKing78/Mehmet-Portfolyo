@@ -40,7 +40,7 @@ export default async function ProjectDetailPage({ params }: Params) {
       >
         <div className="relative min-h-[320px] sm:min-h-[430px]">
           {project.heroMedia.kind === "video" ? (
-            <SmartVideo src={project.heroMedia.src} poster={project.heroMedia.poster} />
+            <SmartVideo key={project.heroMedia.src} src={project.heroMedia.src} />
           ) : (
             <SmartImage src={project.heroMedia.src} alt={project.titleTr} />
           )}
