@@ -35,7 +35,124 @@
 
 @layer components {
   .portfolio-root {
-    @apply mx-auto max-w-[1230px] px-4 pb-20 text-zinc-100 sm:px-6 lg:px-8;
+    @apply relative isolate mx-auto max-w-[1230px] px-4 pb-20 text-zinc-100 sm:px-6 lg:px-8;
+  }
+
+  /* Full-page cursor aurora (fine pointer only; component skips reduced-motion) */
+  .cursor-aurora-root {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    mix-blend-mode: plus-lighter;
+    opacity: 0.92;
+  }
+
+  .cursor-aurora-node {
+    position: absolute;
+    left: 0;
+    top: 0;
+    will-change: transform;
+    contain: layout style;
+  }
+
+  .cursor-aurora-disk {
+    position: absolute;
+    left: 0;
+    top: 0;
+    translate: -50% -50%;
+    border-radius: 50%;
+    filter: blur(68px);
+  }
+
+  .cursor-aurora-disk--0 {
+    width: min(72vw, 720px);
+    height: min(72vw, 720px);
+    background:
+      radial-gradient(circle at 35% 30%, rgba(180, 255, 250, 0.55), transparent 52%),
+      radial-gradient(circle at 70% 65%, rgba(56, 189, 248, 0.4), transparent 58%),
+      radial-gradient(circle at 50% 50%, rgba(45, 212, 191, 0.25), transparent 68%);
+    opacity: 0.72;
+    animation: cursor-aurora-hue 18s ease-in-out infinite alternate;
+  }
+
+  .cursor-aurora-disk--1 {
+    width: min(58vw, 520px);
+    height: min(58vw, 520px);
+    background: radial-gradient(
+      circle at 45% 40%,
+      rgba(167, 139, 250, 0.5),
+      rgba(99, 102, 241, 0.18) 48%,
+      transparent 70%
+    );
+    opacity: 0.55;
+    filter: blur(78px);
+  }
+
+  .cursor-aurora-disk--2 {
+    width: min(42vw, 380px);
+    height: min(42vw, 380px);
+    background: radial-gradient(
+      circle at 50% 50%,
+      rgba(34, 211, 238, 0.65),
+      rgba(6, 182, 212, 0.2) 42%,
+      transparent 65%
+    );
+    opacity: 0.5;
+    filter: blur(56px);
+  }
+
+  .cursor-aurora-disk--3 {
+    width: min(36vw, 320px);
+    height: min(36vw, 320px);
+    background: conic-gradient(
+      from 120deg at 50% 50%,
+      rgba(236, 72, 153, 0.35),
+      rgba(139, 92, 246, 0.3),
+      rgba(34, 211, 238, 0.35),
+      rgba(45, 212, 191, 0.28),
+      rgba(236, 72, 153, 0.35)
+    );
+    opacity: 0.38;
+    filter: blur(72px);
+    animation: cursor-aurora-spin 28s linear infinite;
+  }
+
+  .cursor-aurora-disk--4 {
+    width: min(28vw, 280px);
+    height: min(28vw, 280px);
+    background: radial-gradient(
+      circle at 30% 55%,
+      rgba(255, 255, 255, 0.22),
+      rgba(125, 211, 252, 0.12) 38%,
+      transparent 62%
+    );
+    opacity: 0.4;
+    filter: blur(48px);
+  }
+
+  .cursor-aurora-disk--5 {
+    width: min(22vw, 220px);
+    height: min(22vw, 220px);
+    background: radial-gradient(circle, rgba(0, 255, 240, 0.35), transparent 58%);
+    opacity: 0.45;
+    filter: blur(40px);
+  }
+
+  @keyframes cursor-aurora-hue {
+    0% {
+      filter: blur(68px) hue-rotate(-12deg);
+    }
+    100% {
+      filter: blur(72px) hue-rotate(18deg);
+    }
+  }
+
+  @keyframes cursor-aurora-spin {
+    to {
+      rotate: 360deg;
+    }
   }
 
   .intro-overlay {

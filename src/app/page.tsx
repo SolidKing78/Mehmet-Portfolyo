@@ -43,6 +43,7 @@ import {
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { person, personalMeta } from "@/content/site";
 import { projeler } from "@/lib/paths";
+import { CursorAurora } from "@/components/effects/CursorAurora";
 import { SmartImage } from "@/components/ui/SmartMedia";
 import {
   certificationEntries,
@@ -702,6 +703,7 @@ export default function HomePage() {
 
   return (
     <div className={`portfolio-root${isMobile ? " mobile-mode" : ""}`}>
+      <CursorAurora />
       {showIntro ? <IntroOverlay hidden={false} variant={introVariant} /> : null}
 
       <header
