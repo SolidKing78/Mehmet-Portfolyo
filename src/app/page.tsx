@@ -50,8 +50,10 @@ import {
 } from "@/content/certifications";
 import { publications, publicationImageHref } from "@/content/publications";
 import { linkedInHighlightSkills } from "@/content/linkedinSkills";
+import { aboutGallerySlides, aboutSlideHref } from "@/content/aboutGallery";
 import { projectDetails } from "@/content/projects";
 import { useVideoPosterFromSrc } from "@/hooks/useVideoPosterFromSrc";
+import { cn } from "@/lib/utils";
 
 type Lang = "tr" | "en";
 
@@ -431,6 +433,7 @@ export default function HomePage() {
   const [sliderCycle, setSliderCycle] = useState(0);
   const [formError, setFormError] = useState("");
   const [showSentModal, setShowSentModal] = useState(false);
+  const [aboutSlideIdx, setAboutSlideIdx] = useState(0);
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -486,16 +489,49 @@ export default function HomePage() {
           if (entry.isIntersecting) entry.target.classList.add("is-visible");
         });
       },
-      { threshold: 0.18 },
+      { threshold: 0.05, rootMargin: "0px 0px 18% 0px" },
     );
 
-    document.querySelectorAll(".reveal").forEach((node) => observer.observe(node));
+    const revealNodes = document.querySelectorAll(".reveal");
+    revealNodes.forEach((node) => observer.observe(node));
+
+    const revealInViewOnLoad = () => {
+      revealNodes.forEach((node) => {
+        const r = node.getBoundingClientRect();
+        if (r.top < window.innerHeight * 0.92 && r.bottom > 0) {
+          node.classList.add("is-visible");
+        }
+      });
+    };
+    queueMicrotask(revealInViewOnLoad);
+    window.addEventListener("load", revealInViewOnLoad);
 
     return () => {
       media.removeEventListener("change", onUpdate);
+      window.removeEventListener("load", revealInViewOnLoad);
       observer.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    const applyHashReveal = () => {
+      const id = window.location.hash.replace(/^#/, "");
+      if (!id) return;
+      document.getElementById(id)?.classList.add("is-visible");
+    };
+    applyHashReveal();
+    window.addEventListener("hashchange", applyHashReveal);
+    return () => window.removeEventListener("hashchange", applyHashReveal);
+  }, []);
+
+  useEffect(() => {
+    const slide = aboutGallerySlides[aboutSlideIdx];
+    if (!slide) return;
+    const t = window.setTimeout(() => {
+      setAboutSlideIdx((i) => (i + 1) % aboutGallerySlides.length);
+    }, slide.dwellMs);
+    return () => window.clearTimeout(t);
+  }, [aboutSlideIdx]);
 
   const toggleFeatured = (direction: "next" | "prev") => {
     if (sliderLockRef.current) return;
@@ -652,11 +688,36 @@ export default function HomePage() {
       </section>
 
       <section id="about" className="about-section reveal">
-        <div className="about-image">
-          <SmartImage
-            src={projeler("İnsansız Hava Aracı", "_DSC1307.NEF.jpg")}
-            alt="About visual"
-          />
+        <div className="about-image about-image-slider">
+          {aboutGallerySlides.map((slide, i) => (
+            <div
+              key={slide.id}
+              className={cn("about-slide-layer", i === aboutSlideIdx && "about-slide-layer-active")}
+            >
+              <SmartImage
+                src={aboutSlideHref(slide)}
+                alt={
+                  lang === "tr"
+                    ? `Mehmet Seyrimez — sunum ve proje görseli ${i + 1}/${aboutGallerySlides.length}`
+                    : `Mehmet Seyrimez — presentation & project photo ${i + 1}/${aboutGallerySlides.length}`
+                }
+                priority={i === 0}
+              />
+            </div>
+          ))}
+          <div className="about-slider-dots" role="tablist" aria-label={lang === "tr" ? "Hakkımda görselleri" : "About photos"}>
+            {aboutGallerySlides.map((slide, i) => (
+              <button
+                key={slide.id}
+                type="button"
+                role="tab"
+                aria-selected={i === aboutSlideIdx}
+                className={cn("about-slider-dot", i === aboutSlideIdx && "about-slider-dot-active")}
+                onClick={() => setAboutSlideIdx(i)}
+                aria-label={lang === "tr" ? `Görsel ${i + 1}` : `Slide ${i + 1}`}
+              />
+            ))}
+          </div>
         </div>
         <div className="about-content">
           <h2>{t.aboutTitle}</h2>

@@ -29,8 +29,7 @@ export const publications: PublicationEntry[] = [
     dateEn: "May 16, 2022",
     documentUrl:
       "https://drive.google.com/file/d/1Ph4NBWWsnj4WsJlJu4AP3DIyBzfBXThi/view",
-    coverImageUrl:
-      "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80",
+    imageSegments: ["İnsansız Hava Aracı", "_DSC1307.NEF.jpg"],
   },
 ];
 

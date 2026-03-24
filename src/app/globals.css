@@ -347,6 +347,39 @@
     @apply relative min-h-[300px] overflow-hidden rounded-md border border-white/10;
   }
 
+  .about-image-slider {
+    @apply min-h-[280px] sm:min-h-[320px];
+  }
+
+  .about-slide-layer {
+    @apply absolute inset-0 opacity-0 transition-opacity duration-[650ms] ease-out;
+  }
+
+  .about-slide-layer-active {
+    @apply z-[1] opacity-100;
+  }
+
+  .about-slider-dots {
+    @apply absolute bottom-3 left-1/2 z-[2] flex -translate-x-1/2 gap-2 rounded-full border border-white/15 bg-black/45 px-2.5 py-1.5 backdrop-blur-sm;
+  }
+
+  .about-slider-dot {
+    @apply h-2 w-2 rounded-full border border-cyan-400/35 bg-white/20 transition-all;
+  }
+
+  .about-slider-dot-active {
+    @apply w-5 border-cyan-300/60 bg-cyan-300/80;
+  }
+
+  #about,
+  #skills,
+  #experience,
+  #publications,
+  #certifications,
+  #contact {
+    scroll-margin-top: 5.5rem;
+  }
+
   .about-content h2,
   .services-section h2,
   .featured-section h2,
