@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import {
   useEffect,
@@ -30,13 +31,14 @@ import {
   PencilRuler,
   Phone,
   Play,
+  ScrollText,
   Send,
   ShieldCheck,
   Sparkles,
   Wrench,
 } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
-import { person } from "@/content/site";
+import { person, personalMeta } from "@/content/site";
 import { projeler } from "@/lib/paths";
 import { SmartImage } from "@/components/ui/SmartMedia";
 import {
@@ -127,8 +129,9 @@ const dictionary = {
     scriptMissing:
       "Form şu an yapılandırılmamış. NEXT_PUBLIC_GOOGLE_APPS_SCRIPT_URL ortam değişkenini ekleyin.",
     sendFailed: "Gönderim sırasında bir hata oluştu. Lütfen tekrar deneyin.",
-    messageSentTitle: "Mesaj gönderildi",
-    messageSentBody: "Teşekkürler — mesajınız alındı. En kısa sürede dönüş yapacağım.",
+    messageSentTitle: "E-posta uygulamanız açılıyor",
+    messageSentBody:
+      "Mesajınız mehmetseyrimez@gmail.com adresine gönderilmek üzere hazırlandı. Açılan pencerede Gönder’e basmayı unutmayın; otomatik gönderim tarayıcıdan yapılamaz.",
     messageSentClose: "Tamam",
   },
   en: {
@@ -207,8 +210,9 @@ and to ship productized systems alongside AI consulting in this space.`,
     scriptMissing:
       "The form is not configured yet. Add NEXT_PUBLIC_GOOGLE_APPS_SCRIPT_URL to your environment.",
     sendFailed: "Something went wrong while sending. Please try again.",
-    messageSentTitle: "Message sent",
-    messageSentBody: "Thank you — your message was received. I’ll get back to you shortly.",
+    messageSentTitle: "Opening your email app",
+    messageSentBody:
+      "Your message is prepared for mehmetseyrimez@gmail.com. Please press Send in the window that opens — browsers cannot send email automatically.",
     messageSentClose: "OK",
   },
 } as const;
@@ -426,7 +430,6 @@ export default function HomePage() {
   const [activeFeatured, setActiveFeatured] = useState(0);
   const [sliderCycle, setSliderCycle] = useState(0);
   const [formError, setFormError] = useState("");
-  const [contactSending, setContactSending] = useState(false);
   const [showSentModal, setShowSentModal] = useState(false);
   const [form, setForm] = useState({
     firstName: "",
@@ -532,7 +535,9 @@ export default function HomePage() {
       ? featuredVideoCover
       : activeProject.heroMedia.src;
 
-  const onSubmitContact = async (event: FormEvent<HTMLFormElement>) => {
+  const contactTargetEmail = "mehmetseyrimez@gmail.com";
+
+  const onSubmitContact = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setFormError("");
 
@@ -547,34 +552,25 @@ export default function HomePage() {
       return;
     }
 
-    const url = process.env.NEXT_PUBLIC_GOOGLE_APPS_SCRIPT_URL?.trim();
-    if (!url) {
-      setFormError(t.scriptMissing);
-      return;
-    }
+    const subject =
+      lang === "tr"
+        ? `Portfolyo iletişim: ${form.firstName.trim()} ${form.lastName.trim()}`
+        : `Portfolio contact: ${form.firstName.trim()} ${form.lastName.trim()}`;
+    const body = [
+      lang === "tr" ? "Gönderen" : "From",
+      `${form.firstName.trim()} ${form.lastName.trim()}`,
+      lang === "tr" ? "E-posta" : "Reply-To email",
+      form.email.trim(),
+      "",
+      form.message.trim(),
+    ].join("\n");
 
-    setContactSending(true);
-    try {
-      await fetch(url, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify({
-          firstName: form.firstName.trim(),
-          lastName: form.lastName.trim(),
-          email: form.email.trim(),
-          message: form.message.trim(),
-          lang,
-        }),
-      });
-      setShowSentModal(true);
-      setForm({ firstName: "", lastName: "", email: "", message: "" });
-    } catch {
-      setFormError(t.sendFailed);
-    } finally {
-      setContactSending(false);
-    }
+    const mailto = `mailto:${contactTargetEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailto;
+    setShowSentModal(true);
   };
+
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${personalMeta.address}, Türkiye`)}`;
 
   return (
     <div className={`portfolio-root${isMobile ? " mobile-mode" : ""}`}>
@@ -856,13 +852,25 @@ export default function HomePage() {
             const title = lang === "tr" ? pub.titleTr : pub.titleEn;
             const venue = lang === "tr" ? pub.venueTr : pub.venueEn;
             const date = lang === "tr" ? pub.dateTr : pub.dateEn;
+            const altPub =
+              lang === "tr"
+                ? `${title} — akademik yayın görseli`
+                : `${title} — academic publication visual`;
             return (
               <article key={pub.id} className="pub-card">
                 <div className="pub-card-media">
-                  {img ? (
+                  {pub.coverImageUrl ? (
+                    <Image
+                      src={pub.coverImageUrl}
+                      alt={altPub}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 100vw, 240px"
+                    />
+                  ) : img ? (
                     <SmartImage
                       src={img}
-                      alt={lang === "tr" ? `${title} — kongre görseli` : `${title} — congress visual`}
+                      alt={altPub}
                       sizes="(max-width: 640px) 100vw, 240px"
                     />
                   ) : (
@@ -928,7 +936,12 @@ export default function HomePage() {
                     />
                   ) : (
                     <div className="cert-thumb-fallback" aria-hidden>
-                      <Award size={40} strokeWidth={1.2} />
+                      <div className="cert-fallback-visual">
+                        <ScrollText className="cert-fallback-scroll" size={44} strokeWidth={1.15} />
+                        <span className="cert-fallback-seal">
+                          <BadgeCheck size={18} strokeWidth={2.4} aria-hidden />
+                        </span>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -1008,26 +1021,49 @@ export default function HomePage() {
         <h2>{t.contact}</h2>
         <div className="contact-grid">
           <div className="contact-cards">
-            <article>
-              <MapPin size={18} />
-              <h3>{lang === "tr" ? "Adres" : "Address"}</h3>
-              <p>{t.location}</p>
-            </article>
-            <article>
-              <Mail size={18} />
-              <h3>Email</h3>
-              <p>{person.email}</p>
-            </article>
-            <article>
-              <Linkedin size={18} />
-              <h3>LinkedIn</h3>
-              <p>{person.linkedin}</p>
-            </article>
-            <article>
-              <WhatsAppIcon size={20} className="text-[#25D366]" />
-              <h3>WhatsApp</h3>
-              <p>+90 538 394 01 37</p>
-            </article>
+            <a
+              href={mapsUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="contact-card-link"
+            >
+              <MapPin size={18} className="shrink-0 text-cyan-300" aria-hidden />
+              <span className="contact-card-link-text">
+                <h3>{lang === "tr" ? "Adres" : "Address"}</h3>
+                <p>{personalMeta.address}</p>
+              </span>
+            </a>
+            <a href={`mailto:${person.email}`} className="contact-card-link">
+              <Mail size={18} className="shrink-0 text-cyan-300" aria-hidden />
+              <span className="contact-card-link-text">
+                <h3>Email</h3>
+                <p>{person.email}</p>
+              </span>
+            </a>
+            <a
+              href={person.linkedin}
+              target="_blank"
+              rel="noreferrer"
+              className="contact-card-link"
+            >
+              <Linkedin size={18} className="shrink-0 text-cyan-300" aria-hidden />
+              <span className="contact-card-link-text">
+                <h3>LinkedIn</h3>
+                <p className="break-all">{person.linkedin}</p>
+              </span>
+            </a>
+            <a
+              href="https://wa.me/905383940137"
+              target="_blank"
+              rel="noreferrer"
+              className="contact-card-link"
+            >
+              <WhatsAppIcon size={20} className="shrink-0 text-[#25D366]" />
+              <span className="contact-card-link-text">
+                <h3>WhatsApp</h3>
+                <p>+90 538 394 01 37</p>
+              </span>
+            </a>
           </div>
           <form className="contact-form" onSubmit={onSubmitContact}>
             <input
@@ -1055,9 +1091,9 @@ export default function HomePage() {
               onChange={(e) => setForm((prev) => ({ ...prev, message: e.target.value }))}
             />
             {formError ? <p className="form-error">{formError}</p> : null}
-            <button type="submit" disabled={contactSending}>
+            <button type="submit">
               <Send size={16} />
-              {contactSending ? t.sending : t.send}
+              {t.send}
             </button>
             <div className="contact-form-links">
               <a href={`mailto:${person.email}`} aria-label="Email">

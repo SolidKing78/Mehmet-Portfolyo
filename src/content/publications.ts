@@ -10,6 +10,9 @@ export type PublicationEntry = {
   dateEn: string;
   /** Tam metin / özet PDF (Drive vb.) */
   documentUrl: string;
+  /** Kapak: Unsplash vb. (next.config remotePatterns gerekir) */
+  coverImageUrl?: string;
+  /** Yerel kapak: public/Projeler/... */
   imageSegments?: string[];
 };
 
@@ -26,7 +29,8 @@ export const publications: PublicationEntry[] = [
     dateEn: "May 16, 2022",
     documentUrl:
       "https://drive.google.com/file/d/1Ph4NBWWsnj4WsJlJu4AP3DIyBzfBXThi/view",
-    imageSegments: ["Yayinlar", "otonom-sualti-kongre.png"],
+    coverImageUrl:
+      "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80",
   },
 ];
 

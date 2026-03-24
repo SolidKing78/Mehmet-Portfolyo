@@ -551,7 +551,19 @@
   }
 
   .cert-thumb-fallback {
-    @apply flex h-full w-full items-center justify-center text-cyan-400/35;
+    @apply flex h-full w-full items-center justify-center;
+  }
+
+  .cert-fallback-visual {
+    @apply relative grid place-items-center;
+  }
+
+  .cert-fallback-scroll {
+    @apply text-cyan-400/45;
+  }
+
+  .cert-fallback-seal {
+    @apply absolute -bottom-1 -right-1 flex h-9 w-9 items-center justify-center rounded-full border-2 border-emerald-400/55 bg-emerald-500/20 text-emerald-300 shadow-[0_0_20px_rgba(52,211,153,0.25)];
   }
 
   .cert-card-body {
@@ -621,6 +633,10 @@
 
   .pub-card-media {
     @apply relative min-h-[200px] border-b border-white/10 sm:min-h-0 sm:border-r sm:border-b-0;
+  }
+
+  .pub-card-media img {
+    @apply object-cover;
   }
 
   .pub-card-media .pub-fallback {
@@ -716,20 +732,16 @@
     @apply space-y-3;
   }
 
-  .contact-cards article {
-    @apply rounded border border-white/10 bg-black/35 p-4;
+  .contact-card-link {
+    @apply flex gap-3 rounded border border-white/10 bg-black/35 p-4 text-left no-underline transition-colors hover:border-cyan-400/40 hover:bg-black/50;
   }
 
-  .contact-cards h3 {
-    @apply mt-1;
-  }
-
-  .contact-cards h3 {
+  .contact-card-link-text h3 {
     @apply text-lg font-semibold text-cyan-300;
   }
 
-  .contact-cards p {
-    @apply text-sm text-zinc-300;
+  .contact-card-link-text p {
+    @apply mt-1 text-sm text-zinc-300;
   }
 
   .contact-form {
