@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
+  useCallback,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -231,6 +232,22 @@ const sectionAnchors = [
   "#contact",
 ];
 
+function getActiveNavIndexFromScroll(): number {
+  const last = sectionAnchors.length - 1;
+  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  if (window.scrollY >= maxScroll - 8) return last;
+
+  const marker = Math.min(132, window.innerHeight * 0.11 + 72);
+  let idx = 0;
+  for (let i = 0; i < sectionAnchors.length; i++) {
+    const id = sectionAnchors[i].replace(/^#/, "");
+    const el = document.getElementById(id);
+    if (!el) continue;
+    if (el.getBoundingClientRect().top <= marker) idx = i;
+  }
+  return idx;
+}
+
 function CertVerifyIcon({ kind }: { kind: CertVerifyLinkKind }) {
   switch (kind) {
     case "solidworks":
@@ -436,6 +453,11 @@ export default function HomePage() {
   const [formError, setFormError] = useState("");
   const [showSentModal, setShowSentModal] = useState(false);
   const [aboutSlideIdx, setAboutSlideIdx] = useState(0);
+  const [activeSectionIndex, setActiveSectionIndex] = useState(0);
+  const [navIndicator, setNavIndicator] = useState({ left: 0, width: 0, ready: false });
+  const navRef = useRef<HTMLElement | null>(null);
+  const navLinkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
+  const scrollSpyTicking = useRef(false);
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -524,6 +546,64 @@ export default function HomePage() {
     applyHashReveal();
     window.addEventListener("hashchange", applyHashReveal);
     return () => window.removeEventListener("hashchange", applyHashReveal);
+  }, []);
+
+  const updateNavIndicator = useCallback(() => {
+    const nav = navRef.current;
+    const link = navLinkRefs.current[activeSectionIndex];
+    if (!nav || !link) {
+      setNavIndicator((p) => ({ ...p, ready: false }));
+      return;
+    }
+    if (window.getComputedStyle(nav).display === "none") {
+      setNavIndicator((p) => ({ ...p, ready: false }));
+      return;
+    }
+    const nr = nav.getBoundingClientRect();
+    const lr = link.getBoundingClientRect();
+    setNavIndicator({
+      left: lr.left - nr.left + nav.scrollLeft,
+      width: Math.max(lr.width, 12),
+      ready: true,
+    });
+  }, [activeSectionIndex]);
+
+  useLayoutEffect(() => {
+    const id = requestAnimationFrame(() => updateNavIndicator());
+    return () => cancelAnimationFrame(id);
+  }, [updateNavIndicator, t.nav, isMobile, openMenu, lang]);
+
+  useEffect(() => {
+    const onResize = () => updateNavIndicator();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [updateNavIndicator]);
+
+  useEffect(() => {
+    const onScroll = () => {
+      if (scrollSpyTicking.current) return;
+      scrollSpyTicking.current = true;
+      requestAnimationFrame(() => {
+        scrollSpyTicking.current = false;
+        const next = getActiveNavIndexFromScroll();
+        setActiveSectionIndex((prev) => (prev !== next ? next : prev));
+      });
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const syncActiveFromHash = () => {
+      const id = window.location.hash.replace(/^#/, "");
+      if (!id) return;
+      const i = sectionAnchors.findIndex((h) => h === `#${id}`);
+      if (i >= 0) setActiveSectionIndex(i);
+    };
+    syncActiveFromHash();
+    window.addEventListener("hashchange", syncActiveFromHash);
+    return () => window.removeEventListener("hashchange", syncActiveFromHash);
   }, []);
 
   useEffect(() => {
@@ -624,29 +704,66 @@ export default function HomePage() {
     <div className={`portfolio-root${isMobile ? " mobile-mode" : ""}`}>
       {showIntro ? <IntroOverlay hidden={false} variant={introVariant} /> : null}
 
-      <header className="site-header">
-        <div className="brand-pill">{t.heroBadge}</div>
-        <button
-          className="mobile-menu-btn"
-          onClick={() => setOpenMenu((v) => !v)}
-          aria-label="Toggle menu"
-        >
-          <Menu size={18} />
-        </button>
-        <nav className={`top-nav${isMobile && !openMenu ? " top-nav-hidden" : ""}`}>
-          {sectionAnchors.map((href, idx) => (
-            <a key={href} href={href}>
-              {t.nav[idx]}
-            </a>
-          ))}
-        </nav>
-        <div className="lang-switch">
-          <button className={lang === "tr" ? "active" : ""} onClick={() => setLang("tr")}>
-            TR
+      <header
+        className="site-header"
+        onMouseMove={(e) => {
+          const el = e.currentTarget;
+          const r = el.getBoundingClientRect();
+          const x = ((e.clientX - r.left) / Math.max(r.width, 1)) * 100;
+          const y = ((e.clientY - r.top) / Math.max(r.height, 1)) * 100;
+          el.style.setProperty("--nav-glow-x", `${x}%`);
+          el.style.setProperty("--nav-glow-y", `${y}%`);
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.setProperty("--nav-glow-x", "50%");
+          e.currentTarget.style.setProperty("--nav-glow-y", "42%");
+        }}
+      >
+        <div className="site-header-backdrop" aria-hidden />
+        <div className="site-header-row">
+          <div className="brand-pill">{t.heroBadge}</div>
+          <button
+            className="mobile-menu-btn"
+            onClick={() => setOpenMenu((v) => !v)}
+            aria-label="Toggle menu"
+          >
+            <Menu size={18} />
           </button>
-          <button className={lang === "en" ? "active" : ""} onClick={() => setLang("en")}>
-            EN
-          </button>
+          <nav
+            ref={navRef}
+            className={`top-nav${isMobile && !openMenu ? " top-nav-hidden" : ""}`}
+          >
+            <span
+              className="top-nav-indicator"
+              style={{
+                transform: `translateX(${navIndicator.left}px)`,
+                width: navIndicator.width,
+                opacity: navIndicator.ready ? 1 : 0,
+              }}
+              aria-hidden
+            />
+            {sectionAnchors.map((href, idx) => (
+              <a
+                key={href}
+                ref={(el) => {
+                  navLinkRefs.current[idx] = el;
+                }}
+                href={href}
+                className={cn(idx === activeSectionIndex && "top-nav-link-active")}
+                aria-current={idx === activeSectionIndex ? "location" : undefined}
+              >
+                {t.nav[idx]}
+              </a>
+            ))}
+          </nav>
+          <div className="lang-switch">
+            <button className={lang === "tr" ? "active" : ""} onClick={() => setLang("tr")}>
+              TR
+            </button>
+            <button className={lang === "en" ? "active" : ""} onClick={() => setLang("en")}>
+              EN
+            </button>
+          </div>
         </div>
       </header>
 
