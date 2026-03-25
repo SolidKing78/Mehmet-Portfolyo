@@ -544,7 +544,7 @@
   }
 
   .hero-section {
-    @apply relative mt-5 grid min-h-[560px] overflow-hidden rounded-md border border-cyan-400/20 lg:grid-cols-2;
+    @apply relative mt-5 min-h-[560px] overflow-hidden rounded-md lg:grid lg:grid-cols-2;
   }
 
   .hero-bg {

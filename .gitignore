@@ -34,3 +34,6 @@ next-env.d.ts
 
 # large local media (GitHub 100MB limit)
 Projeler/Solidworks Makro API - Eklenti - ParametriX/20250722.mp4
+
+# Reference clone (React Bits); re-clone: git clone https://github.com/DavidHDev/react-bits.git github/react-bits
+/github/

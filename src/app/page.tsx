@@ -58,6 +58,8 @@ import { aboutGallerySlides, aboutSlideHref } from "@/content/aboutGallery";
 import { projectDetails } from "@/content/projects";
 import { useVideoPosterFromSrc } from "@/hooks/useVideoPosterFromSrc";
 import { cn } from "@/lib/utils";
+import { motion, useReducedMotion } from "framer-motion";
+import { BorderGlow } from "@/components/effects/BorderGlow";
 
 type Lang = "tr" | "en";
 
@@ -446,6 +448,8 @@ function IntroOverlay({
 export default function HomePage() {
   const [lang, setLang] = useState<Lang>("tr");
   const [showIntro, setShowIntro] = useState(false);
+  const [heroReveal, setHeroReveal] = useState(false);
+  const reduceMotion = useReducedMotion();
   const [introVariant, setIntroVariant] = useState<(typeof INTRO_VARIANTS)[number]>("intro-v1");
   const [isMobile, setIsMobile] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
@@ -494,6 +498,15 @@ export default function HomePage() {
       setShowIntro(false);
     }, INTRO_DURATION_MS);
     return () => window.clearTimeout(done);
+  }, [showIntro]);
+
+  useEffect(() => {
+    if (showIntro) {
+      const hide = window.setTimeout(() => setHeroReveal(false), 0);
+      return () => window.clearTimeout(hide);
+    }
+    const t = window.setTimeout(() => setHeroReveal(true), 90);
+    return () => window.clearTimeout(t);
   }, [showIntro]);
 
   useEffect(() => {
@@ -769,53 +782,125 @@ export default function HomePage() {
         </div>
       </header>
 
-      <section id="home" className="hero-section reveal is-visible">
-        <div className="hero-bg">
-          <SmartImage
-            src={projeler("1000032332_890c8c34641268895aacba6ef3c538aa-30.04.2023 07_47_02.jpg")}
-            alt="Hero background"
-            className="hero-bg-image"
-          />
-        </div>
-        <div className="hero-overlay" />
-        <div className="hero-left">
-          <span className="hello-pill">{t.hello}</span>
-          <h1>Mehmet Seyrimez</h1>
-          <p className="role-line">{t.role}</p>
-          <ul>
-            <li>
-              <Mail size={14} />
-              {person.email}
-            </li>
-            <li>
-              <Phone size={14} />
-              {person.phoneDisplay}
-            </li>
-            <li>
-              <MapPin size={14} />
-              {t.location}
-            </li>
-          </ul>
-          <div className="hero-social">
-            <a href={`mailto:${person.email}`} aria-label="Email">
-              <Mail size={20} />
-            </a>
-            <a href={`tel:${person.phoneTel}`} aria-label="Phone">
-              <Phone size={20} />
-            </a>
-            <a href="https://wa.me/905383940137" target="_blank" rel="noreferrer" aria-label="WhatsApp">
-              <WhatsAppIcon size={22} className="text-[#25D366]" />
-            </a>
-            <a href={person.linkedin} target="_blank" rel="noreferrer" aria-label="Linkedin">
-              <Linkedin size={20} />
-            </a>
+      <section id="home" className="reveal is-visible">
+        <BorderGlow
+          className="mt-5"
+          contentClassName="hero-section"
+          animated
+          sweepDelayMs={showIntro ? INTRO_DURATION_MS + 140 : 320}
+          borderRadius={6}
+          glowRadius={32}
+          glowIntensity={1.1}
+          glowColor="187 92% 58%"
+          colors={["#22d3ee", "#c084fc", "#fb7185", "#38bdf8"]}
+          fillOpacity={0.42}
+          coneSpread={22}
+        >
+          <div className="hero-bg">
+            <SmartImage
+              src={projeler("1000032332_890c8c34641268895aacba6ef3c538aa-30.04.2023 07_47_02.jpg")}
+              alt="Hero background"
+              className="hero-bg-image"
+            />
           </div>
-        </div>
-        <div className="hero-right">
-          <div className="profile-ring">
-            <SmartImage src={projeler("MEHMET_SEYRİMEZ.jpg")} alt="Mehmet Seyrimez profile" />
-          </div>
-        </div>
+          <div className="hero-overlay" />
+          {reduceMotion ? (
+            <div className="hero-left">
+              <span className="hello-pill">{t.hello}</span>
+              <h1>Mehmet Seyrimez</h1>
+              <p className="role-line">{t.role}</p>
+              <ul>
+                <li>
+                  <Mail size={14} />
+                  {person.email}
+                </li>
+                <li>
+                  <Phone size={14} />
+                  {person.phoneDisplay}
+                </li>
+                <li>
+                  <MapPin size={14} />
+                  {t.location}
+                </li>
+              </ul>
+              <div className="hero-social">
+                <a href={`mailto:${person.email}`} aria-label="Email">
+                  <Mail size={20} />
+                </a>
+                <a href={`tel:${person.phoneTel}`} aria-label="Phone">
+                  <Phone size={20} />
+                </a>
+                <a href="https://wa.me/905383940137" target="_blank" rel="noreferrer" aria-label="WhatsApp">
+                  <WhatsAppIcon size={22} className="text-[#25D366]" />
+                </a>
+                <a href={person.linkedin} target="_blank" rel="noreferrer" aria-label="Linkedin">
+                  <Linkedin size={20} />
+                </a>
+              </div>
+            </div>
+          ) : (
+            <motion.div
+              className="hero-left"
+              initial={false}
+              animate={
+                heroReveal
+                  ? { opacity: 1, y: 0, filter: "blur(0px)" }
+                  : { opacity: 0, y: 22, filter: "blur(10px)" }
+              }
+              transition={{ duration: 0.62, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <span className="hello-pill">{t.hello}</span>
+              <h1>Mehmet Seyrimez</h1>
+              <p className="role-line">{t.role}</p>
+              <ul>
+                <li>
+                  <Mail size={14} />
+                  {person.email}
+                </li>
+                <li>
+                  <Phone size={14} />
+                  {person.phoneDisplay}
+                </li>
+                <li>
+                  <MapPin size={14} />
+                  {t.location}
+                </li>
+              </ul>
+              <div className="hero-social">
+                <a href={`mailto:${person.email}`} aria-label="Email">
+                  <Mail size={20} />
+                </a>
+                <a href={`tel:${person.phoneTel}`} aria-label="Phone">
+                  <Phone size={20} />
+                </a>
+                <a href="https://wa.me/905383940137" target="_blank" rel="noreferrer" aria-label="WhatsApp">
+                  <WhatsAppIcon size={22} className="text-[#25D366]" />
+                </a>
+                <a href={person.linkedin} target="_blank" rel="noreferrer" aria-label="Linkedin">
+                  <Linkedin size={20} />
+                </a>
+              </div>
+            </motion.div>
+          )}
+          {reduceMotion ? (
+            <div className="hero-right">
+              <div className="profile-ring">
+                <SmartImage src={projeler("MEHMET_SEYRİMEZ.jpg")} alt="Mehmet Seyrimez profile" />
+              </div>
+            </div>
+          ) : (
+            <motion.div
+              className="hero-right"
+              initial={false}
+              animate={heroReveal ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.65, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="profile-ring">
+                <SmartImage src={projeler("MEHMET_SEYRİMEZ.jpg")} alt="Mehmet Seyrimez profile" />
+              </div>
+            </motion.div>
+          )}
+        </BorderGlow>
       </section>
 
       <section id="about" className="about-section reveal">
