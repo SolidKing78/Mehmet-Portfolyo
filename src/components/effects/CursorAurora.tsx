@@ -13,14 +13,13 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
-function randomAuroraHues(root: HTMLDivElement) {
-  const base = Math.random() * 360;
-  const spread = 48 + Math.random() * 92;
-  const h = (offset: number) => Math.round((base + offset * spread) % 360);
-  root.style.setProperty("--aurora-h1", String(h(0)));
-  root.style.setProperty("--aurora-h2", String(h(0.28)));
-  root.style.setProperty("--aurora-h3", String(h(0.55)));
-  root.style.setProperty("--aurora-h4", String(h(0.82)));
+function setPremiumAuroraHues(root: HTMLDivElement) {
+  const base = 192 + Math.random() * 10;
+  const hue = (offset: number) => Math.round(base + offset);
+  root.style.setProperty("--aurora-h1", String(hue(-8)));
+  root.style.setProperty("--aurora-h2", String(hue(14)));
+  root.style.setProperty("--aurora-h3", String(hue(2)));
+  root.style.setProperty("--aurora-h4", String(hue(24)));
 }
 
 export function CursorAurora() {
@@ -64,7 +63,7 @@ export function CursorAurora() {
 
     const root = rootRef.current;
     if (root) {
-      randomAuroraHues(root);
+      setPremiumAuroraHues(root);
       root.style.setProperty("--aurora-fade", "1");
     }
 
@@ -77,7 +76,7 @@ export function CursorAurora() {
     };
 
     const onClick = () => {
-      if (rootRef.current) randomAuroraHues(rootRef.current);
+      if (rootRef.current) setPremiumAuroraHues(rootRef.current);
       lastMoveRef.current = performance.now();
       fadeRef.current = 1;
     };

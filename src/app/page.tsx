@@ -44,6 +44,7 @@ import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { person, personalMeta } from "@/content/site";
 import { projeler } from "@/lib/paths";
 import { CursorAurora } from "@/components/effects/CursorAurora";
+import { BorderGlow } from "@/components/effects/BorderGlow";
 import { SmartImage } from "@/components/ui/SmartMedia";
 import {
   certificationEntries,
@@ -700,6 +701,37 @@ export default function HomePage() {
   };
 
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${personalMeta.address}, Türkiye`)}`;
+  const cvHref = projeler("Güncel CV.pdf");
+  const heroSummary =
+    lang === "tr"
+      ? "Muhendislik yazilimini, CAD otomasyonunu ve AI destekli teslim zincirlerini uretime yakin sistemler olarak tasarliyorum."
+      : "I design engineering software, CAD automation, and AI-assisted delivery systems that sit close to production.";
+  const heroAvailability =
+    lang === "tr"
+      ? "Muhendislik yazilimi, CAD otomasyonu ve AI workflow danismanligi icin acigim."
+      : "Available for engineering software, CAD automation, and AI workflow consulting.";
+  const heroFocusTitle = lang === "tr" ? "Guncel odak" : "Current delivery focus";
+  const heroFocusCopy =
+    lang === "tr"
+      ? "Hiz, tekrar edilebilirlik ve guvenilir teknik cikti isteyen ekipler icin production-grade sistemler."
+      : "Production-grade systems for teams that need speed, repeatability, and reliable technical output.";
+  const heroMetrics = [
+    {
+      value: `${projectDetails.length}+`,
+      label: lang === "tr" ? "teslim sistemi" : "delivery systems",
+    },
+    {
+      value: `${certificationEntries.length}`,
+      label: lang === "tr" ? "sertifika" : "certifications",
+    },
+    {
+      value: `${publications.length}`,
+      label: lang === "tr" ? "yayin" : "publications",
+    },
+  ];
+  const heroPrimaryCta = lang === "tr" ? "One cikan projeler" : "View flagship work";
+  const heroSpecialty = "SolidWorks API · C++ CAD/CAM · AI Workflow Systems";
+  const heroSignals = t.services.map((service) => service.title);
 
   return (
     <div className={`portfolio-root${isMobile ? " mobile-mode" : ""}`}>
@@ -724,13 +756,6 @@ export default function HomePage() {
         <div className="site-header-backdrop" aria-hidden />
         <div className="site-header-row">
           <div className="brand-pill">{t.heroBadge}</div>
-          <button
-            className="mobile-menu-btn"
-            onClick={() => setOpenMenu((v) => !v)}
-            aria-label="Toggle menu"
-          >
-            <Menu size={18} />
-          </button>
           <nav
             ref={navRef}
             className={`top-nav${isMobile && !openMenu ? " top-nav-hidden" : ""}`}
@@ -758,14 +783,27 @@ export default function HomePage() {
               </a>
             ))}
           </nav>
-          <div className="lang-switch">
-            <button className={lang === "tr" ? "active" : ""} onClick={() => setLang("tr")}>
-              TR
-            </button>
-            <button className={lang === "en" ? "active" : ""} onClick={() => setLang("en")}>
-              EN
-            </button>
+          <div className="header-actions">
+            <a href={cvHref} className="header-cta">
+              <Download size={14} />
+              {t.cv}
+            </a>
+            <div className="lang-switch">
+              <button className={lang === "tr" ? "active" : ""} onClick={() => setLang("tr")}>
+                TR
+              </button>
+              <button className={lang === "en" ? "active" : ""} onClick={() => setLang("en")}>
+                EN
+              </button>
+            </div>
           </div>
+          <button
+            className="mobile-menu-btn"
+            onClick={() => setOpenMenu((v) => !v)}
+            aria-label="Toggle menu"
+          >
+            <Menu size={18} />
+          </button>
         </div>
       </header>
 
@@ -778,42 +816,133 @@ export default function HomePage() {
           />
         </div>
         <div className="hero-overlay" />
-        <div className="hero-left">
-          <span className="hello-pill">{t.hello}</span>
-          <h1>Mehmet Seyrimez</h1>
-          <p className="role-line">{t.role}</p>
-          <ul>
-            <li>
-              <Mail size={14} />
-              {person.email}
-            </li>
-            <li>
-              <Phone size={14} />
-              {person.phoneDisplay}
-            </li>
-            <li>
-              <MapPin size={14} />
-              {t.location}
-            </li>
-          </ul>
-          <div className="hero-social">
-            <a href={`mailto:${person.email}`} aria-label="Email">
-              <Mail size={20} />
-            </a>
-            <a href={`tel:${person.phoneTel}`} aria-label="Phone">
-              <Phone size={20} />
-            </a>
-            <a href="https://wa.me/905383940137" target="_blank" rel="noreferrer" aria-label="WhatsApp">
-              <WhatsAppIcon size={22} className="text-[#25D366]" />
-            </a>
-            <a href={person.linkedin} target="_blank" rel="noreferrer" aria-label="Linkedin">
-              <Linkedin size={20} />
-            </a>
-          </div>
-        </div>
-        <div className="hero-right">
-          <div className="profile-ring">
-            <SmartImage src={projeler("MEHMET_SEYRİMEZ.jpg")} alt="Mehmet Seyrimez profile" />
+        <div className="hero-noise" aria-hidden />
+        <div className="hero-grid">
+          <BorderGlow
+            className="hero-card hero-card-main"
+            innerClassName="hero-card-shell"
+            animated
+            glowColor="196 86 74"
+            backgroundColor="rgba(8, 12, 18, 0.92)"
+            borderRadius={30}
+            glowRadius={28}
+            glowIntensity={0.44}
+            coneSpread={18}
+            fillOpacity={0.09}
+            accentColors={[
+              "rgba(126, 210, 234, 0.32)",
+              "rgba(98, 141, 208, 0.18)",
+              "rgba(214, 230, 242, 0.08)",
+            ]}
+          >
+            <div className="hero-chip-row hero-stage-item" style={{ animationDelay: "0.04s" }}>
+              <span className="hello-pill">{t.hello}</span>
+              <span className="hero-availability-pill">{heroAvailability}</span>
+            </div>
+            <div className="hero-copy-block">
+              <h1 className="hero-stage-item" style={{ animationDelay: "0.1s" }}>
+                Mehmet <span>Seyrimez</span>
+              </h1>
+              <p className="role-line hero-stage-item" style={{ animationDelay: "0.18s" }}>
+                {t.role}
+              </p>
+              <p className="hero-summary hero-stage-item" style={{ animationDelay: "0.26s" }}>
+                {heroSummary}
+              </p>
+            </div>
+            <div className="hero-signal-list hero-stage-item" style={{ animationDelay: "0.34s" }}>
+              {heroSignals.map((signal) => (
+                <span key={signal}>{signal}</span>
+              ))}
+            </div>
+            <div className="hero-metrics hero-stage-item" style={{ animationDelay: "0.42s" }}>
+              {heroMetrics.map((metric) => (
+                <div key={metric.label} className="hero-metric">
+                  <strong>{metric.value}</strong>
+                  <span>{metric.label}</span>
+                </div>
+              ))}
+            </div>
+            <div className="hero-cta-row hero-stage-item" style={{ animationDelay: "0.5s" }}>
+              <a href="#featured-projects" className="hero-primary-btn">
+                <span>{heroPrimaryCta}</span>
+                <ChevronRight size={18} strokeWidth={1.8} aria-hidden />
+              </a>
+              <a href={cvHref} className="hero-secondary-btn">
+                <Download size={16} strokeWidth={1.9} aria-hidden />
+                {t.cv}
+              </a>
+            </div>
+            <ul className="hero-contact-list hero-stage-item" style={{ animationDelay: "0.58s" }}>
+              <li>
+                <Mail size={14} />
+                {person.email}
+              </li>
+              <li>
+                <Phone size={14} />
+                {person.phoneDisplay}
+              </li>
+              <li>
+                <MapPin size={14} />
+                {t.location}
+              </li>
+            </ul>
+            <div className="hero-social hero-stage-item" style={{ animationDelay: "0.66s" }}>
+              <a href={`mailto:${person.email}`} aria-label="Email">
+                <Mail size={20} />
+              </a>
+              <a href={`tel:${person.phoneTel}`} aria-label="Phone">
+                <Phone size={20} />
+              </a>
+              <a href="https://wa.me/905383940137" target="_blank" rel="noreferrer" aria-label="WhatsApp">
+                <WhatsAppIcon size={22} className="text-[#25D366]" />
+              </a>
+              <a href={person.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn">
+                <Linkedin size={20} />
+              </a>
+            </div>
+          </BorderGlow>
+          <div className="hero-right">
+            <BorderGlow
+              className="hero-card hero-card-portrait"
+              innerClassName="hero-portrait-shell"
+              glowColor="198 82 72"
+              backgroundColor="rgba(8, 13, 20, 0.88)"
+              borderRadius={30}
+              glowRadius={22}
+              glowIntensity={0.28}
+              coneSpread={16}
+              fillOpacity={0.05}
+              accentColors={[
+                "rgba(126, 210, 234, 0.22)",
+                "rgba(98, 141, 208, 0.12)",
+                "rgba(214, 230, 242, 0.05)",
+              ]}
+            >
+              <div className="hero-portrait-copy hero-stage-item" style={{ animationDelay: "0.18s" }}>
+                <span>{heroFocusTitle}</span>
+                <p>{heroFocusCopy}</p>
+              </div>
+              <div className="hero-portrait-media hero-stage-item" style={{ animationDelay: "0.3s" }}>
+                <SmartImage
+                  src={projeler("MEHMET_SEYRİMEZ.jpg")}
+                  alt="Mehmet Seyrimez profile"
+                  className="hero-portrait-image"
+                  priority
+                />
+                <div className="hero-portrait-scrim" aria-hidden />
+              </div>
+              <div className="hero-portrait-footer hero-stage-item" style={{ animationDelay: "0.42s" }}>
+                <div>
+                  <span>{lang === "tr" ? "Uzmanlik" : "Specialty"}</span>
+                  <strong>{heroSpecialty}</strong>
+                </div>
+                <a href="#contact" className="hero-portrait-link">
+                  {t.contact}
+                  <ChevronRight size={16} strokeWidth={1.8} aria-hidden />
+                </a>
+              </div>
+            </BorderGlow>
           </div>
         </div>
       </section>
@@ -875,7 +1004,7 @@ export default function HomePage() {
               <span key={tag}>{tag}</span>
             ))}
           </div>
-          <a href={projeler("Güncel CV.pdf")} className="cv-btn">
+          <a href={cvHref} className="cv-btn">
             <Download size={16} />
             {t.cv}
           </a>
@@ -894,7 +1023,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="featured-section reveal">
+      <section id="featured-projects" className="featured-section reveal">
         <h2>{t.featured}</h2>
         <div className="featured-grid">
           <div className="featured-media">
@@ -1208,22 +1337,39 @@ export default function HomePage() {
       </section>
 
       <section className="cta-strip reveal">
-        <h2>{t.interested}</h2>
-        <p>{t.interestedText}</p>
-        <div className="cta-direct-links">
-          <a href={`mailto:${person.email}`}>
-            <Mail size={16} />
-            {person.email}
-          </a>
-          <a href={person.linkedin} target="_blank" rel="noreferrer">
-            <Linkedin size={16} />
-            LinkedIn
-          </a>
-          <a href="https://wa.me/905383940137" target="_blank" rel="noreferrer">
-            <WhatsAppIcon size={18} className="text-[#25D366]" />
-            WhatsApp
-          </a>
-        </div>
+        <BorderGlow
+          className="cta-strip-shell"
+          innerClassName="cta-strip-inner"
+          glowColor="196 82 74"
+          backgroundColor="rgba(8, 13, 20, 0.9)"
+          borderRadius={32}
+          glowRadius={20}
+          glowIntensity={0.22}
+          coneSpread={15}
+          fillOpacity={0.04}
+          accentColors={[
+            "rgba(126, 210, 234, 0.16)",
+            "rgba(98, 141, 208, 0.08)",
+            "rgba(214, 230, 242, 0.03)",
+          ]}
+        >
+          <h2>{t.interested}</h2>
+          <p>{t.interestedText}</p>
+          <div className="cta-direct-links">
+            <a href={`mailto:${person.email}`}>
+              <Mail size={16} />
+              {person.email}
+            </a>
+            <a href={person.linkedin} target="_blank" rel="noreferrer">
+              <Linkedin size={16} />
+              LinkedIn
+            </a>
+            <a href="https://wa.me/905383940137" target="_blank" rel="noreferrer">
+              <WhatsAppIcon size={18} className="text-[#25D366]" />
+              WhatsApp
+            </a>
+          </div>
+        </BorderGlow>
       </section>
 
       <section id="contact" className="contact-section reveal">
